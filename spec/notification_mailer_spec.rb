@@ -1,0 +1,12 @@
+require 'spec_helper'
+
+describe Eventifier::NotificationMailer do
+  describe "#notification_email" do
+    it "should response to notification emails" do
+      Eventifier::NotificationMailer.should respond_to(:notification_email)
+    end
+    it "should be able to send a 'notification' email" do
+      proc { Eventifier::NotificationMailer.notification_email(Eventifier::Notification.make!).deliver }.should change(ActionMailer::Base.deliveries, :count)
+    end
+  end
+end

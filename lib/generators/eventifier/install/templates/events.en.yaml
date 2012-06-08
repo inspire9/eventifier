@@ -1,0 +1,13 @@
+en:
+  events:
+    default:
+      create: "{{user.name}} created a <strong>{{object_type}}</strong>"
+      update:
+        single: "{{user.name}} updated a {{object_type}}"
+        multiple: "{{user.name}} made some changes to a {{object_type}}"
+  notifications:
+    default:
+      create: "{{user.name}} created a <strong>{{object_type}}</strong>"
+      update:
+        single: "{{user.name}} updated a {{object_type}}"
+        multiple: "{{user.name}} made some changes to a {{object_type}}"

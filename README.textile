@@ -1,0 +1,43 @@
+h1. Eventifier
+
+Event tracking and notifying for active record models
+
+h2. Features
+
+Tracks and logs events on active record objects
+Send notifications of events
+
+h2. Example
+
+class EventTracking
+  include Eventifier::EventTracking
+
+  def initialize
+    events_for Post do
+      track_on [:create, :update, :destroy], :attributes => { :except => %w(updated_at) }
+      notify :group => :members, :on => [:create, :update]
+    end
+
+    events_for Announcement do
+      track_on :create, :attributes => { :except => %w(updated_at) }
+      notify :group => :members, :on => :create
+    end
+  end
+end
+
+That's it!
+
+h2. Requirements
+
+* ActiveRecord
+
+
+h2. Testing
+
+Creating the database:
+* createdb eventifier
+
+Spec
+``
+  rspec spec
+``

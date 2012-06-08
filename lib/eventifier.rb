@@ -1,0 +1,42 @@
+# Step 1. Use rails hooks for create and update and destroy
+# Step 2. Use modules to overwrite methods, and be rails independent
+# Consider implementing with http://stackoverflow.com/questions/3689736/rails-3-alias-method-chain-still-used
+# Consider implementing with http://www.ruby-doc.org/stdlib-1.9.3/libdoc/observer/rdoc/Observable.html
+
+
+
+# init.rb
+# require 'eventifer'
+
+
+
+
+
+# Todo
+# - Notifications
+
+# Ideas for implementation:
+
+
+# class EventTracking
+#   include Eventable::EventTracking
+# 
+#   def initialize
+#     events_for Activity,
+#                :on => [:create, :update, :destroy],
+#                :attributes => { :except => %w(updated_at) }
+#   end
+# 
+# end
+
+require 'active_record'
+require 'action_mailer'
+
+require 'eventifier/event'
+require 'eventifier/helper_methods'
+require 'eventifier/notification'
+require 'eventifier/notification_mailer'
+require 'eventifier/notification_helper'
+require 'eventifier/event_helper'
+require 'eventifier/event_observer'
+require 'eventifier/event_tracking'
