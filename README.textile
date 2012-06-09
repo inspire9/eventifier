@@ -41,3 +41,7 @@ Spec
 ``
   rspec spec
 ``
+
+h2. Contributors
+
+* PJ Murray
