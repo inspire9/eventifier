@@ -1,18 +1,10 @@
 require 'spec_helper'
 
 describe Eventifier do
-<<<<<<< HEAD
   let(:post)    { double('Post', :group => group) }
   let(:group)   { double('group', :user => owner, :members => [owner, member]) }
-  let(:owner)   { User.make! }
-  let(:member)  { double('member') }
-=======
-  let(:post) { mock_model('Post', :group => group) }
-  let(:group)    { double('group', :user => owner,
-    :members => [owner, member]) }
   let(:owner)    { Fabricate(:user) }
-  let(:member)   { double('member') }
->>>>>>> swapped over to fabrication and added support for testing against mongoid
+  let(:member)  { double('member') }
 
   before :each do
     Eventifier::Notification.stub :create => true
