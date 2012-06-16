@@ -10,7 +10,7 @@ describe Eventifier::EventHelper do
   let!(:helper) { TestClass.new }
 
   describe ".replace_vars" do
-    let(:event) { Eventifier::Event.make }
+    let(:event) { Fabricate.build(:event)}
 
     it "should replace {{stuff}} with awesome" do
       message = "I'm really loving {{eventable.title}}"
@@ -26,7 +26,7 @@ describe Eventifier::EventHelper do
   describe ".load_event_for_template" do
 
     it "should add some handy methods to an event instance" do
-      event = Eventifier::Event.make!
+      event = Fabricate(:event)
       event = helper.load_event_for_template event
       event.object.should == event.eventable
       event.object_type.should == event.eventable_type

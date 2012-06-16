@@ -1,10 +1,18 @@
 require 'spec_helper'
 
 describe Eventifier do
+<<<<<<< HEAD
   let(:post)    { double('Post', :group => group) }
   let(:group)   { double('group', :user => owner, :members => [owner, member]) }
   let(:owner)   { User.make! }
   let(:member)  { double('member') }
+=======
+  let(:post) { mock_model('Post', :group => group) }
+  let(:group)    { double('group', :user => owner,
+    :members => [owner, member]) }
+  let(:owner)    { Fabricate(:user) }
+  let(:member)   { double('member') }
+>>>>>>> swapped over to fabrication and added support for testing against mongoid
 
   before :each do
     Eventifier::Notification.stub :create => true
@@ -55,11 +63,10 @@ describe Eventifier do
         event.save
       end
     end
-  end
-
+    
   # it "should create a notification for users of a post when it's changed" do
   #   post = event.eventable
-  #   user = User.make!
+  #   user = Fabricate(:user)
   # 
   #   lambda { post.update_attribute :date, 5.days.from_now }.should change(user.notifications, :count).by(1)
   # end

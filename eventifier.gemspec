@@ -19,12 +19,15 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_development_dependency  "activerecord"
+  s.add_development_dependency  "mongoid"
   s.add_runtime_dependency      "actionmailer"
-  s.add_development_dependency  "machinist"
+  s.add_development_dependency  "fabrication"
   s.add_development_dependency  "pg"
   s.add_development_dependency  "rspec"
   s.add_development_dependency  "rspec-rails"
 
   s.add_runtime_dependency "activerecord"
+  s.add_runtime_dependency "bson_ext"
+  s.add_runtime_dependency "mongoid"
   s.add_runtime_dependency "actionmailer"
 end

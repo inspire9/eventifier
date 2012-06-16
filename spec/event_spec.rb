@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Eventifier::Event do
-  let(:event) { Eventifier::Event.make! }
+  let(:event) { Fabricate(:event) }
 
   describe "#valid?" do
     pending
@@ -12,12 +12,12 @@ describe Eventifier::Event do
 
   describe ".find_all_by_eventable" do
 
-    let!(:eventable) {Post.make!}
-    let(:event) {Eventifier::Event.make! :eventable => eventable}
+    let!(:eventable) {Fabricate(:post)}
+    let(:event) {Fabricate(:event, :eventable => eventable)}
 
     it "should find the associated polymorphic eventable object" do
       lambda do
-        Eventifier::Event.make! :eventable => Post.make!
+        Fabricate(:event, :eventable => Fabricate(:post))
         event
       end.should change(Eventifier::Event, :count).by(2)
 

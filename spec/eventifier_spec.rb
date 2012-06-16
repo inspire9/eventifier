@@ -1,10 +1,9 @@
 require 'spec_helper'
+ describe Eventifier::EventTracking do
 
-describe Eventifier::EventTracking do
-
-  let(:user) { User.make }
+  let(:user) { Fabricate.build(:post)}
   let(:test_class) { Post }
-  let(:object) { test_class.make }
+  let(:object) { Fabricate.build(:post)}
   let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
 
   after :all do
@@ -164,7 +163,7 @@ describe Eventifier::EventTracking do
 
       it "should create a notification" do
         Eventifier::Notification.should_receive(:create)
-        object.stub(:users => [User.make])
+        object.stub(:users => [Fabricate.build(:user)])
         event_tracker.events_for test_class do
           track_on :create, :attributes => {:except => %w(updated_at)}
           notify :readers, :on => :create

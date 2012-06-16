@@ -17,7 +17,7 @@ module Eventifier
       end
 
       def generate_migration
-        migration_template "migration.rb", "db/migrate/eventifier_setup.rb"
+        migration_template "migration.rb", "db/migrate/eventifier_setup.rb" if defined?(ActiveRecord)
       end
 
     end

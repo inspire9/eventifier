@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Eventifier::Notification do
-  let(:notification) { Eventifier::Notification.make! }
+  let(:notification) { Fabricate(:notification) }
 
   describe '.expire_for_past_events!' do
     let(:notification) { double('notification', :expire! => true) }
@@ -37,7 +37,7 @@ describe Eventifier::Notification do
       user = notification.user
 
       user.notifications_last_read_at = Time.now
-      second_notification = Eventifier::Notification.make!
+      second_notification = Fabricate(:notification)
 
       Eventifier::Notification.unread_for(user).should_not include notification
       Eventifier::Notification.unread_for(user).should_not include second_notification
@@ -47,7 +47,7 @@ describe Eventifier::Notification do
   describe "#create" do
     it "sends an email to the user" do
       ActionMailer::Base.deliveries.clear
-      notification = Eventifier::Notification.make!
+      notification = Fabricate(:notification)
       ActionMailer::Base.deliveries.count.should > 0
     end
   end
@@ -59,7 +59,7 @@ describe Eventifier::Notification do
 
   describe "#unread_for?" do
     let(:user)  { double(User, :notifications_last_read_at => last_read) }
-    subject     { Eventifier::Notification.make(:created_at => Time.now).unread_for?(user) }
+    subject     { Fabricate.build(:notification, :created_at => Time.now).unread_for?(user) }
     context 'when the user has never read notifications' do
       let(:last_read) { nil }
       it 'should return true' do
