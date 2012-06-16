@@ -7,51 +7,58 @@ describe Eventifier::EventHelper do
     include Eventifier::EventHelper
   end
 
-  let!(:helper) { TestClass.new }
+  let(:verb)        { "update" }
+  let(:change_data) { {} }
+  let(:event)       { double("Event", :verb => verb, :eventable_type => "Object", :change_data => change_data, :user => double("user", :name => "Willy")) }
+  let!(:helper)     { TestClass.new }
 
   before do
-    @event_strings = {
-      :post => {
-        :create => "{{user.name}} just created a new post - you should check it out",
-        :destroy => "{{user.name}} just deleted a post",
-        :update => {
-          :single => "{{user.name}} made a change to their post",
-          :multiple => "{{user.name}} made some changes to their post"
-        }
-      }
-    }
-    I18n.backend.store_translations :en, :events => @event_strings
+    helper.stub :replace_vars => double("String", :html_safe => true)
   end
 
   describe ".event_message" do
-    it "should return the I18n message for that event" do
-      event = Eventifier::Event.make! :eventable => Post.make!, :verb => :create
-      helper.event_message(event).should == "<strong>#{event.user.name}</strong> just created a new post - you should check it out"
-    end
+    subject     { helper.event_message event }
 
-    it "should return a message specific to a single change if only 1 change has been made" do
-      event = Eventifier::Event.make! :eventable => Post.make!, :verb => :update, :change_data => { :name => ["Fred", "Mike"] }
-      helper.event_message(event).should == "<strong>#{event.user.name}</strong> made a change to their post"
-    end
+    context "with event verb create" do
+      let(:verb)  { "create" }
 
-    it "should return a message specific to multiple changes if more than 1 change has been made" do
-      event = Eventifier::Event.make! :eventable => Post.make!, :verb => :update, :change_data => { :name => ["Fred", "Mike"], :age => [55, 65] }
-      helper.event_message(event).should == "<strong>#{event.user.name}</strong> made some changes to their post"
-    end
+      it "should hit the I18n verb definition for create & destroy" do
+        I18n.should_receive(:translate).with("events.object.create", :default => :"events.default.create", "user.name" => "Willy", :"event.type" => "Object" )
 
-    it "should return the default I18n message if one doesn't exist" do
-      I18n.backend.reload!
-      @event_strings = {
-        :default => {
-          :create => "{{user.name}} created a {{eventable_type}}",
-          :update => "{{user.name}} updated a {{eventable_type}}"
-        }
-      }
-      I18n.backend.store_translations :test, :events => @event_strings
-      I18n.with_locale("test") do
-        event = Eventifier::Event.make! :eventable => Post.make!, :verb => :create
-        helper.event_message(event).should == "<strong>#{event.user.name}</strong> created a <strong>Post</strong>"
+        subject
+      end
+
+      it "should pass the I18n translation to the replace_vars method" do
+        I18n.should_receive(:translate).with("events.object.create", :default => :"events.default.create", "user.name" => "Willy", :"event.type" => "Object" ).and_return("A message")
+        helper.should_receive(:replace_vars).with "A message", event
+
+        subject
       end
     end
+
+    context "with event verb update" do
+      let(:verb)  { "update" }
+
+      context "multiple updates" do
+        let(:change_data) { {:name => ["Lol", "Omg Lol"]} }
+
+        it "should specify single on the verb for the I18n definition on update when there are just a single change" do
+          I18n.should_receive(:translate).with("events.object.update.single", :default => :"events.default.update", "user.name" => "Willy", :"event.type" => "Object" )
+
+          subject
+        end
+      end
+
+      context "multiple updates" do
+        let(:change_data) { {:name => ["Lol", "Omg Lol"], :address => ["old", "new"]} }
+
+        it "should specify single on the verb for the I18n definition on update when there are just a single change" do
+          I18n.should_receive(:translate).with("events.object.update.multiple", :default => :"events.default.update", "user.name" => "Willy", :"event.type" => "Object" )
+
+          subject
+        end
+      end
+    end
+    
   end
 end
