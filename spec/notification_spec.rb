@@ -29,7 +29,6 @@ describe Eventifier::Notification do
   describe ".unread_for" do
     it "should return unread notifications for a user" do
       user = notification.user
-
       Eventifier::Notification.unread_for(user).should include notification
     end
 

@@ -28,8 +28,6 @@
 #   end
 # 
 # end
-
-require 'active_record'
 require 'action_mailer'
 
 require 'eventifier/event'

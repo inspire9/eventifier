@@ -1,5 +1,6 @@
 require 'eventifier'
 
+
 Fabricator(:event, :class_name => Eventifier::Event) do
   user!
   eventable!(:fabricator => :post)
@@ -8,7 +9,7 @@ Fabricator(:event, :class_name => Eventifier::Event) do
 end
 
 Fabricator(:notification, :class_name => Eventifier::Notification) do
-  event!
+  event! { Fabricate(:event)}
   user!
 end
 

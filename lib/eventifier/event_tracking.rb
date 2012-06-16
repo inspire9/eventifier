@@ -1,20 +1,20 @@
 module Eventifier
   module EventTracking
     def events_for(klass, *args, &block)
-        @klasses = klass.kind_of?(Array) ? klass : [klass]
+      @klasses = klass.kind_of?(Array) ? klass : [klass]
 
-        options = args[0] || {}
+      options = args[0] || { }
 
-        methods     = options.delete(:track_on)
-        attributes  = options.delete(:attributes)
+      methods = options.delete(:track_on)
+      attributes = options.delete(:attributes)
 
-        create_observers
+      create_observers
 
-        if block.nil?
-          track_on methods, :attributes => attributes
-        else
-          instance_eval(&block)
-        end
+      if block.nil?
+        track_on methods, :attributes => attributes
+      else
+        instance_eval(&block)
+      end
     end
 
     def create_observers
@@ -24,24 +24,38 @@ module Eventifier
         # If the observer doesn't exist, create the class
         unless self.class.const_defined?("#{target_klass}Observer")
           constant_name = "#{target_klass}Observer"
-          klass = Class.new(ActiveRecord::Observer)
+          if defined? ActiveRecord
+            klass = Class.new(ActiveRecord::Observer)
+          elsif defined? Mongoid
+            klass = Class.new(Mongoid::Observer)
+          end
+
           self.class.qualified_const_set(constant_name, klass)
         end
       end
     end
 
-    def track_on methods, options = {}
+    def track_on methods, options = { }
       methods = methods.kind_of?(Array) ? methods : [methods]
       attributes = options.delete(:attributes)
       raise 'No events defined to track' if methods.compact.empty?
-      User.class_eval { has_many :notifications, :class_name => Eventifier::Notification } unless User.respond_to?(:notifications)
+      User.class_eval { has_many :notifications, :class_name => 'Eventifier::Notification' } unless User.respond_to?(:notifications)
       Eventifier::EventObserver.instance
 
       # set up each class with an observer and relationships
       @klasses.each do |target_klass|
         # Add relations to class
-        target_klass.class_eval { has_many :events, :as => :eventable, :class_name => Eventifier::Event, :dependent => :destroy }
-        target_klass.class_eval { has_many :notifications, :through => :events, :class_name => Eventifier::Notification, :dependent => :destroy }
+        target_klass.class_eval { has_many :events, :as => :eventable, :class_name => 'Eventifier::Event', :dependent => :destroy }
+        if defined? ActiveRecord
+          target_klass.class_eval { has_many :notifications, :through => :events, :class_name => 'Eventifier::Notification', :dependent => :destroy }
+        elsif defined? Mongoid
+          target_klass.class_eval do
+            define_method :notifications do
+              events.map(&:notifications).flatten.compact
+            end
+          end
+        end
+
 
         # create an observer and have it observe the class
         klass = self.class.const_get("#{target_klass}Observer")

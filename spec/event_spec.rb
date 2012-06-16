@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 describe Eventifier::Event do
-  let(:event) { Fabricate(:event) }
+  let(:event) do
+    Fabricate(:event)
+
+  end
 
   describe "#valid?" do
     pending

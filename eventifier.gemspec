@@ -15,13 +15,14 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
   s.add_development_dependency  "activerecord"
   s.add_development_dependency  "mongoid"
   s.add_runtime_dependency      "actionmailer"
   s.add_development_dependency  "fabrication"
+  s.add_development_dependency  "database_cleaner"
   s.add_development_dependency  "pg"
   s.add_development_dependency  "rspec"
   s.add_development_dependency  "rspec-rails"

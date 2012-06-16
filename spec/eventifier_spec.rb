@@ -6,10 +6,6 @@ describe Eventifier::EventTracking do
   let(:object) { Fabricate.build(:post) }
   let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
 
-  after :all do
-    Post.observers.disable :all
-  end
-
   describe ".initialize" do
 
     it "should start" do
