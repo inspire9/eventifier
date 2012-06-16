@@ -1,62 +1,53 @@
 require 'spec_helper'
 
 describe Eventifier do
-  let(:post) { Fabricate(:post) }
-  let(:group) { double('group', :user => owner, :members => [owner, member]) }
+  let(:post) { Fabricate(:post, :author => owner) }
   let(:owner) { Fabricate(:user) }
-  let(:member) { double('member') }
+  let(:reader1) { Fabricate(:user) }
+  let(:reader2) { Fabricate(:user) }
+
+
+  let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
+
 
   before :each do
-    Eventifier::Notification.stub :create => true
-    post.stub(:group => group)
+    post.stub(:readers => [owner, reader1, reader2])
+
+    event_tracker.events_for Post do
+      track_on [:create, :update], :attributes => { :except => %w(updated_at) }
+      notify :readers, :on => [:create, :update]
+    end
   end
 
   context 'a new post' do
-    let(:event) { Eventifier::Event.new :eventable => post, :verb => :create,
-                                        :user => owner }
+    let(:post) { Fabricate.build(:post, :author => owner) }
 
-    it "notifies the members of the group" do
-      Eventifier::Notification.should_receive(:create).
-        with(:user => member, :event => event)
-        event.save
-    end
-
-    it "does not notify the person initiating the event" do
-      Eventifier::Notification.should_not_receive(:create).
-        with(:user => owner, :event => event)
-
-      event.save
+    it "notifies only the readers of the post" do
+      Eventifier::Notification.should_receive(:create).twice do |args|
+        args[:event].verb.should == :create
+        [reader1, reader2].should include(args[:user])
+      end
+      post.save
     end
   end
 
   context 'an existing post' do
+    let(:post) { Fabricate(:post, :author => owner) }
+
     let(:event) { Eventifier::Event.new :eventable => post, :verb => :update,
                                         :user => owner }
-    let(:guest) { double('guest') }
 
-    before :each do
-      post.group.stub :members => [owner, guest]
+    it "notifies the readers of the post" do
+      Eventifier::Notification.should_receive(:create).twice do |args|
+        args[:event].verb.should == :update
+        [reader1, reader2].should include(args[:user])
+      end
+      post.update_attribute(:title, 'something else')
     end
 
-    it "notifies the members of the post" do
-      Eventifier::Notification.should_receive(:create).
-        with(:user => guest, :event => event)
-        event.save
+    it "should create a notification for readers of a post when it's changed" do
+      lambda { post.update_attribute(:title, 'somethang') }.should change(reader1.notifications, :count).by(1)
     end
-
-    it "does not notify the person initiating the event" do
-      Eventifier::Notification.should_not_receive(:create).
-        with(:user => owner, :event => event)
-
-        event.save
-    end
-
-    # it "should create a notification for users of a post when it's changed" do
-    #   post = event.eventable
-    #   user = Fabricate(:user)
-    #
-    #   lambda { post.update_attribute :date, 5.days.from_now }.should change(user.notifications, :count).by(1)
-    # end
   end
 
   context "helper method" do
@@ -89,12 +80,12 @@ describe Eventifier do
     end
 
     it "should return a message specific to a single change if only 1 change has been made" do
-      event = Fabricate(:event,  :eventable => Fabricate(:post), :verb => :update, :change_data => { :name => ["Fred", "Mike"] })
+      event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :update, :change_data => { :name => ["Fred", "Mike"] })
       helper.event_message(event).should == "<strong>#{event.user.name}</strong> made a change to their post"
     end
 
     it "should return a message specific to multiple changes if more than 1 change has been made" do
-      event = Fabricate(:event,  :eventable => Fabricate(:post), :verb => :update, :change_data => { :name => ["Fred", "Mike"], :age => [55, 65] })
+      event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :update, :change_data => { :name => ["Fred", "Mike"], :age => [55, 65] })
       helper.event_message(event).should == "<strong>#{event.user.name}</strong> made some changes to their post"
     end
 
@@ -108,7 +99,7 @@ describe Eventifier do
       }
       I18n.backend.store_translations :test, :events => @event_strings
       I18n.with_locale("test") do
-        event = Fabricate(:event,  :eventable => Fabricate(:post), :verb => :create)
+        event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :create)
         helper.event_message(event).should == "<strong>#{event.user.name}</strong> created a <strong>Post</strong>"
       end
     end
