@@ -4,7 +4,6 @@ describe Eventifier::EventHelper do
 
   class TestClass
     def self.helper_method(*args)
-      ;
     end
 
     include Eventifier::EventHelper
