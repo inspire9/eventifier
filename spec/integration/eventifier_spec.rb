@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Eventifier do
-  let(:post)    { double('Post', :group => group) }
-  let(:group)   { double('group', :user => owner, :members => [owner, member]) }
-  let(:owner)    { Fabricate(:user) }
-  let(:member)  { double('member') }
+  let(:post) { double('Post', :group => group) }
+  let(:group) { double('group', :user => owner, :members => [owner, member]) }
+  let(:owner) { Fabricate(:user) }
+  let(:member) { double('member') }
 
   before :each do
     Eventifier::Notification.stub :create => true
@@ -12,7 +12,7 @@ describe Eventifier do
 
   context 'a new post' do
     let(:event) { Eventifier::Event.new :eventable => post, :verb => :create,
-      :user => owner }
+                                        :user => owner }
 
     it "notifies the members of the group" do
       Eventifier::Notification.should_receive(:create).
@@ -32,7 +32,7 @@ describe Eventifier do
 
   context 'an existing post' do
     let(:event) { Eventifier::Event.new :eventable => post, :verb => :update,
-      :user => owner }
+                                        :user => owner }
     let(:guest) { double('guest') }
 
     before :each do
@@ -55,13 +55,14 @@ describe Eventifier do
         event.save
       end
     end
-    
-  # it "should create a notification for users of a post when it's changed" do
-  #   post = event.eventable
-  #   user = Fabricate(:user)
-  # 
-  #   lambda { post.update_attribute :date, 5.days.from_now }.should change(user.notifications, :count).by(1)
-  # end
+
+    # it "should create a notification for users of a post when it's changed" do
+    #   post = event.eventable
+    #   user = Fabricate(:user)
+    #
+    #   lambda { post.update_attribute :date, 5.days.from_now }.should change(user.notifications, :count).by(1)
+    # end
+  end
 
   context "helper method" do
     before do
