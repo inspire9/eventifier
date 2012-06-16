@@ -1,3 +1,5 @@
+!https://secure.travis-ci.org/inspire9/eventifier.png!:http://travis-ci.org/inspire9/eventifier
+
 h1. Eventifier
 
 Event tracking and notifying for active record models
