@@ -18,12 +18,12 @@ describe Eventifier::Ghost do
   end
 
   describe "#ghost" do
-    subject     { Fabricate.build(:ghost) }
-    let(:post)  { Fabricate.build(:post).tap { |post| post.id = "123" } }
+    let(:post)  { Fabricate.build(:post, :id => 123) }
+    subject     { Fabricate.build(:ghost, :data_hash => post.serializable_hash) }
 
     it "should be an object with the attributes of the undeleted object" do
       subject.ghost.class.should == Post
-      subject.ghost.attributes.should == post.serializable_hash
+      subject.ghost.attributes.except("_type").should == post.serializable_hash
     end
   end
 

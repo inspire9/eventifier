@@ -15,13 +15,14 @@ Fabricator(:ghost, :class_name => Eventifier::Ghost) do
 end
 
 Fabricator(:notification, :class_name => Eventifier::Notification) do
-  event! { Fabricate(:event)}
+  event! { Fabricate(:event) }
   user!
 end
 
 Fabricator(:post, :class_name => Post) do
-  title { "My amazing blog post" }
-  body { "A deep and profound analysis of life" }
+  title   { "My amazing blog post" }
+  body    { "A deep and profound analysis of life" }
+  author! { Fabricate(:user) }
 end
 
 Fabricator(:user, :class_name => User) do
