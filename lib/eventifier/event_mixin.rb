@@ -1,7 +1,7 @@
 require 'active_support/concern'
 
 module Eventifier
-  module EventMethods
+  module EventMixin
 
     extend ActiveSupport::Concern
 
@@ -37,27 +37,6 @@ module Eventifier
       def find_all_by_eventable object
         where :eventable_id => object.id, :eventable_type => object.class.name
       end
-    end
-  end
-
-  if defined? ActiveRecord
-    class Event < ActiveRecord::Base
-      include Eventifier::EventMethods
-
-      serialize :change_data
-    end
-  elsif defined? Mongoid
-    class Event
-      include Mongoid::Document
-      include Mongoid::Timestamps
-      include Eventifier::EventMethods
-
-      field :change_data, :type => Hash
-      field :eventable_type, :type => String
-      field :verb, :type => Symbol
-
-      index({ user_id: 1})
-      index({ eventable_id: 1, eventable_type: 1 })
     end
   end
 end

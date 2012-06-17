@@ -1,0 +1,5 @@
+require 'eventifier/mongoid/event_tracking'
+require 'eventifier/mongoid/user_patch'
+require 'eventifier/mongoid/event'
+require 'eventifier/mongoid/notification'
+require 'eventifier/mongoid/event_observer'

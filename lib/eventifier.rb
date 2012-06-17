@@ -4,12 +4,8 @@
 # Consider implementing with http://www.ruby-doc.org/stdlib-1.9.3/libdoc/observer/rdoc/Observable.html
 
 
-
 # init.rb
 # require 'eventifer'
-
-
-
 
 
 # Todo
@@ -30,12 +26,16 @@
 # end
 require 'action_mailer'
 
-require 'eventifier/event'
+if defined? Mongoid
+  require 'eventifier/mongoid_support'
+elsif defined? ActiveRecord
+  require 'eventifier/active_record_support'
+end
+
 require 'eventifier/helper_methods'
-require 'eventifier/notification'
 require 'eventifier/notification_mailer'
 require 'eventifier/notification_helper'
 require 'eventifier/event_helper'
-require 'eventifier/event_observer'
 require 'eventifier/event_tracking'
-require 'eventifier/user_mongoid_patch' if defined? Mongoid
+
+

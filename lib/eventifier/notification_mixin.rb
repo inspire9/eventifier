@@ -2,7 +2,7 @@ require 'active_support/concern'
 
 module Eventifier
 
-  module NotificationMethods
+  module NotificationMixin
     extend ActiveSupport::Concern
 
     included do
@@ -38,36 +38,6 @@ module Eventifier
     def send_email
       # TODO: Are we okay to have notifier sit on the gem? How is this going to be handled?
       Eventifier::NotificationMailer.notification_email(self).deliver
-    end
-  end
-  if defined? ActiveRecord
-
-    class Notification < ActiveRecord::Base
-      include Eventifier::NotificationMethods
-
-      default_scope order("created_at DESC")
-      scope :for_events, lambda { |ids| where(:event_id => ids) }
-      scope :for_user, lambda { |user| where(:user_id => user.id) }
-      scope :since, lambda { |date| where("created_at > ?", date) }
-
-      scope :latest, order('notifications.created_at DESC').limit(5)
-    end
-  elsif defined? Mongoid
-
-    class Notification
-      include Mongoid::Document
-      include Mongoid::Timestamps
-      include Eventifier::NotificationMethods
-
-      default_scope order_by([:created_at, :desc])
-      scope :for_events, ->(ids) { where(:event_id => ids) }
-      scope :for_user, ->(user) { where(:user_id => user.id) }
-      scope :since, ->(date) { where(:created_at.gt => date) }
-      scope :latest, order_by([:created_at, :desc]).limit(5)
-
-      index({ user_id: 1})
-      index({ event_id: 1})
-      #index({ parent_id: 1})
     end
   end
 end

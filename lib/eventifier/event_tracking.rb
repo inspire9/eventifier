@@ -5,7 +5,7 @@ module Eventifier
 
       options = args[0] || { }
 
-      methods = options.delete(:track_on)
+      methods    = options.delete(:track_on)
       attributes = options.delete(:attributes)
 
       create_observers
@@ -24,19 +24,14 @@ module Eventifier
         # If the observer doesn't exist, create the class
         unless self.class.const_defined?("#{target_klass}Observer")
           constant_name = "#{target_klass}Observer"
-          if defined? ActiveRecord
-            klass = Class.new(ActiveRecord::Observer)
-          elsif defined? Mongoid
-            klass = Class.new(Mongoid::Observer)
-          end
-
+          klass         = Class.new(OBSERVER_CLASS)
           self.class.qualified_const_set(constant_name, klass)
         end
       end
     end
 
     def track_on methods, options = { }
-      methods = methods.kind_of?(Array) ? methods : [methods]
+      methods    = methods.kind_of?(Array) ? methods : [methods]
       attributes = options.delete(:attributes)
       raise 'No events defined to track' if methods.compact.empty?
       User.class_eval { has_many :notifications, :class_name => 'Eventifier::Notification' } unless User.respond_to?(:notifications)
@@ -46,16 +41,7 @@ module Eventifier
       @klasses.each do |target_klass|
         # Add relations to class
         target_klass.class_eval { has_many :events, :as => :eventable, :class_name => 'Eventifier::Event', :dependent => :destroy }
-        if defined? ActiveRecord
-          target_klass.class_eval { has_many :notifications, :through => :events, :class_name => 'Eventifier::Notification', :dependent => :destroy }
-        elsif defined? Mongoid
-          target_klass.class_eval do
-            define_method :notifications do
-              events.map(&:notifications).flatten.compact
-            end
-          end
-        end
-
+        add_notification_association(target_klass)
 
         # create an observer and have it observe the class
         klass = self.class.const_get("#{target_klass}Observer")
@@ -81,8 +67,8 @@ module Eventifier
       relation = args.delete_at(0) if args.length == 2
       args = args.first
 
-      methods = args.delete(:on)
-      methods = methods.kind_of?(Array) ? methods : [methods]
+      methods  = args.delete(:on)
+      methods  = methods.kind_of?(Array) ? methods : [methods]
       relation ||= args
 
       @klasses.each do |target_klass|

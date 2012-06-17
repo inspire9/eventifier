@@ -1,7 +1,7 @@
 require 'active_support/concern'
 
 module Eventifier
-  module EventObserverMethods
+  module EventObserverMixin
     extend ActiveSupport::Concern
 
     include do
@@ -38,20 +38,6 @@ module Eventifier
       def notification_mappings
         @notification_mapppings ||= { }
       end
-    end
-  end
-
-  if defined? ActiveRecord
-
-    class EventObserver < ActiveRecord::Observer
-      include Eventifier::EventObserverMethods
-
-    end
-  elsif defined? Mongoid
-
-    class EventObserver < Mongoid::Observer
-      include Eventifier::EventObserverMethods
-
     end
   end
 end
