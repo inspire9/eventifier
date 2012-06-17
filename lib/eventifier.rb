@@ -38,3 +38,4 @@ require 'eventifier/notification_helper'
 require 'eventifier/event_helper'
 require 'eventifier/event_observer'
 require 'eventifier/event_tracking'
+require 'eventifier/user_mongoid_patch' if defined? Mongoid

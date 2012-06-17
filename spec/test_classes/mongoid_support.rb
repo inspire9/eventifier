@@ -8,7 +8,6 @@ class User
   include Mongoid::Document
 
   field :name, :type => String
-  field :notifications_last_read_at, :type => DateTime
 
   has_many :subscriptions
   validates :name, :presence => true, :uniqueness => true

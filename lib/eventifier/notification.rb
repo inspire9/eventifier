@@ -64,6 +64,10 @@ module Eventifier
       scope :for_user, ->(user) { where(:user_id => user.id) }
       scope :since, ->(date) { where(:created_at.gt => date) }
       scope :latest, order_by([:created_at, :desc]).limit(5)
+
+      index({ user_id: 1})
+      index({ event_id: 1})
+      #index({ parent_id: 1})
     end
   end
 end
