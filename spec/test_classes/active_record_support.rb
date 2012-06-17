@@ -17,6 +17,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :ghosts, :force => true do |t|
+    t.string  :ghost_class
+    t.integer :ghost_id
+    t.text    :data_hash
+
+    t.timestamps
+  end
+
   create_table :notifications, :force => true do |t|
     t.integer :event_id
     t.integer :user_id

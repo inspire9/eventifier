@@ -18,6 +18,7 @@ module Eventifier
 
       def after_create event
         Rails.logger.info "Firing #{event.eventable_type}##{event.verb} - #{notification_mappings[event.eventable_type][event.verb]}" if notification_mappings.has_key?(event.eventable_type) and notification_mappings[event.eventable_type].has_key?(event.verb) and defined?(Rails)
+
         method_from_relation(event.eventable, notification_mappings[event.eventable_type][event.verb]).each do |user|
           next if user == event.user
           Eventifier::Notification.create :event => event, :user => user

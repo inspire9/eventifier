@@ -8,6 +8,12 @@ Fabricator(:event, :class_name => Eventifier::Event) do
   change_data { { :date => [5.days.ago, 3.days.ago] } }
 end
 
+Fabricator(:ghost, :class_name => Eventifier::Ghost) do
+  ghost_class { "Post" }
+  ghost_id    { 123 }
+  data_hash   { Fabricate.attributes_for(:post) }
+end
+
 Fabricator(:notification, :class_name => Eventifier::Notification) do
   event! { Fabricate(:event)}
   user!
