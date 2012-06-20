@@ -11,6 +11,7 @@ Send notifications of events
 
 h2. Example
 
+<pre><code>
 class EventTracking
   include Eventifier::EventTracking
 
@@ -26,6 +27,7 @@ class EventTracking
     end
   end
 end
+</code></pre>
 
 That's it!
 
@@ -40,9 +42,9 @@ Creating the database:
 * createdb eventifier
 
 Spec
-``
+<pre><code>
   rspec spec
-``
+</code></pre>
 
 h2. Contributors
 
