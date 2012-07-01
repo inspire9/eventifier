@@ -16,7 +16,10 @@ describe Eventifier::NotificationHelper do
         :destroy => "{{user.name}} just deleted an Post",
         :update => {
           :single => "{{user.name}} made a change to their Post",
-          :multiple => "{{user.name}} made some changes to their Post"
+          :multiple => "{{user.name}} made some changes to their Post",
+          :attributes => {
+            :deleted_at => "{{user.name}} deleted their Post"
+          }
         }
       }
     }
@@ -33,6 +36,10 @@ describe Eventifier::NotificationHelper do
     it "should return a message specific to a single change if only 1 change has been made" do
       event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :update, :change_data => { :name => ["Fred", "Mike"] })
       helper.notification_message(event).should == "<strong>#{event.user.name}</strong> made a change to their Post"
+    end
+    it "should return a message specific to a particular field change if configuration is present" do
+      event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :update, :change_data => { :deleted_at => [nil, Time.now] })
+      helper.notification_message(event).should == "<strong>#{event.user.name}</strong> deleted their Post"
     end
 
     it "should return a message specific to multiple changes if more than 1 change has been made" do
