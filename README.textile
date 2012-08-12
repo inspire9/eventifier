@@ -19,6 +19,7 @@ class EventTracking
     events_for Post do
       track_on [:create, :update, :destroy], :attributes => { :except => %w(updated_at) }
       notify :group => :members, :on => [:create, :update]
+      url -> post { [post.category, post] }
     end
 
     events_for Announcement do

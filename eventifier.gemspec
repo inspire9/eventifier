@@ -5,7 +5,7 @@ require "eventifier/version"
 Gem::Specification.new do |s|
   s.name        = "eventifier"
   s.version     = Eventifier::VERSION
-  s.authors     = ["Nathan Sampimon"]
+  s.authors     = ["Nathan Sampimon", "Peter Murray"]
   s.email       = ["nathan@inspire9.com"]
   s.homepage    = "http://github.com/inspire9/eventifier"
   s.summary     = "Event tracking and notifying for active record models"
