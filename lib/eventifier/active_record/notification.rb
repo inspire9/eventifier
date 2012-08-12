@@ -4,6 +4,8 @@ module Eventifier
   class Notification < ActiveRecord::Base
     include Eventifier::NotificationMixin
 
+    attr_accessor :url
+
     default_scope order("created_at DESC")
     scope :for_events, lambda { |ids| where(:event_id => ids) }
     scope :for_user, lambda { |user| where(:user_id => user.id) }

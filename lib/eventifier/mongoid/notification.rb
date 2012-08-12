@@ -6,6 +6,8 @@ module Eventifier
     include Mongoid::Timestamps
     include Eventifier::NotificationMixin
 
+    attr_accessor :url
+
     default_scope order_by([:created_at, :desc])
     scope :for_events, ->(ids) { where(:event_id => ids) }
     scope :for_user, ->(user) { where(:user_id => user.id) }

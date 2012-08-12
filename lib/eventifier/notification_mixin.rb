@@ -36,7 +36,6 @@ module Eventifier
     end
 
     def send_email
-      # TODO: Are we okay to have notifier sit on the gem? How is this going to be handled?
       Eventifier::NotificationMailer.notification_email(self).deliver
     end
   end

@@ -16,6 +16,12 @@ module Eventifier
         end
       end
 
+      def add_url klass_name, url_proc
+        observed_classes.each do |observed_class|
+          url_mappings[klass_name.name.underscore.to_sym] = url_proc
+        end
+      end
+
       def after_create event
         Rails.logger.info "Firing #{event.eventable_type}##{event.verb} - #{notification_mappings[event.eventable_type][event.verb]}" if notification_mappings.has_key?(event.eventable_type) and notification_mappings[event.eventable_type].has_key?(event.verb) and defined?(Rails)
 
@@ -32,6 +38,10 @@ module Eventifier
           send_to = proc { |object, method| object.send(method) }.call(object, relation)
           send_to = send_to.kind_of?(Array) ? send_to : [send_to]
         end
+      end
+
+      def url_mappings
+        @url_mapppings ||= {}
       end
 
       private

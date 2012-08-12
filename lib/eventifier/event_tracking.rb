@@ -77,5 +77,11 @@ module Eventifier
         end
       end
     end
+
+    def url url_proc
+      @klasses.each do |target_klass|
+        Eventifier::Event.add_url target_klass, url_proc
+      end
+    end
   end
 end

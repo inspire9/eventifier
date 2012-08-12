@@ -1,10 +1,7 @@
 require 'spec_helper'
 
 describe Eventifier::Event do
-  let(:event) do
-    Fabricate(:event)
-
-  end
+  let(:event) { Fabricate(:event) }
 
   describe "#valid?" do
     pending
@@ -13,10 +10,21 @@ describe Eventifier::Event do
     #it_requires_a   :verb
   end
 
-  describe ".find_all_by_eventable" do
+  describe '.add_url' do
+    it "should send add_url to each of it's observers with params" do
+      url_proc = -> activity { [activity.group, activity] }
+      observer = double('Observer')
+      Eventifier::Event.stub :observer_instances => [observer]
 
-    let!(:eventable) {Fabricate(:post)}
-    let(:event) {Fabricate(:event, :eventable => eventable)}
+      observer.should_receive(:add_url).with(Object, url_proc)
+
+      Eventifier::Event.add_url Object, url_proc
+    end
+  end
+
+  describe ".find_all_by_eventable" do
+    let!(:eventable)  { Fabricate(:post) }
+    let(:event)       { Fabricate(:event, :eventable => eventable) }
 
     it "should find the associated polymorphic eventable object" do
       lambda do

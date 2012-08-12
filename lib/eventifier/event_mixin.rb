@@ -21,6 +21,10 @@ module Eventifier
         observer_instances.each { |observer| observer.add_notification(*arg) }
       end
 
+      def add_url(*arg)
+        observer_instances.each { |observer| observer.add_url(*arg) }
+      end
+
       def create_event(verb, object, options = { })
         changed_data = object.changes.stringify_keys
         changed_data = changed_data.reject { |attribute, value| options[:except].include?(attribute) } if options[:except]

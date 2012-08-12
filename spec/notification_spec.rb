@@ -27,6 +27,8 @@ describe Eventifier::Notification do
   end
 
   describe ".unread_for" do
+    before { Eventifier::NotificationMailer.any_instance.stub post_path: '/post' }
+
     it "should return unread notifications for a user" do
       user = notification.user
       Eventifier::Notification.unread_for(user).should include notification
@@ -44,17 +46,14 @@ describe Eventifier::Notification do
   end
 
   describe "#create" do
+    before { Eventifier::NotificationMailer.any_instance.stub post_path: '/post' }
+
     it "sends an email to the user" do
       ActionMailer::Base.deliveries.clear
       notification = Fabricate(:notification)
       ActionMailer::Base.deliveries.count.should > 0
     end
   end
-
-  # describe "#valid?" do
-  #   it_requires_a :user
-  #   it_requires_an :event
-  # end
 
   describe "#unread_for?" do
     let(:user)  { double(User, :notifications_last_read_at => last_read) }
