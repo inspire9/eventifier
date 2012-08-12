@@ -4,13 +4,10 @@ module Eventifier
   class Notification < ActiveRecord::Base
     include Eventifier::NotificationMixin
 
-    attr_accessor :url
-
     default_scope order("created_at DESC")
-    scope :for_events, lambda { |ids| where(:event_id => ids) }
-    scope :for_user, lambda { |user| where(:user_id => user.id) }
-    scope :since, lambda { |date| where("created_at > ?", date) }
-
-    scope :latest, order('notifications.created_at DESC').limit(5)
+    scope :for_events,  -> ids { where(event_id: ids) }
+    scope :for_user,    -> user { where(user_id: user.id) }
+    scope :since,       -> date { where("created_at > ?", date) }
+    scope :latest,      order('notifications.created_at DESC').limit(5)
   end
 end

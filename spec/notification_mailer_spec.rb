@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Eventifier::NotificationMailer do
   describe "#notification_email" do
-    before { Eventifier::NotificationMailer.any_instance.stub post_path: '/post' }
+    before { Eventifier::NotificationMailer.any_instance.stub url_for: '/post' }
 
     it "should response to notification emails" do
       Eventifier::NotificationMailer.should respond_to(:notification_email)

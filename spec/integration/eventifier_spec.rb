@@ -45,7 +45,7 @@ describe Eventifier do
     end
 
     it "should create a notification for readers of a post when it's changed" do
-      Eventifier::NotificationMailer.any_instance.stub post_path: '/post'
+      Eventifier::NotificationMailer.any_instance.stub url_for: '/post'
       lambda { post.update_attribute(:title, 'somethang') }.should change(reader1.notifications, :count).by(1)
     end
   end

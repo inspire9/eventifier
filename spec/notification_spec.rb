@@ -27,7 +27,7 @@ describe Eventifier::Notification do
   end
 
   describe ".unread_for" do
-    before { Eventifier::NotificationMailer.any_instance.stub post_path: '/post' }
+    before { Eventifier::NotificationMailer.any_instance.stub url_for: '/post' }
 
     it "should return unread notifications for a user" do
       user = notification.user
@@ -46,7 +46,7 @@ describe Eventifier::Notification do
   end
 
   describe "#create" do
-    before { Eventifier::NotificationMailer.any_instance.stub post_path: '/post' }
+    before { Eventifier::NotificationMailer.any_instance.stub url_for: '/post' }
 
     it "sends an email to the user" do
       ActionMailer::Base.deliveries.clear

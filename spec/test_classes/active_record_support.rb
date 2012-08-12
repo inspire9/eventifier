@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer :event_id
     t.integer :user_id
     t.integer :parent_id
+    t.string :url
 
     t.timestamps
   end
