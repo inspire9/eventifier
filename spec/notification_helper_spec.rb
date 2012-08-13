@@ -26,25 +26,6 @@ describe Eventifier::NotificationHelper do
     I18n.backend.store_translations :en, :notifications => @notification_strings
   end
 
-  describe "#notification_url" do
-    it "should return the url_for an eventable object if no proc is passed" do
-      notification = double('Notification', :url => nil, :event => double('Event', :eventable => test_object = double('object')))
-      helper.stub :url_for
-      helper.should_receive(:url_for).with(test_object)
-
-      helper.notification_url(notification)
-    end
-
-    it "should return the url_for the objects in the proc if proc passed" do
-      notification = double('Notification', :url => -> object { [object.first, object.last] }, :event => double('Event', :eventable => ['my', 'super', 'route']))
-      helper.stub :url_for
-      helper.should_receive(:url_for).with(['my', 'route'])
-
-      helper.notification_url(notification)
-    end
-
-  end
-
   describe "#notification_message" do
     it "should return the I18n message for that event" do
 

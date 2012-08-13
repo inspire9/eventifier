@@ -1,8 +1,6 @@
 module Eventifier
   module NotificationHelper
     include Eventifier::HelperMethods
-    include ActionView::Helpers::UrlHelper
-    include ActionView::Helpers::TagHelper
 
     # A helper for outputting a notification message.
     #
@@ -29,10 +27,6 @@ module Eventifier
       message = I18n.translate key, :default => default, "user.name" => event.user.name, :"event.type" => event.eventable_type
 
       replace_vars(message, event).html_safe
-    end
-
-    def notification_url notification
-      url_for(notification.url ? notification.url.call(notification.event.eventable) : notification.event.eventable)
     end
 
     def self.included(base)

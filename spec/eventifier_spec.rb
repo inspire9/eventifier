@@ -123,6 +123,7 @@ describe Eventifier::EventTracking do
       context "notifying" do
         before do
           @event_observer_instance = Eventifier::EventObserver.instance
+          Eventifier::EventObserver.any_instance.stub post_path: '/post'
         end
 
         describe "#add_notification" do

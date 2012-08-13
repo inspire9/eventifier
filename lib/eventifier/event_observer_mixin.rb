@@ -27,7 +27,7 @@ module Eventifier
 
         method_from_relation(event.eventable, notification_mappings[event.eventable_type][event.verb]).each do |user|
           next if user == event.user
-          Eventifier::Notification.create event: event, user: user, url: url_mappings[event.eventable_type.underscore.to_sym]
+          Eventifier::Notification.create event: event, user: user, url: notification_url(event)
         end if notification_mappings.has_key?(event.eventable_type) and notification_mappings[event.eventable_type].has_key?(event.verb)
       end
 
@@ -42,6 +42,10 @@ module Eventifier
 
       def url_mappings
         @url_mapppings ||= {}
+      end
+
+      def notification_url event
+        url_for(url_mappings[event.eventable_type] ? url_mappings[event.eventable_type].call(event.eventable) : event.eventable)
       end
 
       private

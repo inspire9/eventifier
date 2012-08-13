@@ -10,7 +10,8 @@ describe Eventifier do
   let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
 
 
-  before :each do
+  before do
+    Eventifier::EventObserver.any_instance.stub post_path: '/post'
     post.stub(:readers => [owner, reader1, reader2])
 
     event_tracker.events_for Post do
@@ -45,7 +46,6 @@ describe Eventifier do
     end
 
     it "should create a notification for readers of a post when it's changed" do
-      Eventifier::NotificationMailer.any_instance.stub url_for: '/post'
       lambda { post.update_attribute(:title, 'somethang') }.should change(reader1.notifications, :count).by(1)
     end
   end
