@@ -80,8 +80,13 @@ module Eventifier
 
     def url url_proc
       @klasses.each do |target_klass|
-        Eventifier::Event.add_url target_klass, url_proc
+        Eventifier::EventTracking.url_mappings[target_klass.name.underscore.to_sym] = url_proc
       end
     end
+
+    def self.url_mappings
+      @url_mapppings ||= {}
+    end
+
   end
 end

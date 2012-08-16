@@ -3,11 +3,15 @@ require 'spec_helper'
 describe Eventifier::Notification do
   let(:notification) { Fabricate(:notification) }
 
+  before do
+    Eventifier::NotificationMailer.any_instance.stub main_app: double('app', url_for: true)
+  end
+
   describe '.expire_for_past_events!' do
     let(:notification) { double('notification', :expire! => true) }
     let(:expired_event_ids) { [1, 3, 5, 7] }
 
-    before :each do
+    before do
       Eventifier::Event.stub :expired_ids => expired_event_ids
       Eventifier::Notification.stub :for_events => [notification]
     end

@@ -11,7 +11,7 @@ describe Eventifier do
 
 
   before do
-    Eventifier::EventObserver.any_instance.stub post_path: '/post'
+    Eventifier::NotificationMailer.any_instance.stub main_app: double('app', url_for: true)
     post.stub(:readers => [owner, reader1, reader2])
 
     event_tracker.events_for Post do

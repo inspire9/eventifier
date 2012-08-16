@@ -7,7 +7,11 @@ module Eventifier
 
     def notification_email(notification)
       @notification = notification
-      @notification_url = notification.url
+      @notification_url = if Eventifier::EventTracking.url_mappings[notification.event.eventable_type.underscore.to_sym]
+          main_app.url_for Eventifier::EventTracking.url_mappings[notification.event.eventable_type.underscore.to_sym].call(notification.event.eventable)
+        else
+          main_app.url_for notification.event.eventable
+        end
       @notification_message = notification_message(notification.event)
 
       mail :to => notification.user.email,
