@@ -13,6 +13,8 @@ module Eventifier
             replace_text = "<strong class='target'>#{replace_text}</strong>"
           when "{{object.title}}"
             replace_text = "<strong class='target'>#{replace_text}</strong>"
+          when "{{user.name}}"
+            replace_text = "<strong class='user'>#{replace_text}</strong>"
           else
             replace_text = "<strong>#{replace_text}</strong>"
         end
