@@ -30,6 +30,14 @@ module Eventifier
       end
     end
 
+    def url
+      if Eventifier::EventTracking.url_mappings[event.eventable_type.underscore.to_sym]
+        Eventifier::EventTracking.url_mappings[event.eventable_type.underscore.to_sym].call(event.eventable)
+      else
+        event.eventable
+      end
+    end
+
     def unread_for?(user)
       return true if user.notifications_last_read_at.nil?
       created_at > user.notifications_last_read_at
