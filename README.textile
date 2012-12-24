@@ -32,6 +32,12 @@ end
 
 That's it!
 
+h2. Installation
+
+<pre><code>
+  rails generate eventifier:install
+</code></pre>
+
 h2. Requirements
 
 * ActiveRecord
