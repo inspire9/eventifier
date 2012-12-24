@@ -32,7 +32,7 @@ module Eventifier
 
     def track_on methods, options = { }
       methods    = methods.kind_of?(Array) ? methods : [methods]
-      attributes = options.delete(:attributes)
+      attributes = options.delete(:attributes) || {}
       raise 'No events defined to track' if methods.compact.empty?
       User.class_eval { has_many :notifications, :class_name => 'Eventifier::Notification' } unless User.respond_to?(:notifications)
       Eventifier::EventObserver.instance

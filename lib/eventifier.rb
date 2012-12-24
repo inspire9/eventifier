@@ -38,3 +38,5 @@ require 'eventifier/notification_helper'
 require 'eventifier/event_helper'
 require 'eventifier/event_tracking'
 
+require 'eventifier/railtie' if defined?(Rails)
+
