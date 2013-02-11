@@ -7,12 +7,12 @@ module Eventifier
 
     included do
       belongs_to :user
-      belongs_to :eventable, :polymorphic => true
-      has_many :notifications, :class_name => 'Eventifier::Notification'
+      belongs_to :eventable, polymorphic: true
+      has_many :notifications, class_name: 'Eventifier::Notification', dependent: :destroy
 
-      validates :user, :presence => true
-      validates :eventable, :presence => true
-      validates :verb, :presence => true
+      validates :user, presence: true
+      validates :eventable, presence: true
+      validates :verb, presence: true
     end
 
     module ClassMethods
