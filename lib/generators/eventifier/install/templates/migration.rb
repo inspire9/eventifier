@@ -9,7 +9,7 @@ class EventifierSetup < ActiveRecord::Migration
 
       t.timestamps
     end
-    
+
     add_index :events, :user_id
     add_index :events, [:eventable_id, :eventable_type]
 
@@ -23,7 +23,7 @@ class EventifierSetup < ActiveRecord::Migration
     add_index :notifications, :event_id
     add_index :notifications, :user_id
     add_index :notifications, :parent_id
-    
+
     add_column :users, :notifications_last_read_at, :datetime
   end
 

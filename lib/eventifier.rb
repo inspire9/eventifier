@@ -40,4 +40,3 @@ require 'eventifier/event_tracking'
 require 'eventifier/trackable_class'
 
 require 'eventifier/railtie' if defined?(Rails)
-
