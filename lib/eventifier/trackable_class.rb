@@ -12,7 +12,7 @@ class Eventifier::EventTracking::TrackableClass
   def track
     add_relations
 
-    create_callbacks @klass_methods
+    create_callbacks
 
     observer.instance
   end
@@ -24,15 +24,15 @@ class Eventifier::EventTracking::TrackableClass
   end
 
   # create a callback for the methods we want to track
-  def create_callbacks(klass_methods)
-    @klass_methods = klass_methods
+  def create_callbacks
+    methods = @klass_methods
+    attributes = @attributes
 
     observer.class_eval do
       methods.each do |event|
-        puts event
         define_method "after_#{event}" do |object|
           # create an event when the callback is fired
-          Eventifier::Event.create_event(event.to_sym, object, @attributes) if object.changed?
+          Eventifier::Event.create_event(event.to_sym, object, attributes) if object.changed?
         end
       end
     end
