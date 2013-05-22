@@ -1,6 +1,6 @@
 module Eventifier
-  module EventTracking
-    OBSERVER_CLASS = Mongoid::Observer
+  module NotificationTracking
+    Eventifier::OBSERVER_CLASS = Mongoid::Observer
 
     def add_notification_association target_klass
       target_klass.class_eval do

@@ -24,7 +24,7 @@ module Eventifier
         # If the observer doesn't exist, create the class
         unless self.class.const_defined?("#{target_klass}Observer")
           constant_name = "#{target_klass}Observer"
-          klass         = Class.new(OBSERVER_CLASS)
+          klass         = Class.new(Eventifier::OBSERVER_CLASS)
           self.class.qualified_const_set(constant_name, klass)
         end
       end
@@ -39,25 +39,7 @@ module Eventifier
 
       # set up each class with an observer and relationships
       @klasses.each do |target_klass|
-        # Add relations to class
-        target_klass.class_eval { has_many :events, :as => :eventable, :class_name => 'Eventifier::Event', :dependent => :destroy }
-        add_notification_association(target_klass)
-
-        # create an observer and have it observe the class
-        klass = self.class.const_get("#{target_klass}Observer")
-        klass.observe target_klass
-
-        # create a callback for the methods we want to track
-        klass.class_eval do
-          methods.each do |event|
-            define_method "after_#{event}" do |object|
-              # create an event when the callback is fired
-              Eventifier::Event.create_event(event.to_sym, object, attributes) if object.changed?
-            end
-          end
-        end
-        # instantiate the observer
-        klass.instance
+        TrackableClass.track target_klass, methods, attributes
       end
     end
 
@@ -87,6 +69,5 @@ module Eventifier
     def self.url_mappings
       @url_mapppings ||= {}
     end
-
   end
 end

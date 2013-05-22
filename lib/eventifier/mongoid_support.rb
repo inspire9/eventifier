@@ -1,4 +1,4 @@
-require 'eventifier/mongoid/event_tracking'
+require 'eventifier/mongoid/notification_tracking'
 require 'eventifier/mongoid/user_patch'
 require 'eventifier/mongoid/event'
 require 'eventifier/mongoid/notification'
