@@ -15,18 +15,8 @@ module Eventifier
       end
     end
 
-    def track_on methods, options = { }
-      methods    = methods.kind_of?(Array) ? methods : [methods]
-      attributes = options.delete(:attributes) || {}
-      raise 'No events defined to track' if methods.compact.empty?
-
-      User.class_eval { has_many :notifications, :class_name => 'Eventifier::Notification' } unless User.respond_to?(:notifications)
-      Eventifier::EventObserver.instance
-
-      # set up each class with an observer and relationships
-      @klasses.each do |target_klass|
-        TrackableClass.track target_klass, methods, attributes
-      end
+    def track_on methods, options = {}
+      Eventifier::Tracker.new @klasses, methods, options
     end
 
     def notify *args

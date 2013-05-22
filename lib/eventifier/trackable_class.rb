@@ -1,4 +1,4 @@
-class Eventifier::EventTracking::TrackableClass
+class Eventifier::TrackableClass
   include Eventifier::NotificationTracking
 
   def self.track(klass, klass_methods, attributes)
