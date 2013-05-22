@@ -18,15 +18,8 @@ module Eventifier
     end
 
     def create_observers
-      # Create all the observer classes
       @klasses.each do |target_klass|
-
-        # If the observer doesn't exist, create the class
-        unless self.class.const_defined?("#{target_klass}Observer")
-          constant_name = "#{target_klass}Observer"
-          klass         = Class.new(Eventifier::OBSERVER_CLASS)
-          self.class.qualified_const_set(constant_name, klass)
-        end
+        create_observer target_klass
       end
     end
 
@@ -34,6 +27,7 @@ module Eventifier
       methods    = methods.kind_of?(Array) ? methods : [methods]
       attributes = options.delete(:attributes) || {}
       raise 'No events defined to track' if methods.compact.empty?
+
       User.class_eval { has_many :notifications, :class_name => 'Eventifier::Notification' } unless User.respond_to?(:notifications)
       Eventifier::EventObserver.instance
 
@@ -68,6 +62,16 @@ module Eventifier
 
     def self.url_mappings
       @url_mapppings ||= {}
+    end
+
+    private
+    def create_observer(target_klass)
+      # If the observer doesn't exist, create the class
+      unless self.class.const_defined?("#{target_klass}Observer")
+        constant_name = "#{target_klass}Observer"
+        klass         = Class.new(Eventifier::OBSERVER_CLASS)
+        self.class.qualified_const_set(constant_name, klass)
+      end
     end
   end
 end
