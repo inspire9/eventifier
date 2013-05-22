@@ -54,39 +54,6 @@ describe Eventifier::EventTracking do
 
   end
 
-  describe '#create_event' do
-    let(:object) { double('object', :changes => changes, :user => double(User)) }
-    let(:changes) { { :foo => 'bar', :bar => 'baz', :bob => 'blah' } }
-    let(:options) { { } }
-
-    subject { Eventifier::Event.create_event(:create, object, options) }
-
-    describe "exclude" do
-      let(:options) { { :except => ['foo'] } }
-
-      it 'should exclude the right attrs' do
-        Eventifier::Event.should_receive(:create) do |attrs|
-          attrs[:change_data].should == { :bar => 'baz', :bob => 'blah' }
-        end
-        subject
-      end
-
-    end
-    describe "only" do
-      let(:options) { { :only => ['foo'] } }
-
-      it 'should exclude the right attrs' do
-        Eventifier::Event.should_receive(:create) do |attrs|
-          attrs[:change_data].should == { :foo => 'bar' }
-        end
-        subject
-      end
-
-    end
-
-  end
-
-
   context "block syntax" do
 
     context "tracking" do

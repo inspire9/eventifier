@@ -27,9 +27,7 @@ class Eventifier::EventTracking::TrackableClass
 
   # generate a callback on the observer for the methods we want to track
   def generate_callbacks
-    methods = @klass_methods
-    attributes = @attributes
-    klass = @klass
+    methods, attributes, klass = @klass_methods, @attributes, @klass
 
     observer.class_eval do
       methods.each do |event|
@@ -61,7 +59,21 @@ class Eventifier::EventTracking::TrackableClass
     ActiveSupport::Notifications.subscribe name do |*args|
       event = ActiveSupport::Notifications::Event.new(*args)
 
-      Eventifier::Event.create_event(event.payload[:event].to_sym, event.payload[:object], event.payload[:options])
+      Eventifier::Event.create(
+        user: event.payload[:user] || event.payload[:object].user,
+        eventable: event.payload[:object],
+        verb: event.payload[:event],
+        change_data: change_data(event.payload[:object], event.payload[:options])
+      )
     end
+  end
+
+  def change_data object, options
+
+    change_data = object.changes.stringify_keys
+    change_data = change_data.reject { |attribute, value| options[:except].include?(attribute) } if options[:except]
+    change_data = change_data.select { |attribute, value| options[:only].include?(attribute) } if options[:only]
+
+    change_data.symbolize_keys
   end
 end
