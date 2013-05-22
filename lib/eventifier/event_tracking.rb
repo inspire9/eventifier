@@ -8,18 +8,10 @@ module Eventifier
       methods    = options.delete(:track_on)
       attributes = options.delete(:attributes)
 
-      create_observers
-
       if block.nil?
         track_on methods, :attributes => attributes
       else
         instance_eval(&block)
-      end
-    end
-
-    def create_observers
-      @klasses.each do |target_klass|
-        create_observer target_klass
       end
     end
 
@@ -62,16 +54,6 @@ module Eventifier
 
     def self.url_mappings
       @url_mapppings ||= {}
-    end
-
-    private
-    def create_observer(target_klass)
-      # If the observer doesn't exist, create the class
-      unless self.class.const_defined?("#{target_klass}Observer")
-        constant_name = "#{target_klass}Observer"
-        klass         = Class.new(Eventifier::OBSERVER_CLASS)
-        self.class.qualified_const_set(constant_name, klass)
-      end
     end
   end
 end

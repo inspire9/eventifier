@@ -37,8 +37,8 @@ describe Eventifier::EventTracking do
       before do
         object.stub(:user).and_return(user)
         event_tracker.events_for test_class,
-                                 :track_on => [:create, :update, :destroy],
-                                 :attributes => { :except => %w(updated_at) }
+          :track_on => [:create, :update, :destroy],
+          :attributes => { :except => %w(updated_at) }
       end
 
 
