@@ -37,11 +37,13 @@ require 'eventifier/tracker'
 require 'eventifier/trackable_class'
 require 'eventifier/event_subscriber'
 
-require 'eventifier/helper_methods'
-require 'eventifier/event_helper'
-
+require 'eventifier/notifier/notification_mapping'
+require 'eventifier/notifier/notification_subscriber'
 require 'eventifier/notifier/notifier'
 require 'eventifier/notifier/notification_mailer'
+
+require 'eventifier/notifier/helper_methods'
+require 'eventifier/notifier/event_helper'
 require 'eventifier/notifier/notification_helper'
 
 require 'eventifier/railtie' if defined?(Rails)

@@ -1,22 +1,26 @@
 class Eventifier::EventSubscriber
   def self.subscribe_to_all klass, names
     names.each do |method_name|
-      new.subscribe_to_method "#{method_name}.#{klass.name.tableize}.eventifier"
+      new.subscribe_to_method klass, method_name
     end
   end
 
-  def subscribe_to_method name
+  def subscribe_to_method klass, method_name
+    name = "#{method_name}.#{klass.name.tableize}.event.eventifier"
+
     return if ActiveSupport::Notifications.notifier.listening?(name)
 
     ActiveSupport::Notifications.subscribe name do |*args|
       event = ActiveSupport::Notifications::Event.new(*args)
 
-      Eventifier::Event.create(
+      eventifier_event = Eventifier::Event.create(
         user:         event.payload[:user] || event.payload[:object].user,
         eventable:    event.payload[:object],
         verb:         event.payload[:event],
         change_data:  change_data(event.payload[:object], event.payload[:options])
       )
+
+      ActiveSupport::Notifications.instrument("#{method_name}.#{klass.name.tableize}.notification.eventifier", event: :create, event: eventifier_event, object: event.payload[:object])
     end
   end
 

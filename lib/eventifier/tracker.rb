@@ -6,7 +6,6 @@ class Eventifier::Tracker
     raise 'No events defined to track' if methods.compact.empty?
 
     User.class_eval { has_many :notifications, :class_name => 'Eventifier::Notification' } unless User.respond_to?(:notifications)
-    Eventifier::EventObserver.instance
 
     # set up each class with an observer and relationships
     @klasses.each do |target_klass|

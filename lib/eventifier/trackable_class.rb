@@ -11,7 +11,6 @@ class Eventifier::TrackableClass
 
   def track
     add_relations
-
     generate_observer_callbacks
 
     observer.instance
@@ -31,7 +30,7 @@ class Eventifier::TrackableClass
     observer.class_eval do
       methods.each do |event|
         define_method "after_#{event}" do |object|
-          ActiveSupport::Notifications.instrument("#{event}.#{klass.name.tableize}.eventifier", event: event.to_sym, object: object, options: attributes) if object.changed?
+          ActiveSupport::Notifications.instrument("#{event}.#{klass.name.tableize}.event.eventifier", event: event.to_sym, object: object, options: attributes) if object.changed?
         end
       end
     end

@@ -1,7 +1,20 @@
 require 'spec_helper'
 
-describe Eventifier::EventObserver do
-  subject { Eventifier::EventObserver.instance }
+describe Eventifier::NotificationMapping do
+
+  describe 'adding and finding' do
+    it 'acts like a datasource' do
+      Eventifier::NotificationMapping.add 'test', :relation
+
+      Eventifier::NotificationMapping.find('test').should == :relation
+    end
+  end
+
+  describe '.add' do
+    it 'should act like a data source' do
+      Eventifier::NotificationMapping.add('test', :relation)
+    end
+  end
 
   describe "#method_from_relation" do
     it "should call the string as a method when passed a string" do
@@ -16,5 +29,4 @@ describe Eventifier::EventObserver do
       subject.method_from_relation(object, :cat => :mouse).should == [5]
     end
   end
-
 end

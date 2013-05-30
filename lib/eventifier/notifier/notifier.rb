@@ -12,8 +12,9 @@ class Eventifier::Notifier
     relation ||= args
 
     @klasses.each do |target_klass|
-      methods.each do |method|
-        Eventifier::Event.add_notification target_klass, relation, method
+      methods.each do |method_name|
+        Eventifier::NotificationMapping.add "#{method_name}.#{target_klass.name.tableize}", relation
+        Eventifier::NotificationSubscriber.subscribe_to_method target_klass, method_name
       end
     end
   end
