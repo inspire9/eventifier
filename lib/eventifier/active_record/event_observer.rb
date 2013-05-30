@@ -1,4 +1,4 @@
-require 'eventifier/event_observer_mixin'
+require 'eventifier/notifier/event_observer_mixin'
 
 module Eventifier
   class EventObserver < ActiveRecord::Observer

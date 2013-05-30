@@ -1,4 +1,4 @@
-require 'eventifier/notification_helper'
+require 'eventifier/notifier/notification_helper'
 
 module Eventifier
   class NotificationMailer < ActionMailer::Base

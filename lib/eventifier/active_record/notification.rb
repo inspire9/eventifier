@@ -1,4 +1,4 @@
-require 'eventifier/notification_mixin'
+require 'eventifier/notifier/notification_mixin'
 
 module Eventifier
   class Notification < ActiveRecord::Base

@@ -4,7 +4,6 @@ module Eventifier
     extend ActiveSupport::Concern
 
     included do
-
       validates :ghost_class, :presence => true
       validates :ghost_id,    :presence => true
       validates :data_hash,   :presence => true

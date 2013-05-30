@@ -17,12 +17,12 @@ module Eventifier
       end
 
       def after_create event
-        Rails.logger.info "Firing #{event.eventable_type}##{event.verb} - #{notification_mappings[event.eventable_type][event.verb]}" if notification_mappings.has_key?(event.eventable_type) and notification_mappings[event.eventable_type].has_key?(event.verb) and defined?(Rails)
+        Rails.logger.info "Firing #{event.eventable_type}##{event.verb} - #{notification_mappings[event.eventable_type][event.verb]}" if has_mapping_for?(event) and defined?(Rails)
 
         method_from_relation(event.eventable, notification_mappings[event.eventable_type][event.verb]).each do |user|
           next if user == event.user
           Eventifier::Notification.create event: event, user: user
-        end if notification_mappings.has_key?(event.eventable_type) and notification_mappings[event.eventable_type].has_key?(event.verb)
+        end if has_mapping_for?(event)
       end
 
       def method_from_relation object, relation
@@ -35,6 +35,10 @@ module Eventifier
       end
 
       private
+
+      def has_mapping_for? event
+        notification_mappings.has_key?(event.eventable_type) and notification_mappings[event.eventable_type].has_key?(event.verb)
+      end
 
       def notification_mappings
         @notification_mapppings ||= { }
