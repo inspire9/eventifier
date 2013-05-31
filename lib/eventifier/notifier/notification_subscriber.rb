@@ -7,6 +7,7 @@ class Eventifier::NotificationSubscriber
 
     ActiveSupport::Notifications.subscribe name do |*args|
       event = ActiveSupport::Notifications::Event.new(*args)
+      Rails.logger.debug "||ASN|| #{name}" if defined?(Rails)
       eventifier_event = event.payload[:event]
 
       Eventifier::NotificationMapping.users_for(eventifier_event, key).each do |user|

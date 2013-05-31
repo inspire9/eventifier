@@ -1,4 +1,6 @@
 class Eventifier::EventSubscriber
+  include ObjectHelper
+
   def self.subscribe_to_all klass, names
     names.each do |method_name|
       new.subscribe_to_method klass, method_name
@@ -12,9 +14,17 @@ class Eventifier::EventSubscriber
 
     ActiveSupport::Notifications.subscribe name do |*args|
       event = ActiveSupport::Notifications::Event.new(*args)
+      event_user = if event.payload[:user]
+        Rails.logger.debug "Here we go:"
+        Rails.logger.debug method_from_relation(event.payload[:object], event.payload[:user])
+        method_from_relation(event.payload[:object], event.payload[:user]).first
+      else
+        event.payload[:object].user
+      end
+      Rails.logger.debug "||ASN|| #{name}" if defined?(Rails)
 
       eventifier_event = Eventifier::Event.create(
-        user:         event.payload[:user] || event.payload[:object].user,
+        user:         event_user,
         eventable:    event.payload[:object],
         verb:         event.payload[:event],
         change_data:  change_data(event.payload[:object], event.payload[:options])

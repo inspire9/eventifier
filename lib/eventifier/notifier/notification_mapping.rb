@@ -1,4 +1,8 @@
 class Eventifier::NotificationMapping
+  class << self
+    include ObjectHelper
+  end
+
   def self.add(key, relation)
     notification_mappings[key] = relation
   end
@@ -16,15 +20,6 @@ class Eventifier::NotificationMapping
   end
 
   private
-  def self.method_from_relation object, relation
-    if relation.kind_of?(Hash)
-      method_from_relation(proc { |object, method| object.send(method) }.call(object, relation.keys.first), relation.values.first)
-    else
-      send_to = proc { |object, method| object.send(method) }.call(object, relation)
-      send_to = send_to.kind_of?(Array) ? send_to : [send_to]
-    end
-  end
-
   def self.notification_mappings
     @notification_mapppings ||= {}
   end

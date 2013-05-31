@@ -5,7 +5,7 @@ class Eventifier::Notifier
 
     @klasses = klasses
     relation = args.delete_at(0) if args.length == 2
-    args = args.first
+    args = args.first || {}
 
     methods  = args.delete(:on)
     methods  = methods.kind_of?(Array) ? methods : [methods]

@@ -24,7 +24,8 @@
 #   end
 # 
 # end
-require 'action_mailer'
+require 'rails'
+# require 'action_mailer'
 
 if defined? Mongoid
   require 'eventifier/mongoid_support'
@@ -32,6 +33,7 @@ elsif defined? ActiveRecord
   require 'eventifier/active_record_support'
 end
 
+require 'eventifier/helpers/object_helper'
 require 'eventifier/event_tracking'
 require 'eventifier/tracker'
 require 'eventifier/trackable_class'
@@ -40,7 +42,6 @@ require 'eventifier/event_subscriber'
 require 'eventifier/notifier/notification_mapping'
 require 'eventifier/notifier/notification_subscriber'
 require 'eventifier/notifier/notifier'
-require 'eventifier/notifier/notification_mailer'
 
 require 'eventifier/notifier/helper_methods'
 require 'eventifier/notifier/event_helper'
