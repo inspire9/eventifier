@@ -88,20 +88,9 @@ describe Eventifier::EventTracking do
       end
 
       context "notifying" do
-        before do
-          @event_observer_instance = Eventifier::EventObserver.instance
-          Eventifier::EventObserver.any_instance.stub post_path: '/post'
-        end
-
         describe "#add_notification" do
 
           it "should add the notification to the notification hash" do
-            @event_observer_instance.should_receive(:add_notification).with(test_class, :user, :create)
-
-            event_tracker.events_for test_class do
-              track_on :create, :attributes => { :except => %w(updated_at) }
-              notify :user, :on => :create
-            end
           end
         end
 
