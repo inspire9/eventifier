@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Eventifier::Ghost do
-
   it_requires_a :ghost_class
   it_requires_a :ghost_id
   it_requires_a :data_hash
@@ -22,9 +21,10 @@ describe Eventifier::Ghost do
     subject     { Fabricate.build(:ghost, :data_hash => post.serializable_hash) }
 
     it "should be an object with the attributes of the undeleted object" do
+      pending
+
       subject.ghost.class.should == Post
       subject.ghost.attributes.except("_type").should == post.serializable_hash
     end
   end
-
 end
