@@ -1,6 +1,5 @@
 module Eventifier
   module EventHelper
-    include Eventifier::HelperMethods
 
     # A helper for outputting an event message.
     #
@@ -24,7 +23,7 @@ module Eventifier
       end
       message = I18n.translate key, :default => :"events.default.#{event.verb}", "user.name" => event.user.name, :"event.type" => event.eventable_type
 
-      replace_vars(message, event).html_safe
+      message.html_safe
     end
   end
 end

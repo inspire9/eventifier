@@ -1,3 +1,3 @@
 Eventifier::Engine.routes.draw do
-  resources :notifications
+  resources :notifications, module: "eventifier"
 end
