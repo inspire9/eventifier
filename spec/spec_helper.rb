@@ -1,20 +1,19 @@
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-$LOAD_PATH.unshift File.dirname(__FILE__)
+require 'bundler'
+
+Bundler.setup :default, :development
 
 require 'fabrication'
-orm = ENV['ORM'] || 'active_record'
-require "./spec/test_classes/#{orm}_support.rb"
-
-Fabrication.configure do |config|
-  config.fabricator_dir = ["spec/fabricators"]
-end
-
-
-Dir["./spec/support/**/*.rb"].each { |f| require f }
-
-require 'rubygems'
-require 'rspec'
+require 'combustion'
+require 'active_record'
 require 'eventifier'
 
-# include rails app paths
-Dir["./app/**/*.rb"].each { |f| require f }
+Fabrication.configure do |config|
+  config.fabricator_path = ["spec/fabricators"]
+  config.path_prefix     = '.'
+end
+
+Combustion.initialize! :action_controller, :active_record, :action_mailer
+
+require 'rspec/rails'
+
+Dir["./spec/support/**/*.rb"].each { |f| require f }

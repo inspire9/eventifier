@@ -1,12 +1,4 @@
-require 'active_record'
-
-ActiveRecord::Base.establish_connection(
-  :adapter  => "postgresql",
-  :database => "eventifier"
-)
-
-ActiveRecord::Schema.define(:version => 0) do
-
+ActiveRecord::Schema.define do
   create_table :events, :force => true do |t|
     t.integer :user_id
     t.string :eventable_type
@@ -50,23 +42,4 @@ ActiveRecord::Schema.define(:version => 0) do
     t.column :user_id, :integer
     t.column :post_id, :integer
   end
-
-end
-
-class User < ActiveRecord::Base
-  has_many :subscriptions
-  validates :name, :presence => true, :uniqueness => true
-end
-
-class Subscription < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :post
-end
-
-class Post < ActiveRecord::Base
-  belongs_to :author, :class_name => "User"
-  has_many :subscriptions
-  has_many :readers, :through => :subscriptions, :source => :user
-  
-  alias_method :user, :author
 end
