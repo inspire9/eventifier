@@ -38,6 +38,7 @@ require 'eventifier/notifier/notification_mapping'
 require 'eventifier/notifier/notification_subscriber'
 require 'eventifier/notifier/notifier'
 
+require 'eventifier/notifier/helper_methods'
 require 'eventifier/notifier/event_helper'
 require 'eventifier/mailers/helpers'
 
