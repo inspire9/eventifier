@@ -26,7 +26,7 @@
 # end
 
 require 'action_mailer'
-require 'eventifier/active_record_support'
+require 'eventifier/active_record/notification_tracking'
 
 require 'eventifier/helpers/object_helper'
 require 'eventifier/event_tracking'
