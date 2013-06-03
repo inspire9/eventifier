@@ -24,8 +24,8 @@
 #   end
 # 
 # end
-require 'rails'
-# require 'action_mailer'
+
+require 'action_mailer'
 
 if defined? Mongoid
   require 'eventifier/mongoid_support'
@@ -45,6 +45,11 @@ require 'eventifier/notifier/notifier'
 
 require 'eventifier/notifier/helper_methods'
 require 'eventifier/notifier/event_helper'
-require 'eventifier/notifier/notification_helper'
+require 'eventifier/mailers/helpers'
 
 require 'eventifier/railtie' if defined?(Rails)
+
+module Eventifier
+  mattr_accessor :mailer_sender
+  @@mailer_sender = nil
+end

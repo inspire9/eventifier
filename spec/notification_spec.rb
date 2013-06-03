@@ -4,7 +4,7 @@ describe Eventifier::Notification do
   let(:notification) { Fabricate(:notification) }
 
   before do
-    Eventifier::NotificationMailer.any_instance.stub main_app: double('app', url_for: true)
+    Eventifier::Mailer.any_instance.stub main_app: double('app', url_for: true)
   end
 
   describe '.expire_for_past_events!' do
