@@ -51,10 +51,10 @@ require 'eventifier/engine' if defined?(Rails)
 
 module Eventifier
   mattr_accessor :mailer_sender
-  @@mailer_sender = nil
+  self.mailer_sender = nil
 
   mattr_accessor :mailer_name
-  @@mailer_name = "::Eventifier::Mailer"
+  self.mailer_name = "::Eventifier::Mailer"
 
   def self.setup
     yield self
