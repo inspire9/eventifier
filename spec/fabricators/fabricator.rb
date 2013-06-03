@@ -14,8 +14,8 @@ Fabricator(:ghost, :class_name => Eventifier::Ghost) do
 end
 
 Fabricator(:notification, :class_name => Eventifier::Notification) do
-  event! { Fabricate(:event) }
-  user!
+  event { Fabricate(:event) }
+  user
 end
 
 Fabricator(:post, :class_name => Post) do
