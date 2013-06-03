@@ -1,5 +1,5 @@
 module Eventifier
-  class Railtie < Rails::Railtie
+  class Engine < Rails::Engine
     config.after_initialize do
       ::EventTracking.new
     end

@@ -16,13 +16,13 @@
 
 # class EventTracking
 #   include Eventable::EventTracking
-# 
+#
 #   def initialize
 #     events_for Activity,
 #                :on => [:create, :update, :destroy],
 #                :attributes => { :except => %w(updated_at) }
 #   end
-# 
+#
 # end
 
 require 'action_mailer'
@@ -47,7 +47,7 @@ require 'eventifier/notifier/helper_methods'
 require 'eventifier/notifier/event_helper'
 require 'eventifier/mailers/helpers'
 
-require 'eventifier/railtie' if defined?(Rails)
+require 'eventifier/engine' if defined?(Rails)
 
 module Eventifier
   mattr_accessor :mailer_sender
