@@ -1,4 +1,5 @@
 require 'eventifier/notifier/helper_methods'
+
 module Eventifier
   module NotificationHelper
     include Eventifier::HelperMethods

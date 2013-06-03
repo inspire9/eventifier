@@ -16,5 +16,5 @@ require 'rubygems'
 require 'rspec'
 require 'eventifier'
 
-require "./app/mailers/eventifier/mailer.rb"
-require "./app/helpers/notification_helper.rb"
+# include rails app paths
+Dir["./app/**/*.rb"].each { |f| require f }

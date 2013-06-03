@@ -1,5 +1,3 @@
-require_relative '../../helpers/notification_helper'
-
 class Eventifier::Mailer < ::ActionMailer::Base
   include Eventifier::Mailers::Helpers
 
