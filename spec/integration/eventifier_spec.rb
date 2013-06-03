@@ -7,8 +7,6 @@ describe Eventifier do
   let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
 
   before do
-    Eventifier::Mailer.any_instance.stub main_app: double('app', url_for: true)
-
     post.readers = [owner, reader1, reader2]
 
     event_tracker.events_for Post do
@@ -18,32 +16,64 @@ describe Eventifier do
   end
 
   context 'a new post' do
-    let(:post) { Fabricate.build(:post, :author => owner) }
+    let(:post)  { Fabricate.build(:post, :author => owner) }
+    let(:event) {
+      Eventifier::Event.where(
+        :verb => :create,          :user_id => owner.id,
+        :eventable_type => 'Post', :eventable_id => post.id
+      ).first
+    }
+
+    it "logs an event" do
+      post.save
+
+      event.should be_present
+    end
 
     it "notifies only the readers of the post" do
-      Eventifier::Notification.should_receive(:create).twice do |args|
-        args[:event].verb.should == :create
-        [reader1, reader2].should include(args[:user])
-      end
       post.save
+
+      Eventifier::Notification.where(
+        :event_id => event.id, :user_id => reader1.id
+      ).count.should == 1
+
+      Eventifier::Notification.where(
+        :event_id => event.id, :user_id => reader2.id
+      ).count.should == 1
     end
   end
 
   context 'an existing post' do
-    let(:post) { Fabricate(:post, :author => owner) }
-    let(:event) { Eventifier::Event.new :eventable => post, :verb => :update,
-                                        :user => owner }
+    let(:post)  { Fabricate(:post, :author => owner) }
+    let(:event) {
+      Eventifier::Event.where(
+        :verb => :update,          :user_id => owner.id,
+        :eventable_type => 'Post', :eventable_id => post.id
+      ).first
+    }
+
+    it "logs an event" do
+      post.update_attribute :title, 'somethang'
+
+      event.should be_present
+    end
 
     it "notifies the readers of the post" do
-      Eventifier::Notification.should_receive(:create).twice do |args|
-        args[:event].verb.should == :update
-        [reader1, reader2].should include(args[:user])
-      end
       post.update_attribute(:title, 'something else')
+
+      Eventifier::Notification.where(
+        :event_id => event.id, :user_id => reader1.id
+      ).count.should == 1
+
+      Eventifier::Notification.where(
+        :event_id => event.id, :user_id => reader2.id
+      ).count.should == 1
     end
 
     it "should create a notification for readers of a post when it's changed" do
-      lambda { post.update_attribute(:title, 'somethang') }.should change(reader1.notifications, :count).by(1)
+      lambda {
+        post.update_attribute(:title, 'somethang')
+      }.should change(reader1.notifications, :count).by(1)
     end
   end
 end
