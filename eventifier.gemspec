@@ -1,10 +1,7 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require "eventifier/version"
-
 Gem::Specification.new do |s|
   s.name        = "eventifier"
-  s.version     = Eventifier::VERSION
+  s.version     = '0.0.7'
   s.authors     = ["Nathan Sampimon", "Peter Murray"]
   s.email       = ["nathan@inspire9.com"]
   s.homepage    = "http://github.com/inspire9/eventifier"
