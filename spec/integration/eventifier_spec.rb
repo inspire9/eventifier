@@ -1,14 +1,11 @@
 require 'spec_helper'
 
 describe Eventifier do
-  let(:post) { Fabricate(:post, :author => owner) }
-  let(:owner) { Fabricate(:user) }
-  let(:reader1) { Fabricate(:user) }
-  let(:reader2) { Fabricate(:user) }
-
-
+  let(:post)          { Fabricate(:post, :author => owner) }
+  let(:owner)         { Fabricate(:user) }
+  let(:reader1)       { Fabricate(:user) }
+  let(:reader2)       { Fabricate(:user) }
   let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
-
 
   before do
     Eventifier::Mailer.any_instance.stub main_app: double('app', url_for: true)
