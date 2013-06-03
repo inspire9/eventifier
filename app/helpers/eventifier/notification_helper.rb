@@ -1,9 +1,5 @@
-require 'eventifier/notifier/helper_methods'
-
 module Eventifier
   module NotificationHelper
-    include Eventifier::HelperMethods
-
     # A helper for outputting a notification message.
     #
     # Uses I18n messages from config/locales/events.en.yml to generate these messages, or defaults to a standard.
