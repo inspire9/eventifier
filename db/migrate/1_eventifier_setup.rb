@@ -26,5 +26,4 @@ class EventifierSetup < ActiveRecord::Migration
 
     add_column :users, :notifications_last_read_at, :datetime
   end
-
 end
