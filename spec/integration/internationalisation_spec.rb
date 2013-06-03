@@ -6,19 +6,6 @@ describe "Internationalisation" do
   end
 
   let!(:helper) { TestClass.new }
-  before do
-    @event_strings = {
-      :post => {
-        :create => "{{user.name}} just created a new post - you should check it out",
-        :destroy => "{{user.name}} just deleted a post",
-        :update => {
-          :single => "{{user.name}} made a change to their post",
-          :multiple => "{{user.name}} made some changes to their post"
-        }
-      }
-    }
-    I18n.backend.store_translations :en, :events => @event_strings
-  end
 
   it "should return the I18n message for that event" do
     event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :create)
@@ -37,13 +24,13 @@ describe "Internationalisation" do
 
   it "should return the default I18n message if one doesn't exist" do
     I18n.backend.reload!
-    @event_strings = {
+    I18n.backend.store_translations :test, :events => {
       :default => {
         :create => "{{user.name}} created a {{eventable_type}}",
         :update => "{{user.name}} updated a {{eventable_type}}"
       }
     }
-    I18n.backend.store_translations :test, :events => @event_strings
+
     I18n.with_locale("test") do
       event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :create)
       helper.event_message(event).should == "<strong class='user'>#{event.user.name}</strong> created a <strong>Post</strong>"

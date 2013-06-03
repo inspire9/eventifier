@@ -1,0 +1,19 @@
+en:
+  events:
+    default:
+      create: "{{user.name}} created a <strong>{{object_type}}</strong>"
+      update:
+        single: "{{user.name}} updated a {{object_type}}"
+        multiple: "{{user.name}} made some changes to a {{object_type}}"
+    post:
+      create: "{{user.name}} just created a new post - you should check it out"
+      destroy: "{{user.name}} just deleted a post"
+      update:
+        single: "{{user.name}} made a change to their post"
+        multiple: "{{user.name}} made some changes to their post"
+  notifications:
+    default:
+      create: "{{user.name}} created a <strong>{{object_type}}</strong>"
+      update:
+        single: "{{user.name}} updated a {{object_type}}"
+        multiple: "{{user.name}} made some changes to a {{object_type}}"
