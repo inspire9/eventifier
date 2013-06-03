@@ -26,15 +26,5 @@ module Eventifier
 
       replace_vars(message, event).html_safe
     end
-
-    def self.included(base)
-      base.helper_method :event_message
-    end
-  end
-end
-
-if defined? ActionController::Base
-  ActionController::Base.class_eval do
-    include Eventifier::EventHelper
   end
 end
