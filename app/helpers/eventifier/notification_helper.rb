@@ -30,15 +30,5 @@ module Eventifier
 
       replace_vars(message, event).html_safe
     end
-
-    def self.included(base)
-      base.helper_method :notification_message, :notification_url
-    end
-  end
-end
-
-if defined? ActionController::Base
-  ActionController::Base.class_eval do
-    include Eventifier::NotificationHelper
   end
 end
