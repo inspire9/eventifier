@@ -26,12 +26,7 @@
 # end
 
 require 'action_mailer'
-
-if defined? Mongoid
-  require 'eventifier/mongoid_support'
-elsif defined? ActiveRecord
-  require 'eventifier/active_record_support'
-end
+require 'eventifier/active_record_support'
 
 require 'eventifier/helpers/object_helper'
 require 'eventifier/event_tracking'

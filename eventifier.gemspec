@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'rails',                '~> 3.2.0'
   s.add_runtime_dependency "bson_ext"
-  s.add_runtime_dependency "mongoid"
 
   s.add_development_dependency 'combustion',       '~> 0.5.0'
   s.add_development_dependency 'fabrication',      '~> 2.7.1'
