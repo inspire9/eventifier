@@ -52,4 +52,15 @@ require 'eventifier/railtie' if defined?(Rails)
 module Eventifier
   mattr_accessor :mailer_sender
   @@mailer_sender = nil
+
+  mattr_accessor :mailer_name
+  @@mailer_name = "::Eventifier::Mailer"
+
+  def self.setup
+    yield self
+  end
+
+  def self.mailer
+    ActiveSupport::Dependencies.constantize(@@mailer_name)
+  end
 end

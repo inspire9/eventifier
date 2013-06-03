@@ -35,7 +35,7 @@ module Eventifier
     end
 
     def send_email
-      ::Eventifier::Mailer.notifications(self).deliver
+      Eventifier.mailer.notifications(self).deliver
     end
   end
 end
