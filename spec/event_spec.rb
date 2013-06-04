@@ -4,10 +4,9 @@ describe Eventifier::Event do
   let(:event) { Fabricate(:event) }
 
   describe "#valid?" do
-    pending
-    #it_requires_a   :user
-    #it_requires_an  :eventable
-    #it_requires_a   :verb
+    it_requires_a  :user
+    it_requires_an :eventable
+    it_requires_a  :verb
   end
 
   describe ".find_all_by_eventable" do
@@ -23,5 +22,4 @@ describe Eventifier::Event do
       Eventifier::Event.find_all_by_eventable(eventable).length.should == 1
     end
   end
-
 end
