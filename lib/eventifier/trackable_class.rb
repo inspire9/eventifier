@@ -1,5 +1,6 @@
 class Eventifier::TrackableClass
   include Eventifier::NotificationTracking
+  Eventifier::OBSERVER_CLASS = ActiveRecord::Observer
 
   def self.track(klass, klass_methods, attributes)
     self.new(klass, klass_methods, attributes).track
@@ -24,7 +25,7 @@ class Eventifier::TrackableClass
   private
   def add_relations
     @klass.class_eval { has_many :events, as: :eventable, class_name: 'Eventifier::Event', dependent: :destroy }
-    add_notification_association(@klass)
+    @klass.class_eval { has_many :notifications, through: :events, class_name: 'Eventifier::Notification', dependent: :destroy }
   end
 
   def generate_observer_callbacks

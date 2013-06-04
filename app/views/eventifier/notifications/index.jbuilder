@@ -1,4 +1,4 @@
 json.array! @notifications do |notification|
   json.id notification.id
-  json.html notification.to_s
+  json.html render(partial: partial_view(notification, :dropdown)
 end
