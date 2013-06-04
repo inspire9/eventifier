@@ -1,14 +1,8 @@
 require 'spec_helper'
 
 describe Eventifier::NotificationHelper do
-  class TestClass
-    include Eventifier::NotificationHelper
-  end
-
-  let!(:helper) { TestClass.new }
-
   before do
-    @notification_strings = {
+    I18n.backend.store_translations :en, :notifications => {
       :post => {
         :create => "{{user.name}} just created an Post - you should check it out",
         :destroy => "{{user.name}} just deleted an Post",
@@ -21,12 +15,10 @@ describe Eventifier::NotificationHelper do
         }
       }
     }
-    I18n.backend.store_translations :en, :notifications => @notification_strings
   end
 
   describe "#notification_message" do
     it "should return the I18n message for that event" do
-
       event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :create)
       helper.notification_message(event).should == "<strong class='user'>#{event.user.name}</strong> just created an Post - you should check it out"
     end
@@ -146,6 +138,31 @@ describe Eventifier::NotificationHelper do
 
           subject
         end
+      end
+    end
+  end
+
+  describe "replacing vars" do
+    describe ".replace_vars" do
+      let(:event) { Fabricate.build(:event)}
+
+      it "should replace {{stuff}} with awesome" do
+        message = "I'm really loving {{eventable.title}}"
+        helper.replace_vars(message, event).should == "I'm really loving <strong>#{event.eventable.title}</strong>"
+      end
+
+      it "should replace multiple {{stuff}} with multiple awesome" do
+        message = "I'm really loving {{eventable.title}} and all {{eventable.class.name}}s"
+        helper.replace_vars(message, event).should == "I'm really loving <strong>#{event.eventable.title}</strong> and all <strong>Post</strong>s"
+      end
+    end
+
+    describe ".load_event_for_template" do
+      it "should add some handy methods to an event instance" do
+        event = Fabricate(:event)
+        event = helper.load_event_for_template event
+        event.object.should == event.eventable
+        event.object_type.should == event.eventable_type
       end
     end
   end
