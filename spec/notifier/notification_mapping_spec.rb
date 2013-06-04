@@ -6,7 +6,17 @@ describe Eventifier::NotificationMapping do
     it 'acts like a datasource' do
       Eventifier::NotificationMapping.add 'test', :relation
 
-      Eventifier::NotificationMapping.find('test').should == :relation
+      Eventifier::NotificationMapping.find('test').should == [:relation]
+    end
+
+    it "appends further relations" do
+      Eventifier::NotificationMapping.notification_mappings.clear
+
+      Eventifier::NotificationMapping.add 'test', :relation_a
+      Eventifier::NotificationMapping.add 'test', :relation_b
+
+      Eventifier::NotificationMapping.find('test').
+        should == [:relation_a, :relation_b]
     end
   end
 

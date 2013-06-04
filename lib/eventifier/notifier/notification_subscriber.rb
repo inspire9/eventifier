@@ -10,12 +10,13 @@ class Eventifier::NotificationSubscriber
       Rails.logger.debug "||ASN|| #{name}" if defined?(Rails)
       eventifier_event = event.payload[:event]
 
-      Eventifier::NotificationMapping.users_for(eventifier_event, key).each do |user|
+      Eventifier::NotificationMapping.users_and_relations(eventifier_event, key) do |user, relations|
         next if user == eventifier_event.user
 
         Eventifier::Notification.create(
-          event:  eventifier_event,
-          user:   user
+          event:     eventifier_event,
+          user:      user,
+          relations: relations
         )
       end
     end

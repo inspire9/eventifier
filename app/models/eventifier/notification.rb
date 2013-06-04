@@ -1,6 +1,7 @@
 module Eventifier
   class Notification < ActiveRecord::Base
-    attr_accessible :event, :user
+    attr_accessible :event, :user, :relations
+    attr_accessor :relations
 
     belongs_to :event, :class_name => 'Eventifier::Event'
     belongs_to :user
@@ -38,6 +39,8 @@ module Eventifier
       Eventifier.mailer.notifications(self).deliver if send_email?
     end
 
+    private
+
     def settings
       @settings ||= Eventifier::NotificationSetting.for_user user
     end
@@ -45,10 +48,14 @@ module Eventifier
     def send_email?
       return true if settings.preferences['email'].nil?
 
-      specific = settings.preferences['email'][event.eventable_type.underscore]
-      default  = settings.preferences['email']['default']
-      return specific unless specific.nil?
+      specifics = relations.collect { |relation|
+        key = [event.verb, event.eventable_type.underscore, 'notify', relation].join('_')
+        settings.preferences['email'][key]
+      }.compact
 
+      return specifics.any? { |specific| specific } unless specifics.empty?
+
+      default  = settings.preferences['email']['default']
       default.nil? || default
     end
   end

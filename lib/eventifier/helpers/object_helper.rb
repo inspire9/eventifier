@@ -1,5 +1,5 @@
 module ObjectHelper
-  def method_from_relation object, relation
+  def method_from_relation(object, relation)
     if relation.kind_of?(Hash)
       method_from_relation(proc { |object, method| object.send(method) }.call(object, relation.keys.first), relation.values.first)
     else
