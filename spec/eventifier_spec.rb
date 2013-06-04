@@ -95,6 +95,8 @@ describe Eventifier::EventTracking do
         end
 
         it "should notify users when passed a hash" do
+          pending
+
           subscriber = double('user')
 
           object.stub :category => double('category', :subscribers => [subscriber])

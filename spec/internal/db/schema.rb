@@ -1,4 +1,9 @@
 ActiveRecord::Schema.define do
+  create_table :categories, :force => true do |t|
+    t.string :name
+    t.timestamps
+  end
+
   create_table :ghosts, :force => true do |t|
     t.string  :ghost_class
     t.integer :ghost_id
@@ -16,6 +21,7 @@ ActiveRecord::Schema.define do
     t.column :title, :string
     t.column :author_id, :integer
     t.column :body, :text
+    t.column :category_id, :integer
   end
 
   create_table :subscriptions, :force => true do |t|
