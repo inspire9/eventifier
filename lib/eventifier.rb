@@ -26,21 +26,6 @@
 # end
 
 require 'action_mailer'
-require 'eventifier/active_record/notification_tracking'
-require 'eventifier/helpers/object_helper'
-
-require 'eventifier/tracker'
-require 'eventifier/event_tracking'
-require 'eventifier/trackable_class'
-require 'eventifier/event_subscriber'
-
-require 'eventifier/notifier/notification_mapping'
-require 'eventifier/notifier/notification_subscriber'
-require 'eventifier/notifier/notifier'
-
-require 'eventifier/mailers/helpers'
-
-require 'eventifier/engine' if defined?(Rails)
 
 module Eventifier
   mattr_accessor :mailer_sender
@@ -57,3 +42,18 @@ module Eventifier
     ActiveSupport::Dependencies.constantize(@@mailer_name)
   end
 end
+
+require 'eventifier/helpers/object_helper'
+
+require 'eventifier/tracker'
+require 'eventifier/event_tracking'
+require 'eventifier/trackable_class'
+require 'eventifier/event_subscriber'
+
+require 'eventifier/notifier/notification_mapping'
+require 'eventifier/notifier/notification_subscriber'
+require 'eventifier/notifier/notifier'
+
+require 'eventifier/mailers/helpers'
+
+require 'eventifier/engine' if defined?(Rails)
