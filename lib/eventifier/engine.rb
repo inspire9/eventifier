@@ -7,9 +7,9 @@ module Eventifier
     end
 
     ActiveSupport.on_load :action_controller do
-      # include Eventifier::NotificationHelper
+      include Eventifier::NotificationHelper
 
-      # helper_method :notification_message
+      helper_method :notification_message
     end
   end
 end

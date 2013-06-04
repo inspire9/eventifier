@@ -1,10 +1,19 @@
-require 'eventifier/event_mixin'
-
 module Eventifier
   class Event < ActiveRecord::Base
-    include Eventifier::EventMixin
     attr_accessible :user, :eventable, :verb, :change_data
 
+    belongs_to  :user
+    belongs_to  :eventable,     polymorphic: true
+    has_many    :notifications, class_name: 'Eventifier::Notification', dependent: :destroy
+
+    validates :user,      presence: true
+    validates :eventable, presence: true
+    validates :verb,      presence: true
+
     serialize :change_data
+
+    def self.find_all_by_eventable object
+      where :eventable_id => object.id, :eventable_type => object.class.name
+    end
   end
 end

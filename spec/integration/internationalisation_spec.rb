@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Internationalisation" do
   class TestClass
-    include Eventifier::EventHelper
+    include Eventifier::NotificationHelper
   end
 
   let!(:helper) { TestClass.new }
