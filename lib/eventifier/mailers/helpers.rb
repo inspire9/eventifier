@@ -23,7 +23,7 @@ module Eventifier
         headers = {
           :subject       => "You have received a notification",
           :from          => mailer_sender,
-          :to            => @notification.user.email,
+          :to            => @notifications.first.user.email,
           :template_path => template_paths
         }
 
