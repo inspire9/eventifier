@@ -27,10 +27,10 @@
 
 require 'action_mailer'
 require 'eventifier/active_record/notification_tracking'
-
 require 'eventifier/helpers/object_helper'
-require 'eventifier/event_tracking'
+
 require 'eventifier/tracker'
+require 'eventifier/event_tracking'
 require 'eventifier/trackable_class'
 require 'eventifier/event_subscriber'
 
@@ -38,7 +38,6 @@ require 'eventifier/notifier/notification_mapping'
 require 'eventifier/notifier/notification_subscriber'
 require 'eventifier/notifier/notifier'
 
-require 'eventifier/notifier/event_helper'
 require 'eventifier/mailers/helpers'
 
 require 'eventifier/engine' if defined?(Rails)

@@ -4,7 +4,7 @@ module Eventifier
 
     def add_notification_association(klass)
       klass.class_eval do
-        has_many :notifications, :through => :events, :class_name => 'Eventifier::Notification', :dependent => :destroy
+        has_many :notifications, through: :events, class_name: 'Eventifier::Notification', dependent: :destroy
       end
     end
   end
