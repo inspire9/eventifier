@@ -1,6 +1,6 @@
 module Eventifier
   class Notification < ActiveRecord::Base
-    attr_accessible :event, :user
+    attr_accessible :event, :user, :event_id, :user_id
 
     belongs_to :event, :class_name => 'Eventifier::Event'
     belongs_to :user
