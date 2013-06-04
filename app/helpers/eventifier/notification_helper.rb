@@ -26,8 +26,6 @@ module Eventifier
 
       message.html_safe
     end
-  end
-
 
     def event_message event
       if event.verb.to_sym == :update
@@ -43,8 +41,5 @@ module Eventifier
 
       message.html_safe
     end
-
-    def self.included(base)
-      base.helper_method :event_message
-    end
+  end
 end
