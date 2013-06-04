@@ -35,7 +35,23 @@ module Eventifier
     end
 
     def send_email
-      Eventifier.mailer.notifications(self).deliver
+      if send_email?
+        Eventifier.mailer.notifications(self).deliver
+      end
+    end
+
+    def settings
+      @settings ||= Eventifier::NotificationSetting.for_user user
+    end
+
+    def send_email?
+      return true if settings.preferences['email'].nil?
+
+      specific = settings.preferences['email'][event.eventable_type.underscore]
+      default  = settings.preferences['email']['default']
+      return specific unless specific.nil?
+
+      default.nil? || default
     end
   end
 end

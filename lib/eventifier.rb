@@ -25,6 +25,7 @@
 #
 # end
 
+require 'multi_json'
 require 'action_mailer'
 
 module Eventifier
