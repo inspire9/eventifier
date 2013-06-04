@@ -15,12 +15,13 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'rails',                '~> 3.2.0'
+  s.add_runtime_dependency 'rails',           '~> 3.2.0'
   s.add_runtime_dependency "bson_ext"
-  s.add_runtime_dependency 'multi_json',           '~> 1.7.4'
+  s.add_runtime_dependency 'haml-rails',      '~> 0.4'
+  s.add_runtime_dependency 'multi_json',      '~> 1.7.4'
 
-  s.add_development_dependency 'combustion',       '~> 0.5.0'
-  s.add_development_dependency 'fabrication',      '~> 2.7.1'
+  s.add_development_dependency 'combustion',  '~> 0.5.0'
+  s.add_development_dependency 'fabrication', '~> 2.7.1'
   s.add_development_dependency "pg"
-  s.add_development_dependency 'rspec-rails',      '~> 2.13.2'
+  s.add_development_dependency 'rspec-rails', '~> 2.13.2'
 end

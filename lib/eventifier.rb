@@ -27,6 +27,7 @@
 
 require 'multi_json'
 require 'action_mailer'
+require 'haml-rails'
 
 module Eventifier
   mattr_accessor :mailer_sender
