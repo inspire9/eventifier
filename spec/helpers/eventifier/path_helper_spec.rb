@@ -1,13 +1,6 @@
 require 'spec_helper'
 
 describe Eventifier::PathHelper do
-
-  class TestClass < ActionController::Base
-    def self.helper_method(*args); end
-    include Eventifier::PathHelper
-  end
-
-  let(:helper) { TestClass.new }
   let(:notification) { double(Eventifier::Notification, event: double(Eventifier::Event, eventable_type: 'AwesomeObject')) }
 
   describe "partial_view" do
