@@ -35,9 +35,7 @@ module Eventifier
     end
 
     def send_email
-      if send_email?
-        Eventifier.mailer.notifications(self).deliver
-      end
+      Eventifier.mailer.notifications(self).deliver if send_email?
     end
 
     def settings
