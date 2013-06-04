@@ -16,8 +16,7 @@ module Eventifier
       end
 
       def initialize_from_record(record)
-        @notification = record
-        @event = record.event
+        @notifications = [record]
       end
 
       def headers_for(action)

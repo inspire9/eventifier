@@ -1,4 +1,5 @@
 %p You have a notification
 
 %ul.notifications
-  %li= @event.to_s
+  - @notifications.each do |notification|
+    %li= render_partial_view(notification, :email)
