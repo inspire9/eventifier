@@ -49,7 +49,8 @@ module Eventifier
       return true if settings.preferences['email'].nil?
 
       specifics = relations.collect { |relation|
-        key = [event.verb, event.eventable_type.underscore, 'notify', relation].join('_')
+        key = [event.verb, event.eventable_type.underscore, 'notify',
+          Eventifier::Relationship.new(self, relation).key].join('_')
         settings.preferences['email'][key]
       }.compact
 
