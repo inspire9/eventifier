@@ -49,12 +49,11 @@ module Eventifier
   end
 end
 
-require 'eventifier/helpers/object_helper'
-
 require 'eventifier/tracker'
 require 'eventifier/event_tracking'
 require 'eventifier/trackable_class'
 require 'eventifier/event_subscriber'
+require 'eventifier/relationship'
 
 require 'eventifier/notifier/notification_mapping'
 require 'eventifier/notifier/notification_subscriber'

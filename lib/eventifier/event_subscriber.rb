@@ -1,6 +1,4 @@
 class Eventifier::EventSubscriber
-  include ObjectHelper
-
   def self.subscribe_to_all klass, names
     names.each do |method_name|
       new.subscribe_to_method klass, method_name
@@ -15,7 +13,7 @@ class Eventifier::EventSubscriber
     ActiveSupport::Notifications.subscribe name do |*args|
       event = ActiveSupport::Notifications::Event.new(*args)
       event_user = if event.payload[:user]
-        method_from_relation(event.payload[:object], event.payload[:user]).first
+        Eventifier::Relationship.new(event.payload[:object], event.payload[:user]).first
       else
         event.payload[:object].user
       end

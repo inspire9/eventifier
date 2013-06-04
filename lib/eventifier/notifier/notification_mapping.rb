@@ -1,6 +1,4 @@
 class Eventifier::NotificationMapping
-  extend ObjectHelper
-
   def self.add(key, relation)
     notification_mappings[key] << relation
   end
@@ -13,15 +11,11 @@ class Eventifier::NotificationMapping
     notification_mappings
   end
 
-  def self.users_for(event, key)
-    method_from_relation(event.eventable, find(key))
-  end
-
   def self.users_and_relations(event, key, &block)
     users = Hash.new { |hash, key| hash[key] = [] }
 
     find(key).each do |relation|
-      method_from_relation(event.eventable, relation).each do |user|
+      Eventifier::Relationship.new(event.eventable, relation).users.each do |user|
         users[user] << relation
         users[user].uniq!
       end
