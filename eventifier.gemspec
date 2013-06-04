@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'combustion',       '~> 0.5.0'
   s.add_development_dependency 'fabrication',      '~> 2.7.1'
-  s.add_development_dependency "database_cleaner"
   s.add_development_dependency "pg"
   s.add_development_dependency 'rspec-rails',      '~> 2.13.2'
 end
