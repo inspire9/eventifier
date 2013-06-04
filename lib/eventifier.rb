@@ -43,6 +43,10 @@ module Eventifier
   def self.mailer
     ActiveSupport::Dependencies.constantize(@@mailer_name)
   end
+
+  def self.tracked_classes
+    @tracked_classes ||= []
+  end
 end
 
 require 'eventifier/helpers/object_helper'

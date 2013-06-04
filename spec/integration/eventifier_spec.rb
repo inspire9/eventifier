@@ -1,17 +1,27 @@
 require 'spec_helper'
 
 describe Eventifier do
+  it "can list tracked classes" do
+    Object.new.extend(Eventifier::EventTracking).events_for Post do
+      track_on [:create, :update], :attributes => { :except => %w(updated_at) }
+      notify :readers, :on => [:create, :update]
+    end
+
+    Eventifier.tracked_classes.should == [Post]
+  end
+end
+
+describe 'event tracking' do
   let(:owner)         { Fabricate(:user) }
   let(:reader1)       { Fabricate(:user) }
   let(:reader2)       { Fabricate(:user) }
-  let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
 
   before do
     ActionMailer::Base.deliveries.clear
 
     post.readers = [owner, reader1, reader2]
 
-    event_tracker.events_for Post do
+    Object.new.extend(Eventifier::EventTracking).events_for Post do
       track_on [:create, :update], :attributes => { :except => %w(updated_at) }
       notify :readers, :on => [:create, :update]
     end

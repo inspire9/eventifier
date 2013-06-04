@@ -13,6 +13,9 @@ module Eventifier
       else
         instance_eval(&block)
       end
+
+      @klasses.each { |klass| Eventifier.tracked_classes << klass }
+      Eventifier.tracked_classes.uniq!
     end
 
     def track_on methods, options = {}
