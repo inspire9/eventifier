@@ -1,7 +1,5 @@
 class Eventifier::NotificationMapping
-  class << self
-    include ObjectHelper
-  end
+  extend ObjectHelper
 
   def self.add(key, relation)
     notification_mappings[key] = relation
@@ -20,6 +18,7 @@ class Eventifier::NotificationMapping
   end
 
   private
+
   def self.notification_mappings
     @notification_mapppings ||= {}
   end
