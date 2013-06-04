@@ -1,5 +1,4 @@
 class Eventifier::TrackableClass
-  include Eventifier::NotificationTracking
   Eventifier::OBSERVER_CLASS = ActiveRecord::Observer
 
   def self.track(klass, klass_methods, attributes)

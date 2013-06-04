@@ -1,9 +1,5 @@
-require 'eventifier/notifier/notification_mixin'
-
 module Eventifier
   class Notification < ActiveRecord::Base
-    include Eventifier::NotificationMixin
-
     attr_accessible :event, :user
 
     belongs_to :event, :class_name => 'Eventifier::Event'
@@ -12,7 +8,7 @@ module Eventifier
     validates :event, :presence => true
     validates :user, :presence => true
     validates :event_id, :uniqueness => { :scope => :user_id }
-    
+
     after_create :send_email
 
     default_scope order("notifications.created_at DESC")
