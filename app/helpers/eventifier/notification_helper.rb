@@ -1,6 +1,6 @@
 module Eventifier
   module NotificationHelper
-    # A helper for outputting a notification message.
+    # A helper method for outputting a notification message.
     #
     # Uses I18n messages from config/locales/events.en.yml to generate these messages, or defaults to a standard.
     #
@@ -71,6 +71,17 @@ module Eventifier
       def event.object_type; eventable_type; end
 
       event
+    end
+
+    def pastize(verb)
+      case verb
+      when 'create'
+        "created"
+      when 'update'
+        "changed"
+      when 'destroy'
+        "deleted"
+      end
     end
   end
 end
