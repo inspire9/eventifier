@@ -7,6 +7,8 @@ describe Eventifier do
   let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
 
   before do
+    ActionMailer::Base.deliveries.clear
+
     post.readers = [owner, reader1, reader2]
 
     event_tracker.events_for Post do
@@ -30,16 +32,33 @@ describe Eventifier do
       event.should be_present
     end
 
-    it "notifies only the readers of the post" do
+    it "does not store a notification for the post creator" do
       post.save
 
       Eventifier::Notification.where(
-        :event_id => event.id, :user_id => reader1.id
-      ).count.should == 1
+        :event_id => event.id, :user_id => owner.id
+      ).count.should == 0
+    end
 
-      Eventifier::Notification.where(
-        :event_id => event.id, :user_id => reader2.id
-      ).count.should == 1
+    it "stores notifications for the reader" do
+      post.save
+
+      [reader1, reader2].each do |reader|
+        Eventifier::Notification.where(
+          :event_id => event.id, :user_id => reader.id
+        ).count.should == 1
+      end
+    end
+
+    it "emails the readers with a notification" do
+      post.save
+
+      [reader1, reader2].each do |reader|
+        ActionMailer::Base.deliveries.detect { |email|
+          email.to      == [reader.email] &&
+          email.subject == 'You have received a notification'
+        }.should be_present
+      end
     end
   end
 
@@ -58,22 +77,41 @@ describe Eventifier do
       event.should be_present
     end
 
-    it "notifies the readers of the post" do
+    it "does not store a notification for the post creator" do
       post.update_attribute(:title, 'something else')
 
       Eventifier::Notification.where(
-        :event_id => event.id, :user_id => reader1.id
-      ).count.should == 1
-
-      Eventifier::Notification.where(
-        :event_id => event.id, :user_id => reader2.id
-      ).count.should == 1
+        :event_id => event.id, :user_id => owner.id
+      ).count.should == 0
     end
 
-    it "should create a notification for readers of a post when it's changed" do
-      lambda {
-        post.update_attribute(:title, 'somethang')
-      }.should change(reader1.notifications, :count).by(1)
+    it "stores notifications for the reader" do
+      post.update_attribute(:title, 'something else')
+
+      [reader1, reader2].each do |reader|
+        Eventifier::Notification.where(
+          :event_id => event.id, :user_id => reader.id
+        ).count.should == 1
+      end
+    end
+
+    it "should create a notification for the reader when it's changed" do
+      post.update_attribute(:title, 'somethang')
+
+      [reader1, reader2].each do |reader|
+        reader.notifications.count.should == 1
+      end
+    end
+
+    it "emails the readers with a notification" do
+      post.update_attribute(:title, 'somethang')
+
+      [reader1, reader2].each do |reader|
+        ActionMailer::Base.deliveries.detect { |email|
+          email.to      == [reader.email] &&
+          email.subject == 'You have received a notification'
+        }.should be_present
+      end
     end
   end
 end
