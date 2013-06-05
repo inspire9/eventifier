@@ -8,7 +8,7 @@ describe Eventifier::Relationship do
 
     it "translates hash relations to period-separated strings" do
       Eventifier::Relationship.new(double, :cat => :mouse).key.
-        should == 'cat.mouse'
+        should == 'cat_mouse'
     end
 
     it "translates array relations to hyphen-separated strings" do
