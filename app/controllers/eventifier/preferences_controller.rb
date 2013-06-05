@@ -6,9 +6,11 @@ class Eventifier::PreferencesController < Eventifier::ApplicationController
   def update
     settings = Eventifier::NotificationSetting.for_user current_user
     settings.preferences['email'] ||= {}
-    params[:preferences].each do |hash|
-      settings.preferences['email'][hash['key']] = hash['value']
+
+    Eventifier::Preferences.new(current_user).to_hashes.each do |hash|
+      settings['email'][hash[key]] = params[:preferences][hash[key]].present?
     end
+
     settings.save
 
     render :json => {'status' => 'OK'}
