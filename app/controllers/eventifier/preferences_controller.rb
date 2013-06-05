@@ -8,7 +8,7 @@ class Eventifier::PreferencesController < Eventifier::ApplicationController
     settings.preferences['email'] ||= {}
 
     Eventifier::Preferences.new(current_user).to_hashes.each do |hash|
-      settings['email'][hash[key]] = params[:preferences][hash[key]].present?
+      settings.preferences['email'][hash[:key]] = !params[:preferences][hash[:key]].nil?
     end
 
     settings.save

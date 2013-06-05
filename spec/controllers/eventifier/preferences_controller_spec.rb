@@ -5,14 +5,12 @@ describe Eventifier::PreferencesController do
 
   before :each do
     sign_in user
+
+    Eventifier::Preferences.stub :new => preferences
   end
 
   describe '#show' do
     let(:preferences) { double :to_hashes => [{'foo' => 'bar'}] }
-
-    before :each do
-      Eventifier::Preferences.stub :new => preferences
-    end
 
     it "returns the settings hashes" do
       get :show
@@ -22,32 +20,28 @@ describe Eventifier::PreferencesController do
   end
 
   describe '#update' do
-    let(:settings) { double 'Settings', :preferences => {}, :save => true }
+    let(:preferences) { double to_hashes: [{:key => 'foo'}, {:key => 'bar'}] }
+    let(:settings)    { double 'Settings', :preferences => {}, :save => true }
 
     before :each do
       Eventifier::NotificationSetting.stub :for_user => settings
     end
 
     it "updates the user's email preferences" do
-      put :update, :preferences => [{
-        :key => 'create.posts', :value => false, :label => 'Create Posts'
-      }]
+      put :update, :preferences => {'foo' => ''}
 
-      settings.preferences['email']['create.posts'].should be_false
+      settings.preferences['email']['foo'].should be_true
+      settings.preferences['email']['bar'].should be_false
     end
 
     it 'saves the settings changes' do
       settings.should_receive(:save)
 
-      put :update, :preferences => [{
-        :key => 'create.posts', :value => false, :label => 'Create Posts'
-      }]
+      put :update, :preferences => {'foo' => ''}
     end
 
     it "renders a JSON OK status" do
-      put :update, :preferences => [{
-        :key => 'create.posts', :value => false, :label => 'Create Posts'
-      }]
+      put :update, :preferences => {'foo' => ''}
 
       response.body.should == {'status' => 'OK'}.to_json
     end
