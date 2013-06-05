@@ -28,7 +28,7 @@ class Eventifier::EventSubscriber
         change_data:  change_data(event.payload[:object], event.payload[:options])
       )
 
-      ActiveSupport::Notifications.instrument("#{method_name}.#{klass.name.tableize}.notification.eventifier", event: :create, event: eventifier_event, object: event.payload[:object])
+      ActiveSupport::Notifications.instrument("#{method_name}.#{klass.name.tableize}.notification.eventifier", verb: :create, event: eventifier_event, object: event.payload[:object])
     end
   end
 
