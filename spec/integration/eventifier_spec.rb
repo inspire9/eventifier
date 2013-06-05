@@ -63,6 +63,8 @@ describe 'event tracking' do
     it "emails the readers with a notification" do
       post.save
 
+      Eventifier::Delivery.deliver
+
       [reader1, reader2].each do |reader|
         ActionMailer::Base.deliveries.detect { |email|
           email.to      == [reader.email] &&
@@ -115,6 +117,8 @@ describe 'event tracking' do
 
     it "emails the readers with a notification" do
       post.update_attribute(:title, 'somethang')
+
+      Eventifier::Delivery.deliver
 
       [reader1, reader2].each do |reader|
         ActionMailer::Base.deliveries.detect { |email|

@@ -47,14 +47,6 @@ describe Eventifier::Notification do
     end
   end
 
-  describe "#create" do
-    it "sends an email to the user" do
-      ActionMailer::Base.deliveries.clear
-      notification = Fabricate(:notification)
-      ActionMailer::Base.deliveries.count.should > 0
-    end
-  end
-
   describe "#unread_for?" do
     let(:user)  { double(User, :notifications_last_read_at => last_read) }
     subject     { Fabricate.build(:notification, :created_at => Time.now).unread_for?(user) }

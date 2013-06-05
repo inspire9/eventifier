@@ -50,6 +50,7 @@ module Eventifier
 end
 
 require 'eventifier/tracker'
+require 'eventifier/delivery'
 require 'eventifier/event_tracking'
 require 'eventifier/trackable_class'
 require 'eventifier/event_subscriber'

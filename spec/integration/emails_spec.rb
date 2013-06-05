@@ -22,6 +22,8 @@ describe 'Notification emails' do
     end
 
     def email
+      Eventifier::Delivery.deliver
+
       ActionMailer::Base.deliveries.detect { |email|
         email.to      == [user.email] &&
         email.subject == 'You have received a notification'
