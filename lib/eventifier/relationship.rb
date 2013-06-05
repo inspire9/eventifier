@@ -26,7 +26,7 @@ class Eventifier::Relationship
   def key_from(object)
     case object
     when Hash
-      "#{object.keys.first}.#{key_from object.values.first}"
+      "#{object.keys.first}_#{key_from object.values.first}"
     when Array
       object.join('-')
     else
