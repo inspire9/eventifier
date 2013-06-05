@@ -5,7 +5,8 @@ module Eventifier
     belongs_to  :user
     belongs_to  :eventable,     polymorphic: true
     belongs_to  :groupable,     polymorphic: true
-    has_many    :notifications, class_name: 'Eventifier::Notification', dependent: :destroy
+    has_many    :notifications, class_name: 'Eventifier::Notification',
+      dependent: :destroy
 
     validates :user,      presence: true
     validates :eventable, presence: true

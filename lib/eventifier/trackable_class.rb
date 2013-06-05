@@ -23,9 +23,14 @@ class Eventifier::TrackableClass
   end
 
   private
+
   def add_relations
-    @klass.class_eval { has_many :events, as: :eventable, class_name: 'Eventifier::Event', dependent: :destroy }
-    @klass.class_eval { has_many :notifications, through: :events, class_name: 'Eventifier::Notification', dependent: :destroy }
+    @klass.class_eval do
+      has_many :events, as: :eventable, class_name: 'Eventifier::Event',
+        dependent: :destroy
+      has_many :notifications, through: :events,
+        class_name: 'Eventifier::Notification'
+    end
   end
 
   def generate_observer_callbacks

@@ -78,6 +78,20 @@ describe 'event tracking' do
 
       event.groupable.should == post
     end
+
+    it "deletes the event when the post is destroyed" do
+      post.save
+      post.destroy
+
+      Eventifier::Event.count.should be_zero
+    end
+
+    it "deletes notifications belonging to an event" do
+      post.save
+      post.destroy
+
+      Eventifier::Notification.count.should be_zero
+    end
   end
 
   context 'an existing post' do
