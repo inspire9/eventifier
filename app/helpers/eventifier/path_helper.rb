@@ -1,7 +1,7 @@
 module Eventifier
   module PathHelper
     def render_partial_view notification, context = nil
-      render(partial: partial_path(notification, :dropdown), object: notification.event, locals: { notification: notification, event: notification.event, object: notification.event.eventable })
+      render(partial: partial_path(notification, context), object: notification.event, locals: { notification: notification, event: notification.event, object: notification.event.eventable })
     end
 
     def partial_path notification, context = nil
