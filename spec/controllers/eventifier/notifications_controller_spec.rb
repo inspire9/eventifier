@@ -5,9 +5,7 @@ describe Eventifier::NotificationsController do
     let(:user) { double 'User', :update_attribute => true }
 
     before :each do
-      controller.stub current_user: user
-
-      pending
+      sign_in user
     end
 
     it "updates the current user's notifications last read at" do
