@@ -53,6 +53,7 @@ require 'eventifier/tracker'
 require 'eventifier/event_tracking'
 require 'eventifier/trackable_class'
 require 'eventifier/event_subscriber'
+require 'eventifier/preferences'
 require 'eventifier/relationship'
 
 require 'eventifier/notifier/notification_mapping'
