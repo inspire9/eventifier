@@ -57,7 +57,7 @@ describe 'Notification emails' do
 
     it "sends an email when default and post are true" do
       settings.preferences['email'] = {
-        'default' => true, 'create_post_notify_readers' => true
+        'default' => true, 'create_posts_notify_readers' => true
       }
       settings.save
 
@@ -68,7 +68,7 @@ describe 'Notification emails' do
 
     it "sends an email when default is false but post is true" do
       settings.preferences['email'] = {
-        'default' => false, 'create_post_notify_readers' => true
+        'default' => false, 'create_posts_notify_readers' => true
       }
       settings.save
 
@@ -79,7 +79,7 @@ describe 'Notification emails' do
 
     it "does not send an email when default is true but post is false" do
       settings.preferences['email'] = {
-        'default' => true, 'create_post_notify_readers' => false
+        'default' => true, 'create_posts_notify_readers' => false
       }
       settings.save
 
@@ -90,7 +90,7 @@ describe 'Notification emails' do
 
     it "does not send an email when default and post are false" do
       settings.preferences['email'] = {
-        'default' => false, 'create_post_notify_readers' => false
+        'default' => false, 'create_posts_notify_readers' => false
       }
       settings.save
 
