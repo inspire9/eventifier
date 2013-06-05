@@ -13,7 +13,7 @@ class Eventifier::EventSubscriber
     ActiveSupport::Notifications.subscribe name do |*args|
       event = ActiveSupport::Notifications::Event.new(*args)
       event_user = if event.payload[:user]
-        Eventifier::Relationship.new(event.payload[:object], event.payload[:user]).first
+        Eventifier::Relationship.new(event.payload[:object], event.payload[:user]).users.first
       else
         event.payload[:object].user
       end
