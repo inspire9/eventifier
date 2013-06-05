@@ -20,7 +20,7 @@ class Eventifier::Preferences
   def keys
     @keys ||= begin
       hash = Eventifier::NotificationMapping.notification_mappings
-      hash.keys.collect { |key|
+      ['default'] + hash.keys.collect { |key|
         hash[key].collect { |value|
           (key.split('.') + ['notify', Eventifier::Relationship.new(user, value).key]).join('_')
         }

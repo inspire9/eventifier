@@ -15,6 +15,7 @@ describe Eventifier::Preferences do
   describe '#to_hashes' do
     it "interprets each key" do
       preferences.to_hashes.collect { |hash| hash[:key] }.should == [
+        'default',
         'create_posts_notify_readers',
         'create_comments_notify_post_readers'
       ]
@@ -22,7 +23,7 @@ describe Eventifier::Preferences do
 
     it "sets values to true if unknown" do
       preferences.to_hashes.collect { |hash| hash[:value] }.
-        should == [true, true]
+        should == [true, true, true]
     end
 
     it "sets values to true if known and true" do
@@ -30,7 +31,7 @@ describe Eventifier::Preferences do
       settings.preferences['email']['create_posts_notify_readers'] = true
 
       preferences.to_hashes.collect { |hash| hash[:value] }.
-        should == [true, true]
+        should == [true, true, true]
     end
 
     it "sets values to false if known and false" do
@@ -38,11 +39,12 @@ describe Eventifier::Preferences do
       settings.preferences['email']['create_posts_notify_readers'] = false
 
       preferences.to_hashes.collect { |hash| hash[:value] }.
-        should == [false, true]
+        should == [true, false, true]
     end
 
     it "returns keys if no translations available for labels" do
       preferences.to_hashes.collect { |hash| hash[:label] }.should == [
+        'default',
         'create_posts_notify_readers',
         'create_comments_notify_post_readers'
       ]
@@ -53,6 +55,7 @@ describe Eventifier::Preferences do
       I18n.backend.store_translations :en, :events => {
         :labels => {
           :preferences => {
+            'default'                             => 'All Events',
             'create_posts_notify_readers'         => 'New Posts',
             'create_comments_notify_post_readers' => 'New Comments'
           }
@@ -60,7 +63,7 @@ describe Eventifier::Preferences do
       }
 
       preferences.to_hashes.collect { |hash| hash[:label] }.
-        should == ['New Posts', 'New Comments']
+        should == ['All Events', 'New Posts', 'New Comments']
     end
   end
 end
