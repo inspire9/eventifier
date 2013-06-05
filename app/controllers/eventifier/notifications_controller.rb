@@ -14,6 +14,7 @@ class Eventifier::NotificationsController < Eventifier::ApplicationController
   def notifications
     scope = current_user.notifications.limit(per_page)
     scope = scope.where("created_at < ?", after) if params[:after]
+    scope = scope.where("created_at > ?", since) if params[:since]
     scope = scope.where(
       "created_at > ?", current_user.notifications_last_read_at
     ) if params[:recent]
@@ -27,5 +28,9 @@ class Eventifier::NotificationsController < Eventifier::ApplicationController
 
   def per_page
     (params[:limit] || 5).to_i
+  end
+
+  def since
+    Time.zone.at params[:since].to_i
   end
 end
