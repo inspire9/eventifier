@@ -10,26 +10,24 @@ module Eventifier
       protected
 
       # Configure default email options
-      def eventifier_mail(record, action)
-        initialize_from_record(record)
+      def eventifier_mail(user, records, action)
+        initialize_from_record(user, records)
         mail headers_for(action)
       end
 
-      def initialize_from_record(record)
-        @notifications = [record]
+      def initialize_from_record(user, records)
+        @user, @notifications = user, records
       end
 
       def headers_for(action)
         headers = {
-          :subject       => "You have received a notification",
+          :subject       => "You have received notifications",
           :from          => mailer_sender,
-          :to            => @notifications.first.user.email,
+          :to            => @user.email,
           :template_path => template_paths
         }
 
-        unless headers.key?(:reply_to)
-          headers[:reply_to] = headers[:from]
-        end
+        headers[:reply_to] = headers[:from] unless headers.key?(:reply_to)
 
         headers
       end

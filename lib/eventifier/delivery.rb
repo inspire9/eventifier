@@ -1,40 +1,57 @@
 class Eventifier::Delivery
   def self.deliver
-    Eventifier::Notification.unsent.each do |notification|
-      new(notification).deliver
+    unsent = Eventifier::Notification.unsent
+    unsent.group_by(&:user).each do |user, notifications|
+      new(user, notifications).deliver
     end
   end
 
-  delegate :event, :user, :relations, :to => :notification
-
-  def initialize(notification)
-    @notification = notification
+  def initialize(user, notifications)
+    @user, @notifications = user, notifications
   end
 
   def deliver
-    Eventifier.mailer.notifications(notification).deliver if send_email?
+    if anything_to_send?
+      Eventifier.mailer.notifications(user, notifications_to_send).deliver
+    end
 
-    notification.update_attribute :sent, true
+    notifications.each do |notification|
+      notification.update_attribute :sent, true
+    end
   end
 
   private
 
-  attr_reader :notification
+  attr_reader :user, :notifications
+
+  def anything_to_send?
+    !notifications_to_send.empty?
+  end
+
+  def notifications_to_send
+    @notifications_to_send ||= notifications.select { |notification|
+      include_notification? notification
+    }
+  end
 
   def settings
     @settings ||= Eventifier::NotificationSetting.for_user user
   end
 
-  def send_email?
+  def include_notification?(notification)
     return true if settings.preferences['email'].nil?
 
-    specifics = relations.collect { |relation|
-      key = [event.verb, event.eventable_type.underscore.pluralize, 'notify',
-        Eventifier::Relationship.new(self, relation).key].join('_')
+    specifics = notification.relations.collect { |relation|
+      key = [
+        notification.event.verb,
+        notification.event.eventable_type.underscore.pluralize,
+        'notify',
+        Eventifier::Relationship.new(self, relation).key
+      ].join('_')
       settings.preferences['email'][key]
     }.compact
 
-    return specifics.any? { |specific| specific } unless specifics.empty?
+    return specifics.any? unless specifics.empty?
 
     default  = settings.preferences['email']['default']
     default.nil? || default

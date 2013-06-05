@@ -68,7 +68,7 @@ describe 'event tracking' do
       [reader1, reader2].each do |reader|
         ActionMailer::Base.deliveries.detect { |email|
           email.to      == [reader.email] &&
-          email.subject == 'You have received a notification'
+          email.subject == 'You have received notifications'
         }.should be_present
       end
     end
@@ -129,7 +129,7 @@ describe 'event tracking' do
       [reader1, reader2].each do |reader|
         ActionMailer::Base.deliveries.detect { |email|
           email.to      == [reader.email] &&
-          email.subject == 'You have received a notification'
+          email.subject == 'You have received notifications'
         }.should be_present
       end
     end

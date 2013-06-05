@@ -11,7 +11,11 @@ describe Eventifier::Mailer do
     end
 
     it "should be able to send a 'notification' email" do
-      proc { Eventifier::Mailer.notifications(Fabricate(:notification)).deliver }.should change(ActionMailer::Base.deliveries, :count)
+      proc {
+        Eventifier::Mailer.notifications(
+          Fabricate(:user), [Fabricate(:notification)]
+        ).deliver
+      }.should change(ActionMailer::Base.deliveries, :count)
     end
   end
 end

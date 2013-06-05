@@ -6,7 +6,7 @@ class Eventifier::Mailer < ::ActionMailer::Base
 
   default :from => Eventifier.mailer_sender
 
-  def notifications(record)
-    eventifier_mail(record, :notifications)
+  def notifications(user, records)
+    eventifier_mail(user, records, :notifications)
   end
 end

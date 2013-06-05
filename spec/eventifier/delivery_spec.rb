@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe Eventifier::Delivery do
   describe '#deliver' do
-    let(:delivery)     { Eventifier::Delivery.new notification }
-    let(:notification) { double 'Notification', user: double,
-      relations: [:subscribers], event: event, update_attribute: true }
+    let(:delivery)     { Eventifier::Delivery.new double, [notification] }
+    let(:notification) { double 'Notification', relations: [:subscribers], event: event, update_attribute: true }
     let(:event)        { double 'Event', verb: 'create',
       eventable_type: 'Post' }
     let(:email)        { double 'Email', deliver: true }
