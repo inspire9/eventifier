@@ -3,6 +3,7 @@ require 'eventifier'
 Fabricator(:event, :class_name => Eventifier::Event) do
   user
   eventable(:fabricator => :post)
+  groupable(:fabricator => :post)
   verb :update
   change_data { { :date => [5.days.ago, 3.days.ago] } }
 end

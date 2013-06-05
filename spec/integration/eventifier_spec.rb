@@ -72,6 +72,12 @@ describe 'event tracking' do
         }.should be_present
       end
     end
+
+    it "stores the post as the groupable object" do
+      post.save
+
+      event.groupable.should == post
+    end
   end
 
   context 'an existing post' do

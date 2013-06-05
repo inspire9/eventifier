@@ -17,10 +17,13 @@ class Eventifier::EventSubscriber
       else
         event.payload[:object].user
       end
+      groupable = event.payload[:object]
+      groupable = Eventifier::Relationship.new(groupable, event.payload[:group_by]).users.first if event.payload[:group_by]
 
       eventifier_event = Eventifier::Event.create(
         user:         event_user,
         eventable:    event.payload[:object],
+        groupable:    groupable,
         verb:         event.payload[:event],
         change_data:  change_data(event.payload[:object], event.payload[:options])
       )

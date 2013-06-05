@@ -46,7 +46,7 @@ describe Eventifier::EventTracking do
         changes = { :foo => 'bar', :bar => 'baz' }
         object.stub(:changes).and_return(changes)
 
-        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes)
+        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object)
 
         subject
       end
@@ -73,7 +73,7 @@ describe Eventifier::EventTracking do
           track_on :update, :attributes => { :except => %w(updated_at) }
         end
 
-        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes)
+        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object)
 
         subject
       end

@@ -9,7 +9,8 @@ class Eventifier::TrackableClass
     @klass, @klass_methods = klass, klass_methods
 
     @attributes = options.delete(:attributes) || {}
-    @owner = options.delete(:owner)
+    @owner      = options.delete :owner
+    @group_by   = options.delete :group_by
   end
 
   def track
@@ -28,13 +29,13 @@ class Eventifier::TrackableClass
   end
 
   def generate_observer_callbacks
-    methods, attributes, klass, owner = @klass_methods, @attributes, @klass, @owner
+    methods, attributes, klass, owner, group_by = @klass_methods, @attributes, @klass, @owner, @group_by
 
     observer.class_eval do
       methods.each do |method|
         define_method "after_#{method}" do |object|
           Rails.logger.debug "||ASN|| Instrument #{method}.#{klass.name.tableize}" if defined?(Rails)
-          ActiveSupport::Notifications.instrument("#{method}.#{klass.name.tableize}.event.eventifier", event: method.to_sym, object: object, options: attributes, user: owner) if object.changed?
+          ActiveSupport::Notifications.instrument("#{method}.#{klass.name.tableize}.event.eventifier", event: method.to_sym, object: object, options: attributes, user: owner, group_by: group_by) if object.changed?
         end
       end
     end
