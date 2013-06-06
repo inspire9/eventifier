@@ -21,7 +21,7 @@ module Eventifier
 
       def headers_for(action)
         headers = {
-          :subject       => "You have received notifications",
+          :subject       => I18n.t(:email_subject, :scope => [:notifications]),
           :from          => mailer_sender,
           :to            => @user.email,
           :template_path => template_paths
@@ -62,7 +62,7 @@ module Eventifier
       #           subject: '...'
       #
       def translate(mapping, key)
-        I18n.t(:"notifications_subject", :scope => [:devise, :mailer, key],
+        I18n.t(:"notifications_subject", :scope => [:eventifier, :notifications, key],
           :default => [:subject, key.to_s.humanize])
       end
     end
