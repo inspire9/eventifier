@@ -36,6 +36,29 @@ h2. Installation
 
 <pre><code>
   rails generate eventifier:install
+  rake eventifier:install:migrations
+</code></pre>
+
+h4. Add stylesheets
+
+<pre><code>
+  # app/assets/stylesheets/application.scss
+  /*= require eventifier/notifications*/
+</code></pre>
+
+h4. Add javascript
+
+<pre><code>
+  # app/assets/javascripts/application.coffee
+  #= require eventifier/notifications
+</code></pre>
+
+h2. Sending of emails
+
+You want to add a scheduled task to run the following task every x minutes
+
+<pre><code>
+  rake eventifier:email:deliver
 </code></pre>
 
 h2. Requirements
