@@ -13,10 +13,6 @@ module Eventifier
         copy_file "events.en.yaml", "config/locales/events.en.yaml"
       end
 
-      def generate_migration
-        migration_template "migration.rb", "db/migrate/eventifier_setup.rb" if defined?(ActiveRecord)
-      end
-
       def add_routes
         route %Q{mount Eventifier::Engine => '/'}
       end
