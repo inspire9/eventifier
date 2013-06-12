@@ -34,6 +34,13 @@ describe Eventifier::PreferencesController do
       settings.preferences['email']['bar'].should be_false
     end
 
+    it "sets everything to false if no preferences are supplied" do
+      put :update
+
+      settings.preferences['email']['foo'].should be_false
+      settings.preferences['email']['bar'].should be_false
+    end
+
     it 'saves the settings changes' do
       settings.should_receive(:save)
 
