@@ -12,6 +12,7 @@ en:
         single: "{{user.name}} made a change to their post"
         multiple: "{{user.name}} made some changes to their post"
   notifications:
+    email_subject: "You have received notifications"
     default:
       create: "{{user.name}} created a <strong>{{object_type}}</strong>"
       update:
