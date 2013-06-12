@@ -103,8 +103,8 @@ class window.NotificationDropdown
 
   addNotifications: (data)=>
     @lastReadAt = new Date(data.last_read_at)
-    new_notifications = data.notifications.filter((notification)=>
-      $.inArray(notification.id, @notifications.map((n)->n.id)) < 0
+    new_notifications = $.grep(data.notifications, (notification)=>
+      $.inArray(notification.id, $.map(@notifications, (n)->n.id)) < 0
     )
     @notifications = @notifications.concat new_notifications
     @scrollWindow.off('scroll', @scrolling) if data.notifications == []
@@ -121,7 +121,7 @@ class window.NotificationDropdown
     @el.find(".notification_alert").html(displayCount)
 
   setUnreadCount: =>
-    @unreadCount = @notifications.filter((notification)=>
+    @unreadCount = $.grep(@notifications, (notification)=>
       new Date(notification.created_at) > @lastReadAt
     ).length
 
@@ -143,11 +143,11 @@ class window.NotificationDropdown
     , @pollTime*1000
 
   oldestNotificationTime: =>
-    Math.min.apply Math, @notifications.map((notification)-> (new Date(notification.created_at)).getTime()/1000)
+    Math.min.apply Math, $.map(@notifications, (notification)-> notification.created_at)
 
   newestNotificationTime: =>
     if @notifications.length
-      Math.max.apply Math, @notifications.map((notification)-> (new Date(notification.created_at)).getTime()/1000)
+      Math.max.apply Math, $.map(@notifications, (notification)-> notification.created_at)
     else
       0
 

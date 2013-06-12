@@ -41,7 +41,7 @@
     opacity: 0.5;
     &:hover { opacity: 1; }
     .notification_alert {
-      &:empty { display: none }
+      display: none
       border-radius: 8px;
       position: absolute;
       top: -5px;
@@ -58,6 +58,7 @@
     }
   }
   &.alerting > a, &.notifications_active > a { opacity: 1; }
+  &.alerting > a .notification_alert { display: block; }
   #settings_pane {
     display: none;
     margin: 0;

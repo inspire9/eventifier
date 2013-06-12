@@ -1,10 +1,10 @@
-%a.toggle_dropdown{ href: "#"}
+%a.toggle_dropdown{ href: "#" }
   View Notifications
   %span.notification_alert
-  #notification_dropdown
-    %header
-      %a.toggle_settings{ href: '#' } Settings
-      %h4 Notifications
-    %ol
-      %li.none You have no notifications
-    #settings_pane
+#notification_dropdown
+  %header
+    %a.toggle_settings{ href: '#' } Settings
+    %h4 Notifications
+  %ol
+    %li.none You have no notifications
+  #settings_pane
