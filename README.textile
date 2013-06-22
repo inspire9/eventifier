@@ -50,6 +50,15 @@ h4. Add javascript
 <pre><code>
   # app/assets/javascripts/application.coffee
   #= require eventifier/notifications
+
+  new NotificationDropdown el: $(".notifications")
+</code></pre>
+
+h4. Add the required routes
+
+<pre><code>
+  # config/routes.rb
+  mount Eventifier::Engine => '/'
 </code></pre>
 
 h2. Sending of emails
