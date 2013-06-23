@@ -38,6 +38,17 @@ h2. Installation
   rake eventifier:install:migrations
 </code></pre>
 
+h4. Add required gems
+
+<pre><code>
+  # Gemfile
+  group :assets do
+    gem 'compass-rails'
+    gem 'haml_coffee_assets'
+    gem 'jbuilder'
+  end
+</code></pre>
+
 h4. Add stylesheets
 
 <pre><code>
@@ -72,7 +83,6 @@ You want to add a scheduled task to run the following task every x minutes
 h2. Requirements
 
 * ActiveRecord
-
 
 h2. Testing
 
