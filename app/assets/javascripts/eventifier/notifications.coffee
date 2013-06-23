@@ -8,7 +8,7 @@ class window.NotificationDropdown
   template: JST['eventifier/templates/dropdown']
   settingsTemplate: JST['eventifier/templates/settings']
 
-  constructor: (options) -> 
+  constructor: (options) ->
     {@el, @limit, @pollTime} = options
     @limit =    @limit || 5
     @pollTime = @pollTime || 15
@@ -22,8 +22,25 @@ class window.NotificationDropdown
   render: =>
     @el.html(@template(@)).attr('tabindex', 0)
 
-    @scrollWindow = @el.find("ol")
+    @checkVisibility()
+    @setEvents()
+    @poll()
 
+  checkVisibility: =>
+    @el.addClass("notifications_active").find('#notification_dropdown').attr('opacity': 0)
+    @el.find('#notification_dropdown').offset (index, coords)=>
+      coords.left = 10 if coords.left < 0
+      if coords.left + @el.find('#notification_dropdown').width() > $(window).width()
+        coords.left = $(window).width() - @el.find('#notification_dropdown').width() - 5
+
+      @el.find('#notification_dropdown').offset coords
+
+      if @el.find('#notification_dropdown').position().left > -@el.find('#notification_dropdown').width()/2
+        @el.find('#notification_dropdown').addClass('left_nipple')
+
+    @el.removeClass("notifications_active").find('#notification_dropdown').attr('opacity': 1)
+
+  setEvents: =>
     @el.on 'click', '.toggle_dropdown', @toggleDropdown
     @el.on 'click', '.toggle_settings', @toggleSettings
     @el.on 'click', '#email_settings_default',   @defaultSettings
@@ -31,19 +48,25 @@ class window.NotificationDropdown
     @el.on 'addNotifications', @renderNotifications
     @el.on 'addNotifications', @setUnreadCount
     @el.on 'poll', @poll
-    @scrollWindow.on 'scroll', @scrolling
+    @el.on 'scroll', 'ol', @scrolling
     $(window).on 'click', @blurNotifications
 
-    @poll()
+    @
 
   renderNotifications: =>
     @el.find(".none").remove() if @notifications.length > 0
     $.each @notifications, (index, notification)=>
       unless $.inArray(notification.id, @renderedNotifications) >= 0
         if new Date(notification.created_at) > @lastReadAt
-          $(@el).find('ol').prepend $("<li />").addClass('unread').html(notification.html)
+          @el
+            .find('ol')
+            .prepend $("<li />")
+            .addClass('unread')
+            .html(notification.html)
         else
-          $(@el).find('ol').append $("<li />").html(notification.html)
+          @el
+          .find('ol')
+          .append($("<li />").html(notification.html))
         @renderedNotifications.push notification.id
 
   isActive: =>
@@ -69,7 +92,8 @@ class window.NotificationDropdown
 
   defaultSettings: =>
     @el.find("#settings_pane").toggleClass("disabled")
-    @el.find("input:not([id='email_settings_default'])").each -> $(@).attr(disabled: !$(@).attr('disabled')).prop('checked', true)
+    @el.find("input:not([id='email_settings_default'])").each ->
+      $(@).attr(disabled: !$(@).attr('disabled')).prop('checked', true)
 
   saveSettings: (event)=>
     event.preventDefault() if event?
@@ -107,7 +131,7 @@ class window.NotificationDropdown
       $.inArray(notification.id, $.map(@notifications, (n)->n.id)) < 0
     )
     @notifications = @notifications.concat new_notifications
-    @scrollWindow.off('scroll', @scrolling) if data.notifications == []
+    @el.off('scroll', 'ol', @scrolling) if data.notifications == []
     @el.trigger 'addNotifications'
 
   updateAlert: =>
@@ -143,11 +167,15 @@ class window.NotificationDropdown
     , @pollTime*1000
 
   oldestNotificationTime: =>
-    Math.min.apply Math, $.map(@notifications, (notification)-> notification.created_at)
+    Math.min.apply Math, $.map(@notifications, (notification)->
+      notification.created_at
+    )
 
   newestNotificationTime: =>
     if @notifications.length
-      Math.max.apply Math, $.map(@notifications, (notification)-> notification.created_at)
+      Math.max.apply Math, $.map(@notifications, (notification)->
+        notification.created_at
+      )
     else
       0
 
@@ -155,7 +183,9 @@ class window.NotificationDropdown
     Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime())
 
   scrolling: =>
-    if (@scrollWindow.scrollTop() + @scrollWindow.innerHeight() >= @scrollWindow[0].scrollHeight - 50)
+    scrollWindow = @$el.find('ol')
+
+    if (scrollWindow.scrollTop() + scrollWindow.innerHeight() >= scrollWindow[0].scrollHeight - 50)
       @loadMore(after: @oldestNotificationTime())
 
   arrayFromObject: (collection)->

@@ -114,6 +114,7 @@
       box-shadow: -1px -1px 1px rgba(black, .2);
       @include respond-to(iphone-landscape) { display: none }
     }
+    &.left_nipple:before { left: 30px; right: auto; }
     header {
       margin: 0;
       padding: 5px;
