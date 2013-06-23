@@ -1,0 +1,4 @@
+test:
+  adapter:      postgresql
+  database:     eventifier
+  min_messages: warning

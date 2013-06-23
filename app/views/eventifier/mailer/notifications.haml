@@ -1,0 +1,5 @@
+%p You have new notifications
+
+%ul.notifications
+  - @notifications.each do |notification|
+    %li= render_partial_view(notification, :email)

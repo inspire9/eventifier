@@ -37,8 +37,8 @@ describe Eventifier::EventTracking do
       before do
         object.stub(:user).and_return(user)
         event_tracker.events_for test_class,
-                                 :track_on => [:create, :update, :destroy],
-                                 :attributes => { :except => %w(updated_at) }
+          :track_on => [:create, :update, :destroy],
+          :attributes => { :except => %w(updated_at) }
       end
 
 
@@ -46,46 +46,13 @@ describe Eventifier::EventTracking do
         changes = { :foo => 'bar', :bar => 'baz' }
         object.stub(:changes).and_return(changes)
 
-        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes)
+        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object)
 
         subject
       end
     end
 
   end
-
-  describe '#create_event' do
-    let(:object) { double('object', :changes => changes, :user => double(User)) }
-    let(:changes) { { :foo => 'bar', :bar => 'baz', :bob => 'blah' } }
-    let(:options) { { } }
-
-    subject { Eventifier::Event.create_event(:create, object, options) }
-
-    describe "exclude" do
-      let(:options) { { :except => ['foo'] } }
-
-      it 'should exclude the right attrs' do
-        Eventifier::Event.should_receive(:create) do |attrs|
-          attrs[:change_data].should == { :bar => 'baz', :bob => 'blah' }
-        end
-        subject
-      end
-
-    end
-    describe "only" do
-      let(:options) { { :only => ['foo'] } }
-
-      it 'should exclude the right attrs' do
-        Eventifier::Event.should_receive(:create) do |attrs|
-          attrs[:change_data].should == { :foo => 'bar' }
-        end
-        subject
-      end
-
-    end
-
-  end
-
 
   context "block syntax" do
 
@@ -106,7 +73,7 @@ describe Eventifier::EventTracking do
           track_on :update, :attributes => { :except => %w(updated_at) }
         end
 
-        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes)
+        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object)
 
         subject
       end
@@ -121,24 +88,15 @@ describe Eventifier::EventTracking do
       end
 
       context "notifying" do
-        before do
-          @event_observer_instance = Eventifier::EventObserver.instance
-          Eventifier::EventObserver.any_instance.stub post_path: '/post'
-        end
-
         describe "#add_notification" do
 
           it "should add the notification to the notification hash" do
-            @event_observer_instance.should_receive(:add_notification).with(test_class, :user, :create)
-
-            event_tracker.events_for test_class do
-              track_on :create, :attributes => { :except => %w(updated_at) }
-              notify :user, :on => :create
-            end
           end
         end
 
         it "should notify users when passed a hash" do
+          pending
+
           subscriber = double('user')
 
           object.stub :category => double('category', :subscribers => [subscriber])

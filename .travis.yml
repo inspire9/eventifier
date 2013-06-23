@@ -1,14 +1,13 @@
 language: ruby
 rvm:
-  # - 1.8.7
   - 1.9.2
   - 1.9.3
-  # - jruby-18mode # JRuby in 1.8 mode
   # - jruby-19mode # JRuby in 1.9 mode
-
-env:
-  - ORM=active_record
-  - ORM=mongoid
-
 before_script:
   - psql -c 'create database eventifier;' -U postgres
+notifications:
+  campfire:
+    rooms:
+      - secure: "PZeuyuOFIPVzA6Lr4unFdatKz/hYlwk8LRBK1DMWl7lPWL4RSxoCVY/Lh5mK\nj+1bYtPM73WL38xNLDsXeD6YpS1CkB66PaUcmhP+EnyH+5L1NZ2hKJG1zY4x\njC2ux6hKSstmQheRlIBaWhHUpGqZkoDUPxAI4C1qz44FkfHtI40="
+    on_success: change
+    on_failure: change

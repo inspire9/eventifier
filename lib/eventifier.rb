@@ -16,27 +16,51 @@
 
 # class EventTracking
 #   include Eventable::EventTracking
-# 
+#
 #   def initialize
 #     events_for Activity,
 #                :on => [:create, :update, :destroy],
 #                :attributes => { :except => %w(updated_at) }
 #   end
-# 
+#
 # end
-require 'action_mailer'
 
-if defined? Mongoid
-  require 'eventifier/mongoid_support'
-elsif defined? ActiveRecord
-  require 'eventifier/active_record_support'
+require 'multi_json'
+require 'action_mailer'
+require 'haml-rails'
+
+module Eventifier
+  mattr_accessor :mailer_sender
+  self.mailer_sender = nil
+
+  mattr_accessor :mailer_name
+  self.mailer_name = "::Eventifier::Mailer"
+
+  def self.setup
+    yield self
+  end
+
+  def self.mailer
+    ActiveSupport::Dependencies.constantize(@@mailer_name)
+  end
+
+  def self.tracked_classes
+    @tracked_classes ||= []
+  end
 end
 
-require 'eventifier/helper_methods'
-require 'eventifier/notification_mailer'
-require 'eventifier/notification_helper'
-require 'eventifier/event_helper'
+require 'eventifier/tracker'
+require 'eventifier/delivery'
 require 'eventifier/event_tracking'
+require 'eventifier/trackable_class'
+require 'eventifier/event_subscriber'
+require 'eventifier/preferences'
+require 'eventifier/relationship'
 
-require 'eventifier/railtie' if defined?(Rails)
+require 'eventifier/notifier/notification_mapping'
+require 'eventifier/notifier/notification_subscriber'
+require 'eventifier/notifier/notifier'
 
+require 'eventifier/mailers/helpers'
+
+require 'eventifier/engine' if defined?(Rails)

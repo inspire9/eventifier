@@ -1,17 +1,21 @@
 require 'spec_helper'
 
-describe Eventifier::NotificationMailer do
+describe Eventifier::Mailer do
   describe "#notification_email" do
     before do
-      Eventifier::NotificationMailer.any_instance.stub main_app: double('app', url_for: true)
+      Eventifier::Mailer.any_instance.stub main_app: double('app', url_for: true)
     end
 
     it "should response to notification emails" do
-      Eventifier::NotificationMailer.should respond_to(:notification_email)
+      Eventifier::Mailer.should respond_to(:notifications)
     end
 
     it "should be able to send a 'notification' email" do
-      proc { Eventifier::NotificationMailer.notification_email(Fabricate(:notification)).deliver }.should change(ActionMailer::Base.deliveries, :count)
+      proc {
+        Eventifier::Mailer.notifications(
+          Fabricate(:user), [Fabricate(:notification)]
+        ).deliver
+      }.should change(ActionMailer::Base.deliveries, :count)
     end
   end
 end
