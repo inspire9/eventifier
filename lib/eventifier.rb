@@ -1,19 +1,3 @@
-# Step 1. Use rails hooks for create and update and destroy
-# Step 2. Use modules to overwrite methods, and be rails independent
-# Consider implementing with http://stackoverflow.com/questions/3689736/rails-3-alias-method-chain-still-used
-# Consider implementing with http://www.ruby-doc.org/stdlib-1.9.3/libdoc/observer/rdoc/Observable.html
-
-
-# init.rb
-# require 'eventifer'
-
-
-# Todo
-# - Notifications
-
-# Ideas for implementation:
-
-
 # class EventTracking
 #   include Eventable::EventTracking
 #
@@ -27,7 +11,11 @@
 
 require 'multi_json'
 require 'action_mailer'
+
+require 'compass-rails'
 require 'haml-rails'
+require 'haml_coffee_assets'
+require 'jbuilder'
 
 module Eventifier
   mattr_accessor :mailer_sender

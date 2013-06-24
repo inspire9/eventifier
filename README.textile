@@ -38,15 +38,13 @@ h2. Installation
   rake eventifier:install:migrations
 </code></pre>
 
-h4. Add required gems
+h4. Add notifications indicator in interface
+
+Eventifier provides a notification tool for your users.
 
 <pre><code>
-  # Gemfile
-  group :assets do
-    gem 'compass-rails'
-    gem 'haml_coffee_assets'
-    gem 'jbuilder'
-  end
+  # app/views/layouts/application.erb
+  &lt;div class=&quot;notifications&quot;&gt;&lt;/div&gt;
 </code></pre>
 
 h4. Add stylesheets
