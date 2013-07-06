@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Eventifier::Delivery do
   describe '#deliver' do
-    let(:delivery)     { Eventifier::Delivery.new double, [notification] }
+    let(:delivery)     { Eventifier::Delivery.new user, [notification] }
+    let(:user)         { double 'User' }
     let(:notification) { double 'Notification', relations: [:subscribers], event: event, update_attribute: true }
     let(:event)        { double 'Event', verb: 'create',
       eventable_type: 'Post' }
@@ -102,6 +103,14 @@ describe Eventifier::Delivery do
         settings.preferences['email'] = {
           'default' => false, 'create_posts_notify_subscribers' => false
         }
+      end
+
+      it_should_behave_like 'a blocked email'
+    end
+
+    context "user does not want eventifier emails" do
+      before :each do
+        user.stub eventifier_emails?: false
       end
 
       it_should_behave_like 'a blocked email'

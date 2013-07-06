@@ -11,7 +11,7 @@ class Eventifier::Delivery
   end
 
   def deliver
-    if anything_to_send?
+    if anything_to_send? && user_receives_emails?
       Eventifier.mailer.notifications(user, notifications_to_send).deliver
     end
 
@@ -55,5 +55,11 @@ class Eventifier::Delivery
 
     default  = settings.preferences['email']['default']
     default.nil? || default
+  end
+
+  def user_receives_emails?
+    return true unless user.respond_to? :eventifier_emails?
+
+    user.eventifier_emails?
   end
 end
