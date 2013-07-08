@@ -33,6 +33,17 @@ That's it!
 
 h2. Installation
 
+h4. Add Eventifier to your Gemfile
+
+<pre><code>
+  # Gemfile
+  gem "eventifier"
+</code></pre>
+
+And run <code>bundle install</code>
+
+h4. Add Eventifier to your Gemfile
+
 <pre><code>
   rails generate eventifier:install
   rake eventifier:install:migrations
