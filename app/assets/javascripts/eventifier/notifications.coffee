@@ -22,7 +22,7 @@ class window.NotificationDropdown
   render: =>
     @el.html(@template(@)).attr('tabindex', 0)
 
-    @checkVisibility()
+    # @checkVisibility()
     @setEvents()
     @poll()
 
