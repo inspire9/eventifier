@@ -16,15 +16,35 @@
 
 # class EventTracking
 #   include Eventable::EventTracking
-# 
+#
 #   def initialize
 #     events_for Activity,
 #                :on => [:create, :update, :destroy],
 #                :attributes => { :except => %w(updated_at) }
 #   end
-# 
+#
 # end
 require 'action_mailer'
+
+module Eventifier
+  def self.resume!
+    @suspended = false
+  end
+
+  def self.suspend(&block)
+    suspend!
+    yield
+    resume!
+  end
+
+  def self.suspend!
+    @suspended = true
+  end
+
+  def self.suspended?
+    @suspended
+  end
+end
 
 if defined? Mongoid
   require 'eventifier/mongoid_support'

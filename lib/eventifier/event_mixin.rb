@@ -26,6 +26,8 @@ module Eventifier
       end
 
       def create_event(verb, object, options = { })
+        return if Eventifier.suspended?
+
         changed_data = object.changes.stringify_keys
         changed_data = changed_data.reject { |attribute, value| options[:except].include?(attribute) } if options[:except]
         changed_data = changed_data.select { |attribute, value| options[:only].include?(attribute) } if options[:only]
