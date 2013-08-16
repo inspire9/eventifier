@@ -70,6 +70,15 @@ h4. Add the required routes
   mount Eventifier::Engine => '/'
 </code></pre>
 
+h4. Customise views
+
+<pre><code>
+  # app/views/eventifier/dropdown/_comment.haml
+  %a{ href: "#{root_url}#{url_for([object.commentable.user, object.commentable])}" }
+    = image_tag object.user.photo.thumb.url, class: 'avatar'
+    #{object.user.username} commented on your post
+</code></pre>
+
 h2. Sending of emails
 
 You want to add a scheduled task to run the following task every x minutes
