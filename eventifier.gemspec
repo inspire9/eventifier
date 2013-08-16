@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "eventifier"
-  s.version     = '0.0.9'
-  s.authors     = ["Nathan Sampimon", "Peter Murray"]
+  s.version     = '0.0.10'
+  s.authors     = ["Nathan Sampimon", "Peter Murray", "Pat Allan"]
   s.email       = ["nathan@inspire9.com"]
   s.homepage    = "http://github.com/inspire9/eventifier"
   s.summary     = "Event tracking and notifying for active record models"
