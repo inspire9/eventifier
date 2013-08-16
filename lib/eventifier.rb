@@ -35,7 +35,26 @@ module Eventifier
   def self.tracked_classes
     @tracked_classes ||= []
   end
+
+  def self.resume!
+    @suspended = false
+  end
+
+  def self.suspend(&block)
+    suspend!
+    yield
+    resume!
+  end
+
+  def self.suspend!
+    @suspended = true
+  end
+
+  def self.suspended?
+    @suspended
+  end
 end
+
 
 require 'eventifier/tracker'
 require 'eventifier/delivery'
