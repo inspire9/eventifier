@@ -92,6 +92,14 @@ h4. Customise views
 
 h2. Sending of emails
 
+Firstly, you'll need to set the FROM address for the Eventifier mailer
+
+<pre><code>
+  # config/initializers/eventifier.rb
+  Eventifier.mailer_sender = 'Funways <team@funways.me>'
+</code></pre>
+
+
 You want to add a scheduled task to run the following task every x minutes
 
 <pre><code>
