@@ -12,18 +12,12 @@ class Eventifier::NotificationsController < Eventifier::ApplicationController
   private
 
   def notifications
-    scope = current_user.notifications.limit(per_page)
+    scope = current_user.notifications.order("notifications.created_at DESC").limit(per_page)
     scope = scope.where("notifications.created_at < ?", after) if params[:after]
     scope = scope.where("notifications.created_at > ?", since) if params[:since]
     scope = scope.where(
       "notifications.created_at > ?", current_user.notifications_last_read_at
     ) if params[:recent]
-
-    if params[:since]
-      scope = scope.order("notifications.created_at ASC")
-    else
-      scope = scope.order("notifications.created_at DESC")
-    end
 
     scope
   end

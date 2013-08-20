@@ -58,16 +58,24 @@ class window.NotificationDropdown
     $.each @notifications, (index, notification)=>
       unless $.inArray(notification.id, @renderedNotifications) >= 0
         if new Date(notification.created_at) > @lastReadAt
-          @el
-            .find('ol')
-            .prepend $("<li />")
-            .addClass('unread')
-            .html(notification.html)
+          console.log @lastInserted
+          if @lastInserted?
+            @lastInserted.after @lastInserted = $("<li />")
+              .addClass('unread')
+              .html(notification.html)
+          else
+            @el
+              .find('ol')
+              .prepend @lastInserted = $("<li />")
+                .addClass('unread')
+                .html(notification.html)
         else
           @el
           .find('ol')
           .append($("<li />").html(notification.html))
         @renderedNotifications.push notification.id
+
+    @lastInserted = null
 
   isActive: =>
     @el.hasClass('notifications_active')
