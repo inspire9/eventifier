@@ -19,6 +19,12 @@ class Eventifier::NotificationsController < Eventifier::ApplicationController
       "notifications.created_at > ?", current_user.notifications_last_read_at
     ) if params[:recent]
 
+    if params[:since]
+      scope = scope.order("notifications.created_at ASC")
+    else
+      scope = scope.order("notifications.created_at DESC")
+    end
+
     scope
   end
 

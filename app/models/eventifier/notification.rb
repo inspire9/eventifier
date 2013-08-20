@@ -11,7 +11,6 @@ module Eventifier
     validates :user, :presence => true
     validates :event_id, :uniqueness => { :scope => :user_id }
 
-    default_scope order("notifications.created_at DESC")
     scope :for_events,  -> ids { where(event_id: ids) }
     scope :for_user,    -> user { where(user_id: user.id) }
     scope :since,       -> date { where("created_at > ?", date) }
