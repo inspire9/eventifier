@@ -58,7 +58,6 @@ class window.NotificationDropdown
     $.each @notifications, (index, notification)=>
       unless $.inArray(notification.id, @renderedNotifications) >= 0
         if new Date(notification.created_at) > @lastReadAt
-          console.log @lastInserted
           if @lastInserted?
             @lastInserted.after @lastInserted = $("<li />")
               .addClass('unread')
