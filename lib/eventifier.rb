@@ -24,6 +24,9 @@ module Eventifier
   mattr_accessor :mailer_name
   self.mailer_name = "::Eventifier::Mailer"
 
+  mattr_accessor :user_model_name
+  self.user_model_name = 'User'
+
   def self.setup
     yield self
   end

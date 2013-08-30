@@ -2,7 +2,7 @@ module Eventifier
   class Event < ActiveRecord::Base
     attr_accessible :user, :eventable, :verb, :change_data, :groupable
 
-    belongs_to  :user
+    belongs_to  :user,          class_name: Eventifier.user_model_name
     belongs_to  :eventable,     polymorphic: true
     belongs_to  :groupable,     polymorphic: true
     has_many    :notifications, class_name: 'Eventifier::Notification',
