@@ -6,6 +6,10 @@ class Eventifier::Delivery
     end
   end
 
+  def self.deliver_for(user)
+    new(user, user.notifications.unsent).deliver
+  end
+
   def initialize(user, notifications)
     @user, @notifications = user, notifications
   end
