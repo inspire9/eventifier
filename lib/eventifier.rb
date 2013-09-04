@@ -59,13 +59,15 @@ module Eventifier
 end
 
 
-require 'eventifier/tracker'
 require 'eventifier/delivery'
 require 'eventifier/event_tracking'
-require 'eventifier/trackable_class'
+require 'eventifier/event_builder'
+require 'eventifier/event_translator'
 require 'eventifier/event_subscriber'
 require 'eventifier/preferences'
 require 'eventifier/relationship'
+require 'eventifier/trackable_class'
+require 'eventifier/tracker'
 
 require 'eventifier/notifier/notification_mapping'
 require 'eventifier/notifier/notification_subscriber'

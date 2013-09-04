@@ -1,21 +1,13 @@
 require 'spec_helper'
+
 describe Eventifier::EventTracking do
-
-  let(:user) { Fabricate(:user) }
-  let(:test_class) { Post }
-  let(:object) { Fabricate.build(:post) }
+  let(:user)          { Fabricate(:user) }
+  let(:test_class)    { Post }
+  let(:object)        { Fabricate.build(:post) }
   let(:event_tracker) { Object.new.extend(Eventifier::EventTracking) }
-
-  describe ".initialize" do
-
-    it "should start" do
-      event_tracker
-    end
-
-  end
+  let(:event)         { double eventable: double }
 
   describe ".events_for" do
-
     it "should create the relation notifications for Users" do
       event_tracker.events_for test_class,
                                :track_on => [:create, :update, :destroy],
@@ -23,16 +15,11 @@ describe Eventifier::EventTracking do
 
       user.should respond_to(:notifications)
     end
-
   end
 
   describe "hash syntax" do
-
     describe "creating events" do
-
-      let(:subject) do
-        object.save
-      end
+      let(:subject) { object.save }
 
       before do
         object.stub(:user).and_return(user)
@@ -41,25 +28,20 @@ describe Eventifier::EventTracking do
           :attributes => { :except => %w(updated_at) }
       end
 
-
       it "should create an event with the relevant info" do
         changes = { :foo => 'bar', :bar => 'baz' }
         object.stub(:changes).and_return(changes)
 
-        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object)
+        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object).and_return(event)
 
         subject
       end
     end
-
   end
 
   context "block syntax" do
-
     context "tracking" do
-      let(:subject) do
-        object.save
-      end
+      let(:subject) { object.save }
 
       before do
         object.stub(:user).and_return(user)
@@ -73,7 +55,7 @@ describe Eventifier::EventTracking do
           track_on :update, :attributes => { :except => %w(updated_at) }
         end
 
-        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object)
+        Eventifier::Event.should_receive(:create).with(:user => user, :eventable => object, :verb => :create, :change_data => changes, :groupable => object).and_return(event)
 
         subject
       end
