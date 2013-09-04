@@ -1,23 +1,33 @@
 class Eventifier::NotificationSubscriber
-  def self.subscribe_to_method klass, method_name
-    key = "#{method_name}.#{klass.name.tableize}"
-    name = "#{key}.notification.eventifier"
+  def self.subscribe_to_method(klass, method_name)
+    new(klass, method_name).subscribe_to_method
+  end
 
-    return if ActiveSupport::Notifications.notifier.listening?(name)
+  def initialize(klass, method_name)
+    @klass, @method_name = klass, method_name
+  end
 
-    ActiveSupport::Notifications.subscribe name do |*args|
-      event = ActiveSupport::Notifications::Event.new(*args)
-      eventifier_event = event.payload[:event]
+  def subscribe_to_method
+    return if notifications.notifier.listening?(name)
 
-      Eventifier::NotificationMapping.users_and_relations(eventifier_event, key) do |user, relations|
-        next if user == eventifier_event.user
-
-        Eventifier::Notification.create(
-          event:     eventifier_event,
-          user:      user,
-          relations: relations
-        )
-      end
+    notifications.subscribe(name) do |*args|
+      Eventifier::NotificationTranslator.new(prefix, *args).translate
     end
+  end
+
+  private
+
+  attr_reader :klass, :method_name
+
+  def name
+    "#{prefix}.notification.eventifier"
+  end
+
+  def notifications
+    ActiveSupport::Notifications
+  end
+
+  def prefix
+    "#{method_name}.#{klass.name.tableize}"
   end
 end
