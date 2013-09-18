@@ -1,5 +1,7 @@
 module Eventifier
   class Event < ActiveRecord::Base
+    self.table_name = 'eventifier_events'
+
     attr_accessible :user, :eventable, :verb, :change_data, :groupable
 
     belongs_to  :user,          class_name: Eventifier.user_model_name

@@ -1,4 +1,6 @@
 class Eventifier::NotificationSetting < ActiveRecord::Base
+  self.table_name = 'eventifier_notification_settings'
+
   belongs_to :user
 
   serialize :preferences, MultiJson
