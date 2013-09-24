@@ -8,6 +8,13 @@ module Eventifier
       User.class_eval {
         has_many :notifications, class_name: 'Eventifier::Notification'
       } unless User.respond_to?(:notifications)
+      User.class_eval {
+        has_one :notification_setting,
+                class_name: 'Eventifier::NotificationSetting',
+                dependent: :destroy
+      } unless User.respond_to?(:notification_setting)
+
+
 
       # set up each class with an observer and relationships
       @klasses.each do |target_klass|
