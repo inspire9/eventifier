@@ -106,6 +106,18 @@ You want to add a scheduled task to run the following task every x minutes
   rake eventifier:email:deliver
 </code></pre>
 
+h4. Customise email settings descriptions
+
+<pre><code>
+  # config/locales/events.en.yml
+  en:
+    events:
+      labels:
+        preferences:
+          default: "All notifications"
+          create_relationships_notify_followed: "When you get a new follower"
+</code></pre>
+
 h2. Requirements
 
 * ActiveRecord

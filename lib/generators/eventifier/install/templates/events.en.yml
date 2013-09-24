@@ -1,5 +1,8 @@
 en:
   events:
+    labels:
+      preferences:
+        default: "All notifications"
     default:
       create: "{{user.name}} created a <strong>{{object_type}}</strong>"
       update:

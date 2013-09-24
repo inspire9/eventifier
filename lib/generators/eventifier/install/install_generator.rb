@@ -10,7 +10,7 @@ module Eventifier
       end
 
       def copy_language
-        copy_file "events.en.yaml", "config/locales/events.en.yaml"
+        copy_file "events.en.yaml", "config/locales/events.en.yml"
       end
 
       def add_routes
