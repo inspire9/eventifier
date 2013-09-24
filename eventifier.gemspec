@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "eventifier"
-  s.version     = '0.0.13'
+  s.version     = '0.0.14'
   s.authors     = ["Nathan Sampimon", "Peter Murray", "Pat Allan"]
   s.email       = ["nathan@inspire9.com"]
   s.homepage    = "http://github.com/inspire9/eventifier"
