@@ -8,5 +8,3 @@ class EventTracking
     # end
   end
 end
-
-EventTracking.new
