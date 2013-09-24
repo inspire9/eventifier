@@ -12,9 +12,10 @@ ActiveRecord::Schema.define do
     t.timestamps
   end
 
-  create_table :users, :force => true do |t|
-    t.column :name, :string
-    t.column :email, :string
+  create_table :likes, :force => true do |t|
+    t.integer :user_id
+    t.string  :likeable_type
+    t.integer :likeable_id
   end
 
   create_table :posts, :force => true do |t|
@@ -27,5 +28,10 @@ ActiveRecord::Schema.define do
   create_table :subscriptions, :force => true do |t|
     t.column :user_id, :integer
     t.column :post_id, :integer
+  end
+
+  create_table :users, :force => true do |t|
+    t.column :name, :string
+    t.column :email, :string
   end
 end

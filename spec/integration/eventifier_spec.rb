@@ -149,3 +149,26 @@ describe 'event tracking' do
     end
   end
 end
+
+describe 'immediate email delivery' do
+  let(:author) { Fabricate :user }
+  let(:post)   { Fabricate :post, author: author }
+
+  before do
+    ActionMailer::Base.deliveries.clear
+
+    Object.new.extend(Eventifier::EventTracking).events_for Like do
+      track_on [:create]
+      notify likeable: :user, on: [:create], email: :immediate
+    end
+  end
+
+  it "emails the readers with a notification automatically" do
+    Like.create! user: Fabricate(:user), likeable: post
+
+    ActionMailer::Base.deliveries.detect { |email|
+      email.to      == [author.email] &&
+      email.subject == 'You have received notifications'
+    }.should be_present
+  end
+end
