@@ -23,6 +23,6 @@ class EventTranslator
   end
 
   def user
-    payload[:user] ? relationship(payload[:users]) : payload[:object].user
+    payload[:user] ? relationship(payload[:user]) : payload[:object].user
   end
 end
