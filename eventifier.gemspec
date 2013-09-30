@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/inspire9/eventifier"
   s.summary     = "Event tracking and notifying for active record models"
   s.description = "Tracks and logs events and sends notifications of events on Active Record models."
+  s.license     = 'MIT'
 
   s.rubyforge_project = "eventifier"
 
