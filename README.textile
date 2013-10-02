@@ -90,6 +90,21 @@ h4. Customise views
     #{object.user.username} commented on your post
 </code></pre>
 
+You can create a custom view for each context
+
+Dropdown notification:  app/views/eventifier/dropdown/_comment.haml
+Email notification:  app/views/eventifier/email/_comment.haml
+
+Helpers made available to these views are:
+
+*notification*: The notification object
+Eventifier::Notification(event: event, user: user_being_notified, parent: parent_notification, sent: email_sent_flag)
+
+*event*: The event object
+Eventifier::Event(user: event_owner, eventable: object_for_event, verb: [:create, :update, :destroy], change_data: {"name" => ["Bill", "Bob"]}, groupable: grouped_object)
+
+*object*: The object the event was created for
+
 h2. Sending of emails
 
 Firstly, you'll need to set the FROM address for the Eventifier mailer
