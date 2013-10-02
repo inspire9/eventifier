@@ -17,13 +17,14 @@ class EventTracking
 
   def initialize
     events_for Post do
-      track_on [:create, :update, :destroy], :attributes => { :except => %w(updated_at) }
-      notify :group => :members, :on => [:create, :update]
+      track_on [:create, :update, :destroy], attributes: { except: %w(updated_at) }
+      notify group: :members, on: :create
+      notify group: :commenters, on: :update, unless: ->post,author { post.age > 1.week }
     end
 
     events_for Announcement do
-      track_on :create, :attributes => { :except => %w(updated_at) }
-      notify :group => :members, :on => :create
+      track_on :create
+      notify group: :members, on: :create, if: ->announcement,admin { announcement.is_important? }
     end
   end
 end
