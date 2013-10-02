@@ -5,7 +5,7 @@ class Eventifier::Notifier
   # If it's the first one, relation is the first in the array, otherwise treat
   # the whole thing like a hash
   def initialize(klasses, *arguments)
-    relation   = arguments.shift if arguments.length == 2
+    relation   = arguments.shift if arguments.length >= 2
     arguments  = arguments.first || {}
 
     methods    = Array arguments.delete(:on)

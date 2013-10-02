@@ -21,8 +21,8 @@ class Eventifier::NotificationTranslator
   attr_reader :event, :prefix, :options
 
   def skip?(user)
-    return !options[:if].call(event, user)    if options[:if]
-    return options[:unless].call(event, user) if options[:unless]
+    return !options[:if].call(event.eventable, user)    if options[:if]
+    return options[:unless].call(event.eventable, user) if options[:unless]
 
     false
   end

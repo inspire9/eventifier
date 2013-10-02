@@ -5,7 +5,8 @@ describe Eventifier::NotificationTranslator do
     Eventifier::NotificationTranslator.new 'foo', options, :bar
   }
   let(:options)    { {} }
-  let(:event)      { double 'Event', user: double }
+  let(:object)     { double 'EventableObject'}
+  let(:event)      { double 'Event', user: double, eventable: object }
   let(:user_a)     { double 'User' }
   let(:user_b)     { double 'User' }
 
