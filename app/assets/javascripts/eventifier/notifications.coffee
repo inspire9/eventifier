@@ -150,6 +150,17 @@ class window.NotificationDropdown
       @el.addClass('alerting')
 
     @el.find(".notification_alert").html(displayCount)
+    $('title').html (index, old_html) ->
+      if old_html.match /^\(\d+\).*/
+        if displayCount > 0
+          old_html.replace(/^\(\d+\)/, "(#{displayCount})");
+        else
+          old_html.replace(/^(\(\d+\))\s/, "");
+      else
+        if displayCount > 0
+          "(#{displayCount}) #{old_html}"
+        else
+          old_html
 
   setUnreadCount: =>
     @unreadCount = $.grep(@notifications, (notification)=>
