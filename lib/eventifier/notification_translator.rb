@@ -22,10 +22,10 @@ class Eventifier::NotificationTranslator
   attr_reader :event, :prefix, :options
 
   def skip?(user = nil)
-    case conditional.try :arity
-      when 2 then return !conditional_call(event.eventable, user)
-      when 1 then return !conditional_call(event.eventable)
-      else return false
+    if conditional
+      !conditional_call *[event.eventable, user][0..conditional.arity-1]
+    else
+      false
     end
   end
 
