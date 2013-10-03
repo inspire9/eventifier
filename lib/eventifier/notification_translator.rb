@@ -5,6 +5,7 @@ class Eventifier::NotificationTranslator
   end
 
   def translate
+    return if skip?
     users_and_relations do |user, relations|
       next if user == event.user
       next if skip?(user)
@@ -20,9 +21,11 @@ class Eventifier::NotificationTranslator
 
   attr_reader :event, :prefix, :options
 
-  def skip?(user)
-    return !options[:if].call(event.eventable, user)    if options[:if]
-    return options[:unless].call(event.eventable, user) if options[:unless]
+  def skip?(user = nil)
+    return !options[:if].call(event.eventable, user)    if options[:if] and options[:if].arity == 2
+    return options[:unless].call(event.eventable, user) if options[:unless] and options[:unless].arity == 2
+    return !options[:if].call(event.eventable)    if options[:if] and options[:if].arity == 1
+    return options[:unless].call(event.eventable) if options[:unless] and options[:unless].arity == 1
 
     false
   end
