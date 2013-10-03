@@ -22,12 +22,23 @@ class Eventifier::NotificationTranslator
   attr_reader :event, :prefix, :options
 
   def skip?(user = nil)
-    return !options[:if].call(event.eventable, user)    if options[:if] and options[:if].arity == 2
-    return options[:unless].call(event.eventable, user) if options[:unless] and options[:unless].arity == 2
-    return !options[:if].call(event.eventable)    if options[:if] and options[:if].arity == 1
-    return options[:unless].call(event.eventable) if options[:unless] and options[:unless].arity == 1
+    case conditional.try :arity
+      when 2 then return !conditional_call(event.eventable, user)
+      when 1 then return !conditional_call(event.eventable)
+      else return false
+    end
+  end
 
-    false
+  def conditional
+    options[:if] || options[:unless]
+  end
+
+  def conditional_call(*args)
+    if options[:if]
+      conditional.call(*args)
+    else
+      !conditional.call(*args)
+    end
   end
 
   def users_and_relations(&block)
