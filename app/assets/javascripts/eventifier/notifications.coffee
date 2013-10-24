@@ -9,9 +9,10 @@ class window.NotificationDropdown
   settingsTemplate: JST['eventifier/templates/settings']
 
   constructor: (options) ->
-    {@el, @limit, @pollTime} = options
+    {@el, @limit, @pollTime, @push} = options
     @limit =    @limit || 5
     @pollTime = @pollTime || 15
+    @push = @push || false
 
 
     [@notifications, @renderedNotifications, @unreadCount, @lastReadAt] = [[], [], 0, new Date()]
@@ -50,8 +51,18 @@ class window.NotificationDropdown
     @el.on 'poll', @poll
     @el.on 'scroll', 'ol', @scrolling
     $(window).on 'click', @blurNotifications
+    if @push
+      @el.on 'click', '#notification_dropdown ol a', @pushUrl
 
     @
+
+  pushUrl: (e)->
+    location = $(e.currentTarget).attr('href')
+    location = $('<a />').attr(href: location).get(0).pathname if location.match /^https?\:\/\//
+
+    Backbone?.history.navigate(location, true) || history.pushState({trigger: true}, '', location)
+
+    false
 
   renderNotifications: =>
     @el.find(".none").remove() if @notifications.length > 0
