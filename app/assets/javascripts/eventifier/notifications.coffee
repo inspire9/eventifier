@@ -56,7 +56,7 @@ class window.NotificationDropdown
 
     @
 
-  pushUrl: (e)->
+  pushUrl: (e)=>
     location = $(e.currentTarget).attr('href')
     location = $('<a />').attr(href: location).get(0).pathname if location.match /^https?\:\/\//
 
