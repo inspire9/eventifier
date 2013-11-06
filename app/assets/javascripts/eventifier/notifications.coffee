@@ -53,6 +53,7 @@ class window.NotificationDropdown
     $(window).on 'click', @blurNotifications
     if @push
       @el.on 'click', '#notification_dropdown ol a', @pushUrl
+      @hide()
 
     @
 
