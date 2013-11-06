@@ -53,7 +53,6 @@ class window.NotificationDropdown
     $(window).on 'click', @blurNotifications
     if @push
       @el.on 'click', '#notification_dropdown ol a', @pushUrl
-      @hide()
 
     @
 
@@ -62,6 +61,7 @@ class window.NotificationDropdown
     location = $('<a />').attr(href: location).get(0).pathname if location.match /^https?\:\/\//
 
     Backbone?.history.navigate(location, true) || history.pushState({trigger: true}, '', location)
+    @hide()
 
     false
 
