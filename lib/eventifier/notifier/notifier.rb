@@ -1,5 +1,5 @@
 class Eventifier::Notifier
-  OPTION_KEYS = [:email, :if, :unless]
+  OPTION_KEYS = [:email, :if, :unless, :notify_self]
   # arguments will either be [:relation, {:on => :create}] or
   # [{:relation => :second_relation, :on => :create}]
   # If it's the first one, relation is the first in the array, otherwise treat
