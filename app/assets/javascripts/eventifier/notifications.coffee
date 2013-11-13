@@ -210,7 +210,7 @@ class window.NotificationDropdown
       0
 
   lastLookTime: =>
-    Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime())
+    Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime()/1000)
 
   scrolling: =>
     scrollWindow = @$el.find('ol')
