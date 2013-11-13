@@ -42,6 +42,19 @@ describe Eventifier::NotificationTranslator do
       translator.translate
     end
 
+    it "creates a notification for the originating user if allowed" do
+      options[:notify_self] = true
+
+      event.stub user: user_a
+
+      Eventifier::Notification.should_receive(:create).
+        with(event: event, user: user_a, relations: [:a])
+      Eventifier::Notification.should_receive(:create).
+        with(event: event, user: user_b, relations: [:b])
+
+      translator.translate
+    end
+
     it "creates an event when :if is set and returns true" do
       options[:if] = Proc.new { |event, user| true }
 

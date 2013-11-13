@@ -7,7 +7,7 @@ class Eventifier::NotificationTranslator
   def translate
     return if skip?
     users_and_relations do |user, relations|
-      next if user == event.user
+      next if user == event.user && !options[:notify_self]
       next if skip?(user)
 
       Eventifier::Notification.create event: event, user: user,
