@@ -149,7 +149,7 @@
         &.unread { background-color: #d3d3d3; }
         a {
           display: block;
-          overflow: auto;
+          overflow: visible;
           padding-left: 38px;
         }
         img.avatar {

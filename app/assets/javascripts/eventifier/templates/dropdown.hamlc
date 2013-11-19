@@ -5,6 +5,6 @@
   %header
     %a.toggle_settings{ href: '#' } Settings
     %h4 Notifications
-  %ol
+  %ol.notifications_dropdown_list
     %li.none You have no notifications
   #settings_pane

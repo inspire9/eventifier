@@ -24,6 +24,7 @@ class window.NotificationDropdown
     @el.html(@template(@)).attr('tabindex', 0)
 
     # @checkVisibility()
+
     @setEvents()
     @poll()
 
@@ -49,7 +50,7 @@ class window.NotificationDropdown
     @el.on 'addNotifications', @renderNotifications
     @el.on 'addNotifications', @setUnreadCount
     @el.on 'poll', @poll
-    @el.on 'scroll', 'ol', @scrolling
+    @el.find('ol.notifications_dropdown_list').on 'scroll', @scrolling
     $(window).on 'click', @blurNotifications
     if @push
       @el.on 'click', '#notification_dropdown ol a', @pushUrl
@@ -213,10 +214,10 @@ class window.NotificationDropdown
     Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime()/1000)
 
   scrolling: =>
-    scrollWindow = @$el.find('ol')
+    scrollWindow = @el.find('ol')
 
     if (scrollWindow.scrollTop() + scrollWindow.innerHeight() >= scrollWindow[0].scrollHeight - 50)
-      @loadMore(after: @oldestNotificationTime())
+      @loadMore(after: @oldestNotificationTime()/1000)
 
   arrayFromObject: (collection)->
     serializedObject = {}
