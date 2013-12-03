@@ -13,6 +13,14 @@ class Eventifier::Preferences
     end
   end
 
+  def update(preferences)
+    settings.preferences['email'] ||= {}
+    to_hashes.each do |hash|
+      settings.preferences['email'][hash[:key]] = !preferences[hash[:key]].nil?
+    end
+    settings.save
+  end
+
   private
 
   attr_reader :user

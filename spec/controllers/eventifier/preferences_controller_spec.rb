@@ -20,29 +20,10 @@ describe Eventifier::PreferencesController do
   end
 
   describe '#update' do
-    let(:preferences) { double to_hashes: [{:key => 'foo'}, {:key => 'bar'}] }
-    let(:settings)    { double 'Settings', :preferences => {}, :save => true }
-
-    before :each do
-      Eventifier::NotificationSetting.stub :for_user => settings
-    end
-
-    it "updates the user's email preferences" do
-      put :update, :preferences => {'foo' => ''}
-
-      settings.preferences['email']['foo'].should be_true
-      settings.preferences['email']['bar'].should be_false
-    end
-
-    it "sets everything to false if no preferences are supplied" do
-      put :update
-
-      settings.preferences['email']['foo'].should be_false
-      settings.preferences['email']['bar'].should be_false
-    end
+    let(:preferences) { double update: true }
 
     it 'saves the settings changes' do
-      settings.should_receive(:save)
+      preferences.should_receive(:update).with('foo' => '')
 
       put :update, :preferences => {'foo' => ''}
     end

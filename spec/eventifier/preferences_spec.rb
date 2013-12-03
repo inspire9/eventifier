@@ -66,4 +66,38 @@ describe Eventifier::Preferences do
         should == ['All Events', 'New Posts', 'New Comments']
     end
   end
+
+  describe '#update' do
+    before :each do
+      settings.stub save: true
+    end
+
+    it "updates the user's email preferences" do
+      preferences.update('create_posts_notify_readers' => '')
+
+      expect(
+        settings.preferences['email']['create_posts_notify_readers']
+      ).to be_true
+      expect(
+        settings.preferences['email']['create_comments_notify_post_readers']
+      ).to be_false
+    end
+
+    it "sets everything to false if no preferences are supplied" do
+      preferences.update({})
+
+      expect(
+        settings.preferences['email']['create_posts_notify_readers']
+      ).to be_false
+      expect(
+        settings.preferences['email']['create_comments_notify_post_readers']
+      ).to be_false
+    end
+
+    it 'saves the settings changes' do
+      settings.should_receive(:save)
+
+      preferences.update('create_posts_notify_readers' => '')
+    end
+  end
 end
