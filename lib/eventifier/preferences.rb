@@ -16,7 +16,9 @@ class Eventifier::Preferences
   def update(preferences)
     settings.preferences['email'] ||= {}
     to_hashes.each do |hash|
-      settings.preferences['email'][hash[:key]] = !preferences[hash[:key]].nil?
+      settings.preferences['email'][hash[:key]] = boolean(
+        preferences[hash[:key]]
+      )
     end
     settings.save
   end
@@ -24,6 +26,10 @@ class Eventifier::Preferences
   private
 
   attr_reader :user
+
+  def boolean(value)
+    !(value.nil? || value == '0')
+  end
 
   def keys
     @keys ||= begin

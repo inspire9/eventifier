@@ -73,7 +73,10 @@ describe Eventifier::Preferences do
     end
 
     it "updates the user's email preferences" do
-      preferences.update('create_posts_notify_readers' => '')
+      preferences.update(
+        'create_posts_notify_readers'         => '',
+        'create_comments_notify_post_readers' => '0'
+      )
 
       expect(
         settings.preferences['email']['create_posts_notify_readers']
