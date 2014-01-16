@@ -2,7 +2,7 @@ module Eventifier
   class Event < ActiveRecord::Base
     self.table_name = 'eventifier_events'
 
-    attr_accessible :user, :eventable, :verb, :change_data, :groupable
+    attr_accessible :user, :eventable, :verb, :change_data, :groupable, :system
 
     belongs_to  :user,          class_name: Eventifier.user_model_name
     belongs_to  :eventable,     polymorphic: true
@@ -10,7 +10,7 @@ module Eventifier
     has_many    :notifications, class_name: 'Eventifier::Notification',
       dependent: :destroy
 
-    validates :user,      presence: true
+    validates :user,      presence: true, unless: :system?
     validates :eventable, presence: true
     validates :verb,      presence: true
     validates :groupable, presence: true

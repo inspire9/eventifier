@@ -10,7 +10,8 @@ class Eventifier::EventBuilder
 
   def store
     Eventifier::Event.create user: user, eventable: object,
-      groupable: groupable, verb: verb, change_data: change_data
+      groupable: groupable, verb: verb, change_data: change_data,
+      system: options[:system]
   end
 
   private
