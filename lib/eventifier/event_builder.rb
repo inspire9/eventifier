@@ -19,6 +19,8 @@ class Eventifier::EventBuilder
   attr_reader :object, :user, :verb, :groupable, :options
 
   def change_data
+    return options[:change_data] unless options[:change_data].nil?
+
     changes = object.changes.stringify_keys
 
     changes.reject! { |attribute, value|
