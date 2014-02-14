@@ -5,7 +5,7 @@ module Eventifier
     end
 
     def partial_path notification, context = nil
-      if lookup_context.exists?(notification.event.eventable_type.underscore, [:eventifier, context].compact.join("/"), true)
+      if lookup_context.exists?(notification.event.eventable_type.underscore, [[:eventifier, context].compact.join("/")], true)
         [:eventifier, context, notification.event.eventable_type.underscore].compact.join("/")
       else
         [:eventifier, context, 'notification'].compact.join("/")
