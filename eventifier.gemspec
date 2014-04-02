@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'coffee-rails',    '~> 4.0.0'
   s.add_runtime_dependency 'compass-rails'
   s.add_runtime_dependency 'multi_json',      '~> 1.7.4'
-  s.add_runtime_dependency 'jbuilder',        '~> 1.4.2'
+  s.add_runtime_dependency 'jbuilder',        '~> 2.0.4'
   s.add_runtime_dependency 'rails-observers', '~> 0.1.2'
 
   s.add_development_dependency 'combustion',  '~> 0.5.0'
