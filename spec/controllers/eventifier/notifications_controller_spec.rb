@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Eventifier::NotificationsController do
+  routes     { Eventifier::Engine.routes }
+
   describe '#touch' do
     let(:user) { double 'User', :update_attribute => true }
 
@@ -18,7 +20,7 @@ describe Eventifier::NotificationsController do
     it "responds with JSON OK status" do
       post :touch
 
-      response.body.should == {'status' => 'OK'}.to_json
+      expect(response.body).to eq ({'status' => 'OK'}.to_json)
     end
   end
 end

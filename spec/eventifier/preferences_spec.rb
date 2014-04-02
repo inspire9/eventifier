@@ -14,7 +14,7 @@ describe Eventifier::Preferences do
 
   describe '#to_hashes' do
     it "interprets each key" do
-      preferences.to_hashes.collect { |hash| hash[:key] }.should == [
+      expect(preferences.to_hashes.collect { |hash| hash[:key] }).to eq [
         'default',
         'create_posts_notify_readers',
         'create_comments_notify_post_readers'
@@ -22,28 +22,28 @@ describe Eventifier::Preferences do
     end
 
     it "sets values to true if unknown" do
-      preferences.to_hashes.collect { |hash| hash[:value] }.
-        should == [true, true, true]
+      expect(preferences.to_hashes.collect { |hash| hash[:value] }).
+        to eq [true, true, true]
     end
 
     it "sets values to true if known and true" do
       settings.preferences['email'] = {}
       settings.preferences['email']['create_posts_notify_readers'] = true
 
-      preferences.to_hashes.collect { |hash| hash[:value] }.
-        should == [true, true, true]
+      expect(preferences.to_hashes.collect { |hash| hash[:value] }).
+        to eq [true, true, true]
     end
 
     it "sets values to false if known and false" do
       settings.preferences['email'] = {}
       settings.preferences['email']['create_posts_notify_readers'] = false
 
-      preferences.to_hashes.collect { |hash| hash[:value] }.
-        should == [true, false, true]
+      expect(preferences.to_hashes.collect { |hash| hash[:value] }).
+        to eq [true, false, true]
     end
 
     it "returns keys if no translations available for labels" do
-      preferences.to_hashes.collect { |hash| hash[:label] }.should == [
+      expect(preferences.to_hashes.collect { |hash| hash[:label] }).to eq [
         'default',
         'create_posts_notify_readers',
         'create_comments_notify_post_readers'
@@ -62,8 +62,8 @@ describe Eventifier::Preferences do
         }
       }
 
-      preferences.to_hashes.collect { |hash| hash[:label] }.
-        should == ['All Events', 'New Posts', 'New Comments']
+      expect(preferences.to_hashes.collect { |hash| hash[:label] }).
+        to eq ['All Events', 'New Posts', 'New Comments']
     end
   end
 
@@ -80,10 +80,10 @@ describe Eventifier::Preferences do
 
       expect(
         settings.preferences['email']['create_posts_notify_readers']
-      ).to be_true
+      ).to be_truthy
       expect(
         settings.preferences['email']['create_comments_notify_post_readers']
-      ).to be_false
+      ).to be_falsey
     end
 
     it "sets everything to false if no preferences are supplied" do
@@ -91,10 +91,10 @@ describe Eventifier::Preferences do
 
       expect(
         settings.preferences['email']['create_posts_notify_readers']
-      ).to be_false
+      ).to be_falsey
       expect(
         settings.preferences['email']['create_comments_notify_post_readers']
-      ).to be_false
+      ).to be_falsey
     end
 
     it 'saves the settings changes' do

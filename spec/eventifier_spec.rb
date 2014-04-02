@@ -13,7 +13,7 @@ describe Eventifier::EventTracking do
                                :track_on => [:create, :update, :destroy],
                                :attributes => { :except => %w(updated_at) }
 
-      user.should respond_to(:notifications)
+      expect(user).to respond_to(:notifications)
     end
   end
 
@@ -84,16 +84,20 @@ describe Eventifier::EventTracking do
           object.stub :category => double('category', :subscribers => [subscriber])
 
           Eventifier::Notification.should_receive(:create) do |args|
-            args[:user].should == subscriber
-            args[:event].eventable.should == object
-          end
+            expect(args[:user]).to == subscriber
+            expect(args[:event].eventable).to == object
+          end.and_return(nil)
 
-          event_tracker.events_for test_class do
-            track_on :create, :attributes => { :except => %w(updated_at) }
-            notify :category => :subscribers, :on => :create
-          end
+          # event_tracker.events_for test_class do
+          #   track_on :create, :attributes => { :except => %w(updated_at) }
+          #   notify :category => :subscribers, :on => :create
+          # end
 
           object.save
+
+          ActiveSupport::Notifications.notifier.listeners_for('create.posts.notification.eventifier').each do |listener|
+            ActiveSupport::Notifications.unsubscribe(listener)
+          end
         end
 
 

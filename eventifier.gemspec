@@ -16,17 +16,18 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'rails',           '~> 3.2.0'
+  s.add_runtime_dependency 'rails',           '~> 4.0.3'
   s.add_runtime_dependency "bson_ext"
   s.add_runtime_dependency 'haml-rails',      '~> 0.4'
   s.add_runtime_dependency 'haml_coffee_assets'
-  s.add_runtime_dependency 'coffee-rails',    '~> 3.2.1'
+  s.add_runtime_dependency 'coffee-rails',    '~> 4.0.0'
   s.add_runtime_dependency 'compass-rails'
   s.add_runtime_dependency 'multi_json',      '~> 1.7.4'
   s.add_runtime_dependency 'jbuilder',        '~> 1.4.2'
+  s.add_runtime_dependency 'rails-observers', '~> 0.1.2'
 
   s.add_development_dependency 'combustion',  '~> 0.5.0'
-  s.add_development_dependency 'fabrication', '~> 2.7.1'
+  s.add_development_dependency 'fabrication', '~> 2.11.0'
   s.add_development_dependency "pg"
-  s.add_development_dependency 'rspec-rails', '~> 2.13.2'
+  s.add_development_dependency 'rspec-rails', '~> 3.0.0.beta2'
 end

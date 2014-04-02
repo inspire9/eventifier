@@ -9,6 +9,8 @@
 #
 # end
 
+require "rails/observers/activerecord/active_record"
+
 require 'multi_json'
 require 'action_mailer'
 

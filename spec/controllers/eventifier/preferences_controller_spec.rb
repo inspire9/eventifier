@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Eventifier::PreferencesController do
+  routes     { Eventifier::Engine.routes }
   let(:user) { double 'User' }
 
   before :each do
@@ -15,7 +16,7 @@ describe Eventifier::PreferencesController do
     it "returns the settings hashes" do
       get :show
 
-      response.body.should == [{'foo' => 'bar'}].to_json
+      expect(response.body).to eq ([{'foo' => 'bar'}].to_json)
     end
   end
 
@@ -31,7 +32,7 @@ describe Eventifier::PreferencesController do
     it "renders a JSON OK status" do
       put :update, :preferences => {'foo' => ''}
 
-      response.body.should == {'status' => 'OK'}.to_json
+      expect(response.body).to eq ({'status' => 'OK'}.to_json)
     end
   end
 end

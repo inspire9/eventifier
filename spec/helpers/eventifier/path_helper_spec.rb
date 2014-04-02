@@ -5,15 +5,15 @@ describe Eventifier::PathHelper do
 
   describe "partial_path" do
     it "returns an app view path with context in the path" do
-      helper.partial_path(notification, :donkey).should == 'eventifier/donkey/notification'
+expect(      helper.partial_path(notification, :donkey)).to eq'eventifier/donkey/notification'
     end
 
     it "returns an app view if it's defined" do
-      helper.partial_path(notification, :dropdown).should == 'eventifier/dropdown/awesome_object'
+expect(      helper.partial_path(notification, :dropdown)).to eq'eventifier/dropdown/awesome_object'
     end
 
     it "returns the default view if not defined" do
-      helper.partial_path(notification).should == 'eventifier/notification'
+expect(      helper.partial_path(notification)).to eq'eventifier/notification'
     end
   end
 end

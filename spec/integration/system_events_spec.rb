@@ -32,9 +32,9 @@ describe 'System Events' do
     )
 
     [owner, reader].each do |user|
-      Eventifier::Notification.where(
+      expect(Eventifier::Notification.where(
         :event_id => event.id, :user_id => user.id
-      ).count.should == 1
+      ).count).to eq 1
     end
   end
 end

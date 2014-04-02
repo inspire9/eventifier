@@ -7,7 +7,7 @@ describe Eventifier do
       notify :readers, :on => [:create, :update]
     end
 
-    Eventifier.tracked_classes.should == [Post]
+    expect(Eventifier.tracked_classes).to eq [Post]
   end
 end
 
@@ -45,18 +45,18 @@ describe 'event tracking' do
     it "does not store a notification for the post creator" do
       post.save
 
-      Eventifier::Notification.where(
+      expect(Eventifier::Notification.where(
         :event_id => event.id, :user_id => owner.id
-      ).count.should == 0
+        ).count).to eq 0
     end
 
     it "stores notifications for the reader" do
       post.save
 
       [reader1, reader2].each do |reader|
-        Eventifier::Notification.where(
+        expect(Eventifier::Notification.where(
           :event_id => event.id, :user_id => reader.id
-        ).count.should == 1
+        ).count).to eq 1
       end
     end
 
@@ -76,7 +76,7 @@ describe 'event tracking' do
     it "stores the post as the groupable object" do
       post.save
 
-      event.groupable.should == post
+      expect(event.groupable).to eq post
     end
 
     it "deletes the event when the post is destroyed" do
@@ -112,18 +112,18 @@ describe 'event tracking' do
     it "does not store a notification for the post creator" do
       post.update_attribute(:title, 'something else')
 
-      Eventifier::Notification.where(
+      expect(Eventifier::Notification.where(
         :event_id => event.id, :user_id => owner.id
-      ).count.should == 0
+      ).count).to eq 0
     end
 
     it "stores notifications for the reader" do
       post.update_attribute(:title, 'something else')
 
       [reader1, reader2].each do |reader|
-        Eventifier::Notification.where(
+        expect(Eventifier::Notification.where(
           :event_id => event.id, :user_id => reader.id
-        ).count.should == 1
+        ).count).to eq 1
       end
     end
 
@@ -131,7 +131,7 @@ describe 'event tracking' do
       post.update_attribute(:title, 'somethang')
 
       [reader1, reader2].each do |reader|
-        reader.notifications.count.should == 1
+        expect(reader.notifications.count).to eq 1
       end
     end
 
