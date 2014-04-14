@@ -13,7 +13,7 @@ class Eventifier::EventSubscriber
     return if notifications.notifier.listening?(name)
 
     notifications.subscribe(name) do |*args|
-      event = EventTranslator.new(*args).translate
+      event = Eventifier::EventTranslator.new(*args).translate
 
       notifications.instrument "#{prefix}.notification.eventifier",
         verb: :create, event: event, object: event.eventable

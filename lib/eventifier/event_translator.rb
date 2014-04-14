@@ -1,4 +1,4 @@
-class EventTranslator
+class Eventifier::EventTranslator
   def initialize(*args)
     @event = ActiveSupport::Notifications::Event.new *args
   end
