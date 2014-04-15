@@ -14,9 +14,8 @@ class Eventifier::EventSubscriber
 
     notifications.subscribe(name) do |*args|
       event = Eventifier::EventTranslator.new(*args).translate
-
       notifications.instrument "#{prefix}.notification.eventifier",
-        verb: :create, event: event, object: event.eventable
+        verb: :create, event: event, object: event.eventable unless event.nil?
     end
   end
 

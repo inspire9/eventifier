@@ -18,15 +18,15 @@ module Eventifier
       Eventifier.tracked_classes.uniq!
     end
 
-    def track_on methods, options = {}
+    def track_on(methods, options = {})
       Eventifier::Tracker.new @klasses, methods, options
     end
 
-    def notify *args
+    def notify(*args)
       Eventifier::Notifier.new @klasses, *args
     end
 
-    def url url_proc
+    def url(url_proc)
       @klasses.each do |target_klass|
         Eventifier::EventTracking.url_mappings[target_klass.name.underscore.to_sym] = url_proc
       end

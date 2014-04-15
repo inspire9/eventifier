@@ -1,6 +1,6 @@
 module Eventifier
   class Tracker
-    def initialize klasses, methods, options
+    def initialize(klasses, methods, options)
       @klasses   = klasses
       methods    = methods.kind_of?(Array) ? methods : [methods]
       raise 'No events defined to track' if methods.compact.empty?
