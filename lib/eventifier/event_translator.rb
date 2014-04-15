@@ -4,8 +4,10 @@ class Eventifier::EventTranslator
   end
 
   def translate
+    return unless conditional_call
+
     Eventifier::EventBuilder.store payload[:object], user, payload[:event],
-      groupable, payload[:options]
+      groupable, options.except(:if, :unless)
   end
 
   private
@@ -14,8 +16,26 @@ class Eventifier::EventTranslator
 
   delegate :payload, to: :event
 
+  def conditional
+    options[:if] || options[:unless]
+  end
+
+  def conditional_call
+    if options[:if]
+      conditional.call payload[:object]
+    elsif options[:unless]
+      !conditional.call payload[:object]
+    else
+      true
+    end
+  end
+
   def groupable
     payload[:group_by] ? relationship(payload[:group_by]) : payload[:object]
+  end
+
+  def options
+    payload[:options] || {}
   end
 
   def relationship(key)

@@ -31,7 +31,7 @@ describe Eventifier::NotificationTranslator do
       translator.translate
     end
 
-    it "does not create an event for the originator's user" do
+    it "does not create a notification for the originator's user" do
       event.stub user: user_a
 
       Eventifier::Notification.should_not_receive(:create).
@@ -55,7 +55,7 @@ describe Eventifier::NotificationTranslator do
       translator.translate
     end
 
-    it "creates an event when :if is set and returns true" do
+    it "creates a notification when :if is set and returns true" do
       options[:if] = Proc.new { |event, user| true }
 
       Eventifier::Notification.should_receive(:create).
@@ -66,7 +66,7 @@ describe Eventifier::NotificationTranslator do
       translator.translate
     end
 
-    it "does not create an event when :if is set and returns false" do
+    it "does not create a notification when :if is set and returns false" do
       options[:if] = Proc.new { |event, user| false }
 
       Eventifier::Notification.should_not_receive(:create).
@@ -77,7 +77,7 @@ describe Eventifier::NotificationTranslator do
       translator.translate
     end
 
-    it "creates an event when :unless is set and returns false" do
+    it "creates a notification when :unless is set and returns false" do
       options[:unless] = Proc.new { |event, user| false }
 
       Eventifier::Notification.should_receive(:create).
@@ -88,7 +88,7 @@ describe Eventifier::NotificationTranslator do
       translator.translate
     end
 
-    it "does not create an event when :unless is set and returns true" do
+    it "does not create a notification when :unless is set and returns true" do
       options[:unless] = Proc.new { |event, user| true }
 
       Eventifier::Notification.should_not_receive(:create).
