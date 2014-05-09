@@ -1,6 +1,15 @@
 class Eventifier::API::Base
   include Sliver::Action
 
+  def skip?
+    return false if user
+
+    response.status = 403
+    response.body   = ['Forbidden']
+
+    true
+  end
+
   def call
     response.status ||= 200
     response.body   ||= {}

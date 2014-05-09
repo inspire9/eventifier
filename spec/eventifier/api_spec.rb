@@ -20,6 +20,15 @@ describe Eventifier::API do
       allow(notifications).to receive(:limit).and_return(notifications)
     end
 
+    it 'returns 403 if there is no authenticated user' do
+      allow(warden).to receive(:authenticated?).and_return(false)
+      allow(warden).to receive(:user).and_return(nil)
+
+      get '/notifications', {}, {'warden' => warden}
+
+      expect(last_response.status).to eq(403)
+    end
+
     it 'returns notifications as JSON' do
       allow(user).to receive(:notifications).and_return(notifications)
 
