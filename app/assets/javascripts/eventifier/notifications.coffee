@@ -78,9 +78,10 @@ class window.NotificationDropdown
           else
             @el
               .find('ol')
-              .prepend @lastInserted = $("<li />")
+              .prepend( @lastInserted = $("<li />")
                 .addClass('unread')
                 .html(notification.html)
+            )
         else
           @el
           .find('ol')
