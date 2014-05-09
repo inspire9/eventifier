@@ -105,7 +105,7 @@ class window.NotificationDropdown
   toggleSettings: (event)=>
     event.preventDefault() if event?
     $.ajax
-      url: "/preferences"
+      url: "/eventifier/preferences"
       success: (data)=>
         @el.find("#settings_pane").html(@settingsTemplate(data))
         @defaultSettings() if @arrayFromObject($.makeArray(data)).default
@@ -124,7 +124,7 @@ class window.NotificationDropdown
       serializedSettings[@name] = @value
 
     $.ajax
-      url: "/preferences"
+      url: "/eventifier/preferences"
       type: "PUT"
       data: preferences: serializedSettings
       success: (data)=> @el.toggleClass('show_settings')
@@ -140,7 +140,7 @@ class window.NotificationDropdown
 
   loadMore: (params = {})=>
     $.ajax
-      url: "/notifications"
+      url: "/eventifier/notifications"
       dataType: 'json'
       data: params
       success: @addNotifications
@@ -189,7 +189,7 @@ class window.NotificationDropdown
     if @isAlerting()
       @lastReadAt = new Date()
       @setUnreadCount()
-      $.post '/notifications/touch'
+      $.post '/eventifier/notifications/touch'
 
   poll: =>
     @loadMore(recent: true, since: @lastLookTime())
