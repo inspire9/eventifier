@@ -1,6 +1,6 @@
 #= require hamlcoffee
-#= require ./templates/dropdown
-#= require ./templates/settings
+#= require eventifier/templates/dropdown
+#= require eventifier/templates/settings
 # Usage
 # window.notifications = new NotificationDropdown el: $('.notifications'), limit: 5
 
