@@ -72,16 +72,16 @@ class window.NotificationDropdown
       unless $.inArray(notification.id, @renderedNotifications) >= 0
         if new Date(notification.created_at) > @lastReadAt
           if @lastInserted?
-            @lastInserted.after @lastInserted = $("<li />")
+            @lastInserted.after( @lastInserted = $("<li />")
               .addClass('unread')
               .html(notification.html)
+            )
           else
             @el
               .find('ol')
-              .prepend( @lastInserted = $("<li />")
+              .prepend(@lastInserted = $("<li />")
                 .addClass('unread')
-                .html(notification.html)
-            )
+                .html(notification.html))
         else
           @el
           .find('ol')
