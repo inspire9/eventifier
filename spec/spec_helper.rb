@@ -5,6 +5,8 @@ Bundler.setup :default, :development
 require 'fabrication'
 require 'combustion'
 require 'active_record'
+require 'action_view'
+require 'haml'
 require 'eventifier'
 
 Fabrication.configure do |config|
@@ -12,7 +14,8 @@ Fabrication.configure do |config|
   config.path_prefix     = '.'
 end
 
-Combustion.initialize! :action_controller, :active_record, :action_mailer
+Combustion.initialize! :action_controller, :action_view, :active_record,
+  :action_mailer
 
 require 'rspec/rails'
 

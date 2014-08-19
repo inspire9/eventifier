@@ -18,3 +18,5 @@ en:
       update:
         single: "{{user.name}} updated a {{object_type}}"
         multiple: "{{user.name}} made some changes to a {{object_type}}"
+test:
+  placeholder: true

@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'rails',           '~> 4.0.3'
+  s.add_runtime_dependency 'rails',           '>= 4.0.3'
   s.add_runtime_dependency "bson_ext"
   s.add_runtime_dependency 'haml-rails',      '~> 0.4'
   s.add_runtime_dependency 'haml_coffee_assets'
