@@ -138,6 +138,19 @@ h2. Requirements
 
 * ActiveRecord
 
+h2. Turbolinks
+
+Turbolinks removes the body of the page, which is where our dropdown notifications box sits.  We'll need to re-render it and point it at the holding element when the page changes.
+
+```
+$ ->
+  window.notifications = new NotificationDropdown el: $('.notifications'), pollTime: 60
+
+$(document).on "page:change", ->
+  notifications.el = $('.notifications')
+  notifications.render()
+```
+
 h2. Testing
 
 Creating the database:

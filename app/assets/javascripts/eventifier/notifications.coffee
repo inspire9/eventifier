@@ -19,14 +19,18 @@ class window.NotificationDropdown
 
     @render()
     @loadMore(limit: 14)
+    setTimeout =>
+      @el.trigger 'poll'
+    , @pollTime*1000
 
   render: =>
+    @unsetEvents()
+    @renderedNotifications = []
     @el.html(@template(@)).attr('tabindex', 0)
-
+    @renderNotifications()
     # @checkVisibility()
 
     @setEvents()
-    @poll()
 
   checkVisibility: =>
     @el.addClass("notifications_active").find('#notification_dropdown').attr('opacity': 0)
@@ -56,6 +60,9 @@ class window.NotificationDropdown
       @el.on 'click', '#notification_dropdown ol a', @pushUrl
 
     @
+
+  unsetEvents: =>
+    @el.off()
 
   pushUrl: (e)=>
     location = $(e.currentTarget).attr('href')
