@@ -37,7 +37,7 @@ module Eventifier
       else
         key = "events.#{event.eventable_type.downcase}.#{event.verb}"
       end
-      message = I18n.translate key, :default => :"events.default.#{event.verb}", "user.name" => event.user.name, :"event.type" => event.eventable_type
+      message = I18n.translate key, :default => :"events.default.#{event.verb}", "user.name" => event.user.try(:name), :"event.type" => event.eventable_type
 
       replace_vars(message, event).html_safe
     end

@@ -17,7 +17,7 @@ describe Eventifier::Event do
       alpha = Fabricate :event, :eventable => eventable
       beta  = Fabricate :event, :eventable => Fabricate(:user)
 
-      Eventifier::Event.find_all_by_eventable(eventable).should == [alpha]
+      expect(Eventifier::Event.find_all_by_eventable(eventable)).to eq [alpha]
     end
   end
 end

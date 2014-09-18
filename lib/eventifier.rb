@@ -9,6 +9,8 @@
 #
 # end
 
+require "rails/observers/activerecord/active_record"
+
 require 'multi_json'
 require 'action_mailer'
 
@@ -16,6 +18,7 @@ require 'compass-rails'
 require 'haml-rails'
 require 'haml_coffee_assets'
 require 'jbuilder'
+require 'sliver'
 
 module Eventifier
   mattr_accessor :mailer_sender
@@ -58,7 +61,7 @@ module Eventifier
   end
 end
 
-
+require 'eventifier/api'
 require 'eventifier/delivery'
 require 'eventifier/event_tracking'
 require 'eventifier/event_builder'

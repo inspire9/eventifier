@@ -53,7 +53,7 @@ describe Eventifier::Notification do
     context 'when the user has never read notifications' do
       let(:last_read) { nil }
       it 'should return true' do
-        subject.should be_true
+        subject.should be_truthy
       end
     end
     context 'when the user has read notifications before' do
@@ -61,12 +61,12 @@ describe Eventifier::Notification do
       describe 'notificication newer than that time' do
         let(:last_read) { Time.now - 1.day }
 
-        it { should be_true }
+        it { should be_truthy }
       end
       describe 'notificication older than that time' do
         let(:last_read) { Time.now + 1.day }
 
-        it { should be_false }
+        it { should be_falsey }
       end
     end
   end

@@ -1,23 +1,23 @@
 class Eventifier::NotificationSubscriber
-  def self.subscribe_to_method(klass, method_name, delivery)
-    new(klass, method_name, delivery).subscribe_to_method
+  def self.subscribe_to_method(klass, method_name, options)
+    new(klass, method_name, options).subscribe_to_method
   end
 
-  def initialize(klass, method_name, delivery)
-    @klass, @method_name, @delivery = klass, method_name, delivery
+  def initialize(klass, method_name, options)
+    @klass, @method_name, @options = klass, method_name, options
   end
 
   def subscribe_to_method
     return if notifications.notifier.listening?(name)
 
     notifications.subscribe(name) do |*args|
-      Eventifier::NotificationTranslator.new(prefix, delivery, *args).translate
+      Eventifier::NotificationTranslator.new(prefix, options, *args).translate
     end
   end
 
   private
 
-  attr_reader :klass, :method_name, :delivery
+  attr_reader :klass, :method_name, :options
 
   def name
     "#{prefix}.notification.eventifier"

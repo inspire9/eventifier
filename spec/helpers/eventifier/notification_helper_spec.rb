@@ -20,21 +20,21 @@ describe Eventifier::NotificationHelper do
   describe "#notification_message" do
     it "should return the I18n message for that event" do
       event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :create)
-      helper.notification_message(event).should == "<strong class='user'>#{event.user.name}</strong> just created an Post - you should check it out"
+      expect(helper.notification_message(event)).to eq "<strong class='user'>#{event.user.name}</strong> just created an Post - you should check it out"
     end
 
     it "should return a message specific to a single change if only 1 change has been made" do
       event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :update, :change_data => { :name => ["Fred", "Mike"] })
-      helper.notification_message(event).should == "<strong class='user'>#{event.user.name}</strong> made a change to their Post"
+      expect(helper.notification_message(event)).to eq "<strong class='user'>#{event.user.name}</strong> made a change to their Post"
     end
     it "should return a message specific to a particular field change if configuration is present" do
       event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :update, :change_data => { :deleted_at => [nil, Time.now] })
-      helper.notification_message(event).should == "<strong class='user'>#{event.user.name}</strong> deleted their Post"
+      expect(helper.notification_message(event)).to eq "<strong class='user'>#{event.user.name}</strong> deleted their Post"
     end
 
     it "should return a message specific to multiple changes if more than 1 change has been made" do
       event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :update, :change_data => { :name => ["Fred", "Mike"], :age => [55, 65] })
-      helper.notification_message(event).should == "<strong class='user'>#{event.user.name}</strong> made some changes to their Post"
+      expect(helper.notification_message(event)).to eq "<strong class='user'>#{event.user.name}</strong> made some changes to their Post"
     end
 
     it "should return the default I18n message if one doesn't exist" do
@@ -48,7 +48,7 @@ describe Eventifier::NotificationHelper do
       I18n.backend.store_translations :test, :notifications => @notification_strings
       I18n.with_locale("test") do
         event = Fabricate(:event, :eventable => Fabricate(:post), :verb => :create)
-        helper.notification_message(event).should == "<strong class='user'>#{event.user.name}</strong> created a <strong>Post</strong>"
+        expect(helper.notification_message(event)).to eq "<strong class='user'>#{event.user.name}</strong> created a <strong>Post</strong>"
       end
     end
   end
@@ -67,12 +67,12 @@ describe Eventifier::NotificationHelper do
 
       it "should replace {{stuff}} with awesome" do
         message = "I'm really loving {{eventable.title}}"
-        helper.replace_vars(message, event).should == "I'm really loving <strong>#{event.eventable.title}</strong>"
+        expect(helper.replace_vars(message, event)).to eq "I'm really loving <strong>#{event.eventable.title}</strong>"
       end
 
       it "should replace multiple {{stuff}} with multiple awesome" do
         message = "I'm really loving {{eventable.title}} and all {{eventable.class.name}}s"
-        helper.replace_vars(message, event).should == "I'm really loving <strong>#{event.eventable.title}</strong> and all <strong>Post</strong>s"
+        expect(helper.replace_vars(message, event)).to eq "I'm really loving <strong>#{event.eventable.title}</strong> and all <strong>Post</strong>s"
       end
     end
 
@@ -81,8 +81,8 @@ describe Eventifier::NotificationHelper do
       it "should add some handy methods to an event instance" do
         event = Fabricate(:event)
         event = helper.load_event_for_template event
-        event.object.should == event.eventable
-        event.object_type.should == event.eventable_type
+        expect(event.object).to eq event.eventable
+        expect(event.object_type).to eq event.eventable_type
       end
 
     end
@@ -148,12 +148,12 @@ describe Eventifier::NotificationHelper do
 
       it "should replace {{stuff}} with awesome" do
         message = "I'm really loving {{eventable.title}}"
-        helper.replace_vars(message, event).should == "I'm really loving <strong>#{event.eventable.title}</strong>"
+        expect(helper.replace_vars(message, event)).to eq "I'm really loving <strong>#{event.eventable.title}</strong>"
       end
 
       it "should replace multiple {{stuff}} with multiple awesome" do
         message = "I'm really loving {{eventable.title}} and all {{eventable.class.name}}s"
-        helper.replace_vars(message, event).should == "I'm really loving <strong>#{event.eventable.title}</strong> and all <strong>Post</strong>s"
+        expect(helper.replace_vars(message, event)).to eq "I'm really loving <strong>#{event.eventable.title}</strong> and all <strong>Post</strong>s"
       end
     end
 
@@ -161,8 +161,8 @@ describe Eventifier::NotificationHelper do
       it "should add some handy methods to an event instance" do
         event = Fabricate(:event)
         event = helper.load_event_for_template event
-        event.object.should == event.eventable
-        event.object_type.should == event.eventable_type
+        expect(event.object).to eq event.eventable
+        expect(event.object_type).to eq event.eventable_type
       end
     end
   end

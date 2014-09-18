@@ -12,7 +12,7 @@ describe Eventifier::EventTracking do
 
       event_tracker.url url_proc
 
-      Eventifier::EventTracking.url_mappings[:activity].should == url_proc
+      expect(Eventifier::EventTracking.url_mappings[:activity]).to eq url_proc
     end
 
   end

@@ -1,6 +1,6 @@
 #= require hamlcoffee
-#= require ./templates/dropdown
-#= require ./templates/settings
+#= require eventifier/templates/dropdown
+#= require eventifier/templates/settings
 # Usage
 # window.notifications = new NotificationDropdown el: $('.notifications'), limit: 5
 
@@ -9,22 +9,28 @@ class window.NotificationDropdown
   settingsTemplate: JST['eventifier/templates/settings']
 
   constructor: (options) ->
-    {@el, @limit, @pollTime} = options
+    {@el, @limit, @pollTime, @push} = options
     @limit =    @limit || 5
     @pollTime = @pollTime || 15
+    @push = @push || false
 
 
     [@notifications, @renderedNotifications, @unreadCount, @lastReadAt] = [[], [], 0, new Date()]
 
     @render()
     @loadMore(limit: 14)
+    setTimeout =>
+      @el.trigger 'poll'
+    , @pollTime*1000
 
   render: =>
+    @unsetEvents()
+    @renderedNotifications = []
     @el.html(@template(@)).attr('tabindex', 0)
-
+    @renderNotifications()
     # @checkVisibility()
+
     @setEvents()
-    @poll()
 
   checkVisibility: =>
     @el.addClass("notifications_active").find('#notification_dropdown').attr('opacity': 0)
@@ -48,10 +54,24 @@ class window.NotificationDropdown
     @el.on 'addNotifications', @renderNotifications
     @el.on 'addNotifications', @setUnreadCount
     @el.on 'poll', @poll
-    @el.on 'scroll', 'ol', @scrolling
+    @el.find('ol.notifications_dropdown_list').on 'scroll', @scrolling
     $(window).on 'click', @blurNotifications
+    if @push
+      @el.on 'click', '#notification_dropdown ol a', @pushUrl
 
     @
+
+  unsetEvents: =>
+    @el.off()
+
+  pushUrl: (e)=>
+    location = $(e.currentTarget).attr('href')
+    location = $('<a />').attr(href: location).get(0).pathname if location.match /^https?\:\/\//
+
+    Backbone?.history.navigate(location, true) || history.pushState({trigger: true}, '', location)
+    @hide()
+
+    false
 
   renderNotifications: =>
     @el.find(".none").remove() if @notifications.length > 0
@@ -59,15 +79,16 @@ class window.NotificationDropdown
       unless $.inArray(notification.id, @renderedNotifications) >= 0
         if new Date(notification.created_at) > @lastReadAt
           if @lastInserted?
-            @lastInserted.after @lastInserted = $("<li />")
+            @lastInserted.after( @lastInserted = $("<li />")
               .addClass('unread')
               .html(notification.html)
+            )
           else
             @el
               .find('ol')
-              .prepend @lastInserted = $("<li />")
+              .prepend(@lastInserted = $("<li />")
                 .addClass('unread')
-                .html(notification.html)
+                .html(notification.html))
         else
           @el
           .find('ol')
@@ -91,7 +112,7 @@ class window.NotificationDropdown
   toggleSettings: (event)=>
     event.preventDefault() if event?
     $.ajax
-      url: "/preferences"
+      url: "/eventifier/preferences"
       success: (data)=>
         @el.find("#settings_pane").html(@settingsTemplate(data))
         @defaultSettings() if @arrayFromObject($.makeArray(data)).default
@@ -110,7 +131,7 @@ class window.NotificationDropdown
       serializedSettings[@name] = @value
 
     $.ajax
-      url: "/preferences"
+      url: "/eventifier/preferences"
       type: "PUT"
       data: preferences: serializedSettings
       success: (data)=> @el.toggleClass('show_settings')
@@ -126,7 +147,7 @@ class window.NotificationDropdown
 
   loadMore: (params = {})=>
     $.ajax
-      url: "/notifications"
+      url: "/eventifier/notifications"
       dataType: 'json'
       data: params
       success: @addNotifications
@@ -150,6 +171,17 @@ class window.NotificationDropdown
       @el.addClass('alerting')
 
     @el.find(".notification_alert").html(displayCount)
+    $('title').html (index, old_html) ->
+      if old_html.match /^\(\d+\).*/
+        if displayCount > 0
+          old_html.replace(/^\(\d+\)/, "(#{displayCount})");
+        else
+          old_html.replace(/^(\(\d+\))\s/, "");
+      else
+        if displayCount > 0
+          "(#{displayCount}) #{old_html}"
+        else
+          old_html
 
   setUnreadCount: =>
     @unreadCount = $.grep(@notifications, (notification)=>
@@ -164,7 +196,7 @@ class window.NotificationDropdown
     if @isAlerting()
       @lastReadAt = new Date()
       @setUnreadCount()
-      $.post '/notifications/touch'
+      $.post '/eventifier/notifications/touch'
 
   poll: =>
     @loadMore(recent: true, since: @lastLookTime())
@@ -187,13 +219,13 @@ class window.NotificationDropdown
       0
 
   lastLookTime: =>
-    Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime())
+    Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime()/1000)
 
   scrolling: =>
-    scrollWindow = @$el.find('ol')
+    scrollWindow = @el.find('ol')
 
     if (scrollWindow.scrollTop() + scrollWindow.innerHeight() >= scrollWindow[0].scrollHeight - 50)
-      @loadMore(after: @oldestNotificationTime())
+      @loadMore(after: @oldestNotificationTime()/1000)
 
   arrayFromObject: (collection)->
     serializedObject = {}

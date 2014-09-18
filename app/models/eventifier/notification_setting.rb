@@ -5,8 +5,6 @@ class Eventifier::NotificationSetting < ActiveRecord::Base
 
   serialize :preferences, MultiJson
 
-  attr_accessible :user
-
   validates :user,    :presence   => true
   validates :user_id, :uniqueness => true
 
