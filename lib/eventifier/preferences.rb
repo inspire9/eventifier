@@ -28,7 +28,7 @@ class Eventifier::Preferences
   attr_reader :user
 
   def boolean(value)
-    !(value.nil? || value == '0')
+    !(value.blank? || value == '0')
   end
 
   def keys

@@ -74,8 +74,8 @@ describe Eventifier::Preferences do
 
     it "updates the user's email preferences" do
       preferences.update(
-        'create_posts_notify_readers'         => '',
-        'create_comments_notify_post_readers' => '0'
+        'create_posts_notify_readers'         => 'enabled',
+        'create_comments_notify_post_readers' => '0',
       )
 
       expect(
@@ -83,6 +83,16 @@ describe Eventifier::Preferences do
       ).to be_truthy
       expect(
         settings.preferences['email']['create_comments_notify_post_readers']
+      ).to be_falsey
+    end
+
+    it 'handles false as false' do
+      preferences.update(
+        'create_posts_notify_readers' => false
+      )
+
+      expect(
+        settings.preferences['email']['create_posts_notify_readers']
       ).to be_falsey
     end
 
