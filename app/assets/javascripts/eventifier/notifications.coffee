@@ -72,8 +72,7 @@ class window.NotificationDropdown
     @el.on 'poll', @poll
     @el.find('.notifications-list-pane').on 'scroll', @scrolling
     $(window).on 'click', @blurNotifications
-    if @push
-      @el.on 'click', '#notifications-dropdown ol a', @pushUrl
+    @el.on 'click', 'ol.notifications-list a', @handleClick
 
     @
 
@@ -81,14 +80,16 @@ class window.NotificationDropdown
     $('body').off 'click', @trigger, @toggleDropdown
     @el.off()
 
-  pushUrl: (e)=>
-    location = $(e.currentTarget).attr('href')
-    location = $('<a />').attr(href: location).get(0).pathname if location.match /^https?\:\/\//
+  handleClick: (e)=>
+    if @push
+      e.preventDefault() if e?
 
-    Backbone?.history.navigate(location, true) || history.pushState({trigger: true}, '', location)
+      location = $(e.currentTarget).attr('href')
+      location = $('<a />').attr(href: location).get(0).pathname if location.match /^https?\:\/\//
+
+      Backbone?.history.navigate(location, true) || history.pushState({trigger: true}, '', location)
+
     @hide()
-
-    false
 
   renderNotifications: =>
     @el.find(".none").remove() if @notifications.length > 0
