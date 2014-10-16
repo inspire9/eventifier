@@ -4,36 +4,14 @@
   }
 }
 
-#notifications-settings-pane {
-  display: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  max-height:380px;
-  background-color: #f2f2f2;
-  strong {
-    display: block;
-    font-size: 13px;
-    padding: 5px 5px 10px;
-  }
-  label {
-    display: block;
-    margin-bottom: 15px;
-    font-size: 12px;
-    line-height: 1.2;
-    padding-left: 35px;
-    input {
-      float: left;
-      margin-left: -25px;
-    }
-  }
-  &.disabled label:not([for='email_settings_default']) { opacity: 0.5; }
-  .buttons { text-align: center; }
-  &.show_settings {
-    #notification_dropdown ol { display: none; }
-    #notifications-settings-pane { display: block; }
-  }
+.pull-right { float: right; }
+
+.notifications-header {
+  padding: 15px;
+  background: white;
+}
+.notifications-heading {
+  font: bold 16px inherit;
 }
 
 #notifications-dropdown {
@@ -45,6 +23,7 @@
   right: 0;
   bottom: 0;
   z-index: 10020;
+  &:focus { outline: none }
   @include eventifier-respond-to(desktop) {
     width: 420px;
     left: auto;
@@ -71,7 +50,7 @@
 .notifications-alert { display: none; }
 .notifications-alerting .notifications-alert { display: block; }
 
-.notifications-list-wrap {
+.notifications-list-pane, .notifications-settings-pane {
   overflow: scroll;
   height: 100%;
 }
@@ -84,17 +63,34 @@
     padding: 0;
     background: #f9f9f9;
     &.unread a, a:focus { background-color: white; }
-
     a {
       display: block;
       padding: 15px;
       font: 13px/1.2 $font_regular;
       overflow: hidden;
       color: inherit;
-      &:hover {
-        text-decoration: none;
-      }
-
+      &:hover { text-decoration: none; }
     }
   }
+}
+
+.notifications-settings-pane {
+  display: none;
+  background-color: #f2f2f2;
+  fieldset { display: block; }
+  label {
+    display: block;
+    margin-bottom: 15px;
+    padding-left: 35px;
+    input {
+      float: left;
+      margin-left: -25px;
+    }
+  }
+  &.disabled label:not([for='email_settings_default']) { opacity: 0.5; }
+  .notifications-settings-buttons { text-align: center; }
+}
+.notifications-show-settings {
+  .notifications-list-pane { display: none; }
+  .notifications-settings-pane { display: block; }
 }

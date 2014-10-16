@@ -1,14 +1,16 @@
 <form id="email_notification_settings">
-  <strong>Receive emails for:</strong>
-  <% this.forEach(function(i, setting) { %>
-    <label for="email_settings_<%= setting.key %>">
-      <input type='checkbox' checked='<%= setting.value %>'
-      id="email_settings_<%= setting.key %>" name="<%= setting.key %>"
-      value="<%= setting.value %>" />
-      <%= setting.label %>
-    </label>
-  <% }) %>
-  <div class="buttons">
-    <button class="save-settings">Save</button>
-  </div>
+  <fieldset class="notifications-settings-fieldset">
+    <legend>Receive emails for:</legend>
+    <% $.each(settings, function(i, setting) { %>
+      <label for="email_settings_<%= setting.key %>">
+        <input type='checkbox' checked='<%= setting.value %>'
+        id="email_settings_<%= setting.key %>" name="<%= setting.key %>"
+        value="<%= setting.value %>" />
+        <%= setting.label %>
+      </label>
+    <% }) %>
+    <div class="notifications-settings-buttons">
+      <button class="save-settings">Save</button>
+    </div>
+  </fieldset>
 </form>

@@ -70,7 +70,7 @@ class window.NotificationDropdown
     @el.on 'addNotifications', @renderNotifications
     @el.on 'addNotifications', @setUnreadCount
     @el.on 'poll', @poll
-    @el.find('.notifications-list-wrap').on 'scroll', @scrolling
+    @el.find('.notifications-list-pane').on 'scroll', @scrolling
     $(window).on 'click', @blurNotifications
     if @push
       @el.on 'click', '#notifications-dropdown ol a', @pushUrl
@@ -127,26 +127,26 @@ class window.NotificationDropdown
     @el.toggleClass('notifications-active')
     @setLastRead()
 
-  blurNotifications: (event)=>
-    if @isActive() and $.inArray($(@trigger)[0], $(event.target).parents()) < 0
+  blurNotifications: (e)=>
+    if @isActive() && $.inArray($(@trigger)[0], $(e.target).parents()) < 0 && $.inArray(@el.get(0), $(e.target).parents()) < 0
       @toggleDropdown()
 
-  toggleSettings: (event)=>
-    event.preventDefault() if event?
+  toggleSettings: (e)=>
+    e.preventDefault() if e?
     $.ajax
       url: "/eventifier/preferences"
       success: (data)=>
-        @el.find("#notifications-settings-pane").html(@settingsTemplate(data))
+        @el.find(".notifications-settings-pane").html(@settingsTemplate(settings: data))
         @defaultSettings() if @arrayFromObject($.makeArray(data)).default
-    @el.toggleClass('show_settings')
+    @el.toggleClass('notifications-show-settings')
 
   defaultSettings: =>
-    @el.find("#notifications-settings-pane").toggleClass("disabled")
+    @el.find(".notifications-settings-pane").toggleClass("disabled")
     @el.find("input:not([id='email_settings_default'])").each ->
       $(@).attr(disabled: !$(@).attr('disabled')).prop('checked', true)
 
-  saveSettings: (event)=>
-    event.preventDefault() if event?
+  saveSettings: (e)=>
+    e.preventDefault() if e?
 
     serializedSettings = {}
     @el.find("input:checked").each ->
@@ -156,7 +156,7 @@ class window.NotificationDropdown
       url: "/eventifier/preferences"
       type: "PUT"
       data: preferences: serializedSettings
-      success: (data)=> @el.toggleClass('show_settings')
+      success: (data)=> @el.toggleClass('notifications-show-settings')
       error: -> alert "There was a problem saving your settings"
 
   hide: =>
@@ -240,7 +240,7 @@ class window.NotificationDropdown
     Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime()/1000)
 
   scrolling: =>
-    scrollWindow = @el.find('.notifications-list-wrap')
+    scrollWindow = @el.find('.notifications-list-pane')
 
     if (scrollWindow.scrollTop() + scrollWindow.innerHeight() >= scrollWindow[0].scrollHeight - 100)
       @loadMore(after: @oldestNotificationTime()/1000)
