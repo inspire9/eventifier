@@ -1,21 +1,36 @@
-#= require hamlcoffee
 #= require eventifier/templates/dropdown
 #= require eventifier/templates/settings
+
 # Usage
-# window.notifications = new NotificationDropdown el: $('.notifications'), limit: 5
+#
+# window.notifications = new NotificationDropdown
+# or with options
+# window.notifications = new NotificationDropdown trigger: '.notifications-toggle', pollTime: 60, limit: 10, push: true
+
+# Options
+# trigger - The selector for a dom element to add an onClick action to, which triggers the toggling of the notifications dropdown.  This is just the selector, not the jQuery object
+# eg: new NotificationDropdown trigger: '.btn.notifications-toggle'
+#
+# limit (default: 5) - Limit the number of notifications to get in each load
+#
+# pollTime (default: 30) - Time in seconds between checks for new notifications
+#
+# push (default: false) - Enable HTML5 pushState for url changes. When set to true, onclick actions onto individual notifications are overriden and caught by either Backbone's history.nagivate (if Backbone is defined) or native browser history.pushState handler
 
 class window.NotificationDropdown
   template: JST['eventifier/templates/dropdown']
   settingsTemplate: JST['eventifier/templates/settings']
 
   constructor: (options) ->
-    {@el, @limit, @pollTime, @push} = options
+    {@trigger, @limit, @pollTime, @push} = options
+    @trigger ||= '.notifications-toggle'
     @limit =    @limit || 5
-    @pollTime = @pollTime || 15
+    @pollTime = @pollTime || 30
     @push = @push || false
 
-
     [@notifications, @renderedNotifications, @unreadCount, @lastReadAt] = [[], [], 0, new Date()]
+
+    @el = $(@template(@))
 
     @render()
     @loadMore(limit: 14)
@@ -26,42 +41,44 @@ class window.NotificationDropdown
   render: =>
     @unsetEvents()
     @renderedNotifications = []
-    @el.html(@template(@)).attr('tabindex', 0)
+    @el.attr('tabindex', 0).appendTo $('body')
+
     @renderNotifications()
     # @checkVisibility()
 
     @setEvents()
 
   checkVisibility: =>
-    @el.addClass("notifications_active").find('#notification_dropdown').attr('opacity': 0)
-    @el.find('#notification_dropdown').offset (index, coords)=>
+    @el.addClass("notifications-active").find('#notifications-dropdown').attr('opacity': 0)
+    @el.find('#notifications-dropdown').offset (index, coords)=>
       coords.left = 10 if coords.left < 0
-      if coords.left + @el.find('#notification_dropdown').width() > $(window).width()
-        coords.left = $(window).width() - @el.find('#notification_dropdown').width() - 5
+      if coords.left + @el.find('#notifications-dropdown').width() > $(window).width()
+        coords.left = $(window).width() - @el.find('#notifications-dropdown').width() - 5
 
-      @el.find('#notification_dropdown').offset coords
+      @el.find('#notifications-dropdown').offset coords
 
-      if @el.find('#notification_dropdown').position().left > -@el.find('#notification_dropdown').width()/2
-        @el.find('#notification_dropdown').addClass('left_nipple')
+      if @el.find('#notifications-dropdown').position().left > -@el.find('#notifications-dropdown').width()/2
+        @el.find('#notifications-dropdown').addClass('left_nipple')
 
-    @el.removeClass("notifications_active").find('#notification_dropdown').attr('opacity': 1)
+    @el.removeClass("notifications-active").find('#notifications-dropdown').attr('opacity': 1)
 
   setEvents: =>
-    @el.on 'click', '.toggle_dropdown', @toggleDropdown
-    @el.on 'click', '.toggle_settings', @toggleSettings
+    $('body').on 'click', @trigger, @toggleDropdown
+    @el.on 'click', '.toggle-notifications-settings', @toggleSettings
     @el.on 'click', '#email_settings_default',   @defaultSettings
-    @el.on 'click', '.save_settings',   @saveSettings
+    @el.on 'click', '.save-settings',   @saveSettings
     @el.on 'addNotifications', @renderNotifications
     @el.on 'addNotifications', @setUnreadCount
     @el.on 'poll', @poll
-    @el.find('ol.notifications_dropdown_list').on 'scroll', @scrolling
+    @el.find('.notifications-list-wrap').on 'scroll', @scrolling
     $(window).on 'click', @blurNotifications
     if @push
-      @el.on 'click', '#notification_dropdown ol a', @pushUrl
+      @el.on 'click', '#notifications-dropdown ol a', @pushUrl
 
     @
 
   unsetEvents: =>
+    $('body').off 'click', @trigger, @toggleDropdown
     @el.off()
 
   pushUrl: (e)=>
@@ -86,9 +103,10 @@ class window.NotificationDropdown
           else
             @el
               .find('ol')
-              .prepend(@lastInserted = $("<li />")
+              .prepend( @lastInserted = $("<li />")
                 .addClass('unread')
-                .html(notification.html))
+                .html(notification.html)
+            )
         else
           @el
           .find('ol')
@@ -98,28 +116,32 @@ class window.NotificationDropdown
     @lastInserted = null
 
   isActive: =>
-    @el.hasClass('notifications_active')
+    @el.hasClass('notifications-active')
 
   isAlerting: =>
     @unreadCount > 0
 
-  toggleDropdown: (event)=>
-    event.preventDefault() if event?
+  toggleDropdown: (e)=>
+    e.preventDefault() if e?
 
-    @el.toggleClass('notifications_active')
+    @el.toggleClass('notifications-active')
     @setLastRead()
+
+  blurNotifications: (event)=>
+    if @isActive() and $.inArray($(@trigger)[0], $(event.target).parents()) < 0
+      @toggleDropdown()
 
   toggleSettings: (event)=>
     event.preventDefault() if event?
     $.ajax
       url: "/eventifier/preferences"
       success: (data)=>
-        @el.find("#settings_pane").html(@settingsTemplate(data))
+        @el.find("#notifications-settings-pane").html(@settingsTemplate(data))
         @defaultSettings() if @arrayFromObject($.makeArray(data)).default
     @el.toggleClass('show_settings')
 
   defaultSettings: =>
-    @el.find("#settings_pane").toggleClass("disabled")
+    @el.find("#notifications-settings-pane").toggleClass("disabled")
     @el.find("input:not([id='email_settings_default'])").each ->
       $(@).attr(disabled: !$(@).attr('disabled')).prop('checked', true)
 
@@ -138,12 +160,8 @@ class window.NotificationDropdown
       error: -> alert "There was a problem saving your settings"
 
   hide: =>
-    @el.removeClass('notifications_active')
+    @el.removeClass('notifications-active')
     $(window).off 'click', @blurNotifications
-
-  blurNotifications: (event)=>
-    if @isActive() and $.inArray(@el[0], $(event.target).parents()) < 0
-      @toggleDropdown()
 
   loadMore: (params = {})=>
     $.ajax
@@ -165,12 +183,12 @@ class window.NotificationDropdown
   updateAlert: =>
     if @unreadCount == 0
       displayCount = null
-      @el.removeClass('alerting')
+      $(@trigger).removeClass('notifications-alerting')
     else
       displayCount = @unreadCount
-      @el.addClass('alerting')
+      $(@trigger).addClass('notifications-alerting')
 
-    @el.find(".notification_alert").html(displayCount)
+    $(@trigger).find(".notifications-alert").html(displayCount)
     $('title').html (index, old_html) ->
       if old_html.match /^\(\d+\).*/
         if displayCount > 0
@@ -222,9 +240,9 @@ class window.NotificationDropdown
     Math.max(@lastReadAt.getTime()/1000, @newestNotificationTime()/1000)
 
   scrolling: =>
-    scrollWindow = @el.find('ol')
+    scrollWindow = @el.find('.notifications-list-wrap')
 
-    if (scrollWindow.scrollTop() + scrollWindow.innerHeight() >= scrollWindow[0].scrollHeight - 50)
+    if (scrollWindow.scrollTop() + scrollWindow.innerHeight() >= scrollWindow[0].scrollHeight - 100)
       @loadMore(after: @oldestNotificationTime()/1000)
 
   arrayFromObject: (collection)->

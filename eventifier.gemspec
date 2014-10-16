@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'rails',           '>= 4.0.3'
   s.add_runtime_dependency "bson_ext"
   s.add_runtime_dependency 'haml-rails',      '~> 0.4'
-  s.add_runtime_dependency 'haml_coffee_assets'
   s.add_runtime_dependency 'coffee-rails',    '~> 4.0.0'
   s.add_runtime_dependency 'compass-rails'
   s.add_runtime_dependency 'multi_json',      '>= 1.7.4'

@@ -55,6 +55,15 @@ h4. Add notifications indicator in interface
 Eventifier provides a notification tool for your users.
 
 <pre><code>
+  <div class="notifications">
+    <a href="#" class="notifications-toggle">
+      <span class="icon-notifications"></span>
+      <span class="notifications-alert"></span>
+    </a>
+  </div>
+</code></pre>
+
+<pre><code>
   # app/views/layouts/application.erb
   &lt;div class=&quot;notifications&quot;&gt;&lt;/div&gt;
 </code></pre>
