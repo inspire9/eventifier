@@ -47,7 +47,7 @@ module Eventifier
       event = load_event_for_template event
       message.scan(/{{[^}]*}}/) do |replaceable|
         method = "event."+replaceable.to_s.gsub(/[{|}]/, '').to_s
-        replace_text = eval(method) rescue ""
+        replace_text = eval(method)
 
         case replaceable.to_s
           when "{{object.name}}"
