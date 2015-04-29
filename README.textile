@@ -9,6 +9,10 @@ h2. Features
 Tracks and logs events on active record objects
 Send notifications of events
 
+h2. Assumptions
+
+* You're using warden for auth (or Devise)
+
 h2. Example
 
 <pre><code>

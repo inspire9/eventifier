@@ -64,15 +64,13 @@
   padding: 0;
   background: #f9f9f9;
 }
-.notifications-list li.unread a,
-  .notifications-list li a:focus { background-color: white; }
+.notifications-list li.unread a, .notifications-list li a:focus { background-color: white; }
 .notifications-list li a {
-    display: block;
-    padding: 15px;
-    font: 13px/1.2 $font_regular;
-    overflow: hidden;
-    color: inherit;
-  }
+  display: block;
+  padding: 15px;
+  font: 13px/1.2 $font_regular;
+  overflow: hidden;
+  color: inherit;
 }
 .notifications-list li a:hover { text-decoration: none; }
 
