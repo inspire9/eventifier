@@ -14,9 +14,7 @@ require "rails/observers/activerecord/active_record"
 require 'multi_json'
 require 'action_mailer'
 
-require 'compass-rails'
 require 'haml-rails'
-require 'haml_coffee_assets'
 require 'jbuilder'
 require 'sliver'
 

@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe Eventifier::NotificationHelper do
+  class TestClass
+    def self.helper_method(*args); end
+    include Eventifier::NotificationHelper
+  end
+
+  let!(:helper) { TestClass.new }
+
   before do
     I18n.backend.store_translations :en, :notifications => {
       :post => {

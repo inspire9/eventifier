@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "eventifier"
-  s.version     = '0.2.0'
+  s.version     = '0.2.1'
   s.authors     = ["Nathan Sampimon", "Peter Murray", "Pat Allan"]
   s.email       = ["nathan@inspire9.com"]
   s.homepage    = "http://github.com/inspire9/eventifier"
@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "bson_ext"
   s.add_runtime_dependency 'haml-rails',      '~> 0.4'
   s.add_runtime_dependency 'coffee-rails',    '~> 4.0.0'
-  s.add_runtime_dependency 'compass-rails'
   s.add_runtime_dependency 'multi_json',      '>= 1.7.4'
   s.add_runtime_dependency 'jbuilder',        '>= 2.0.4'
   s.add_runtime_dependency 'rails-observers', '~> 0.1.2'

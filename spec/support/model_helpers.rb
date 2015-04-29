@@ -8,14 +8,14 @@ module ModelHelpers
   module ClassMethods
     def it_requires_a(attribute)
       it "requires a #{attribute}" do
-        instance = Fabricate.build(self.class.describes.name.demodulize.downcase.to_sym, attribute => nil)
+        instance = Fabricate.build(self.class.described_class.name.demodulize.downcase.to_sym, attribute => nil)
         instance.errors[attribute].should_not be_nil
       end
     end
 
     def it_requires_an(attribute)
       it "requires an #{attribute}" do
-        instance = Fabricate.build(self.class.describes.name.demodulize.downcase.to_sym, attribute => nil)
+        instance = Fabricate.build(self.class.described_class.name.demodulize.downcase.to_sym, attribute => nil)
         instance.errors[attribute].should_not be_nil
       end
     end
