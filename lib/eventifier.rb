@@ -11,7 +11,7 @@
 
 require "rails/observers/activerecord/active_record"
 
-require 'multi_json'
+require 'json'
 require 'action_mailer'
 
 require 'haml-rails'

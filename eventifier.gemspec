@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "bson_ext"
   s.add_runtime_dependency 'haml-rails',      '~> 0.4'
   s.add_runtime_dependency 'coffee-rails',    '~> 4.0.0'
-  s.add_runtime_dependency 'multi_json',      '>= 1.7.4'
+  s.add_runtime_dependency 'json',      '>= 1.8.6'
   s.add_runtime_dependency 'jbuilder',        '>= 2.0.4'
   s.add_runtime_dependency 'rails-observers', '~> 0.1.2'
   s.add_runtime_dependency 'sliver',          '~> 0.1'

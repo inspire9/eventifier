@@ -5,7 +5,7 @@ module Eventifier
     belongs_to :event, :class_name => 'Eventifier::Event'
     belongs_to :user
 
-    serialize :relations, MultiJson
+    serialize :relations, JSON
 
     validates :event, :presence => true
     validates :user, :presence => true

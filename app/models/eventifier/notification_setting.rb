@@ -3,7 +3,7 @@ class Eventifier::NotificationSetting < ActiveRecord::Base
 
   belongs_to :user
 
-  serialize :preferences, MultiJson
+  serialize :preferences, JSON
 
   validates :user,    :presence   => true
   validates :user_id, :uniqueness => true
